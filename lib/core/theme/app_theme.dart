@@ -132,7 +132,7 @@ class AppTheme {
           horizontal: AppSizes.paddingL,
           vertical: AppSizes.paddingM,
         ),
-        hintStyle: TextStyle(color: AppColors.textHint.withOpacity(0.7)),
+        hintStyle: TextStyle(color: AppColors.textHint.withValues(alpha: 0.7)),
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.divider,

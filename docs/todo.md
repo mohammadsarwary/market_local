@@ -8,10 +8,35 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ## Legend
 
+### Status
 - `[ ]` - Not started
 - `[~]` - In progress
 - `[x]` - Completed
 - `[!]` - Blocked
+
+### Task Code Format
+Each task has a unique code: `[CATEGORY]-[NUMBER]`
+
+| Prefix | Category |
+|--------|----------|
+| `UI` | UI Polish & Visual |
+| `ANI` | Animations |
+| `STM` | State Management |
+| `CQ` | Code Quality |
+| `AUTH` | Authentication |
+| `CHAT` | Chat System |
+| `SRCH` | Search & Filters |
+| `POST` | Post Ad Flow |
+| `PROF` | Profile & Settings |
+| `API` | Backend/API Integration |
+| `RT` | Real-time Features |
+| `ADM` | Admin Panel |
+| `ADV` | Advanced Features |
+| `PERF` | Performance |
+| `TEST` | Testing |
+| `L10N` | Localization |
+| `A11Y` | Accessibility |
+| `DEBT` | Technical Debt |
 
 ---
 
@@ -19,40 +44,48 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ### UI Polish
 
-- [ ] Add loading shimmer effects to product grids
-- [ ] Add pull-to-refresh on list screens
-- [ ] Implement empty state widgets for all lists
-- [ ] Add error state widgets with retry buttons
-- [ ] Improve image loading placeholders
-- [ ] Add haptic feedback on button taps
-- [ ] Implement skeleton loading for profile screen
-- [ ] Add smooth page transitions between screens
-- [ ] Fix any remaining overflow issues on small screens
-- [ ] Add scroll-to-top button on long lists
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `UI-001` | [ ] | Add loading shimmer effects to product grids | UI Engineer |
+| `UI-002` | [ ] | Add pull-to-refresh on list screens | UI Engineer |
+| `UI-003` | [ ] | Implement empty state widgets for all lists | UI Engineer |
+| `UI-004` | [ ] | Add error state widgets with retry buttons | UI Engineer |
+| `UI-005` | [ ] | Improve image loading placeholders | UI Engineer |
+| `UI-006` | [ ] | Add haptic feedback on button taps | UI Engineer |
+| `UI-007` | [ ] | Implement skeleton loading for profile screen | UI Engineer |
+| `UI-008` | [ ] | Add smooth page transitions between screens | UI Engineer |
+| `UI-009` | [ ] | Fix any remaining overflow issues on small screens | UI Engineer |
+| `UI-010` | [ ] | Add scroll-to-top button on long lists | UI Engineer |
 
 ### Animations
 
-- [ ] Add hero animations for product images
-- [ ] Implement fade transitions for tab switches
-- [ ] Add scale animation on favorite button tap
-- [ ] Implement slide-in animation for bottom sheets
-- [ ] Add staggered animation for grid items
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `ANI-001` | [ ] | Add hero animations for product images | UI Engineer |
+| `ANI-002` | [ ] | Implement fade transitions for tab switches | UI Engineer |
+| `ANI-003` | [ ] | Add scale animation on favorite button tap | UI Engineer |
+| `ANI-004` | [ ] | Implement slide-in animation for bottom sheets | UI Engineer |
+| `ANI-005` | [ ] | Add staggered animation for grid items | UI Engineer |
 
 ### State Management
 
-- [ ] Implement proper loading states in all controllers
-- [ ] Add error handling states to controllers
-- [ ] Implement retry logic for failed operations
-- [ ] Add state persistence for filters
-- [ ] Implement optimistic updates for favorites
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `STM-001` | [ ] | Implement proper loading states in all controllers | Feature Dev |
+| `STM-002` | [ ] | Add error handling states to controllers | Feature Dev |
+| `STM-003` | [ ] | Implement retry logic for failed operations | Feature Dev |
+| `STM-004` | [ ] | Add state persistence for filters | Feature Dev |
+| `STM-005` | [ ] | Implement optimistic updates for favorites | Feature Dev |
 
 ### Code Quality
 
-- [ ] Remove all remaining `withOpacity` deprecation warnings
-- [ ] Add `const` constructors where missing
-- [ ] Remove unused imports across all files
-- [ ] Add documentation comments to public APIs
-- [ ] Ensure consistent error handling patterns
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `CQ-001` | [ ] | Remove all remaining `withOpacity` deprecation warnings | Refactor Agent |
+| `CQ-002` | [ ] | Add `const` constructors where missing | Refactor Agent |
+| `CQ-003` | [ ] | Remove unused imports across all files | Refactor Agent |
+| `CQ-004` | [ ] | Add documentation comments to public APIs | Arch Guardian |
+| `CQ-005` | [ ] | Ensure consistent error handling patterns | Arch Guardian |
 
 ---
 
@@ -60,57 +93,67 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ### Authentication
 
-- [ ] Design authentication flow (login, register, forgot password)
-- [ ] Create auth screens (login, register, OTP verification)
-- [ ] Implement AuthController
-- [ ] Add secure token storage
-- [ ] Implement session management
-- [ ] Add biometric authentication option
-- [ ] Implement social login (Google, Apple)
-- [ ] Add logout functionality
-- [ ] Implement account deletion flow
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `AUTH-001` | [ ] | Design authentication flow (login, register, forgot password) | Feature Dev |
+| `AUTH-002` | [ ] | Create auth screens (login, register, OTP verification) | Feature Dev |
+| `AUTH-003` | [ ] | Implement AuthController | Feature Dev |
+| `AUTH-004` | [ ] | Add secure token storage | Integration Eng |
+| `AUTH-005` | [ ] | Implement session management | Integration Eng |
+| `AUTH-006` | [ ] | Add biometric authentication option | Feature Dev |
+| `AUTH-007` | [ ] | Implement social login (Google, Apple) | Integration Eng |
+| `AUTH-008` | [ ] | Add logout functionality | Feature Dev |
+| `AUTH-009` | [ ] | Implement account deletion flow | Feature Dev |
 
 ### Chat System
 
-- [ ] Design chat data models (Message, Conversation)
-- [ ] Create ChatDetailScreen for individual conversations
-- [ ] Implement real-time message updates (mock first)
-- [ ] Add typing indicators
-- [ ] Implement read receipts
-- [ ] Add image sharing in chat
-- [ ] Implement chat notifications
-- [ ] Add message search functionality
-- [ ] Implement chat archiving
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `CHAT-001` | [ ] | Design chat data models (Message, Conversation) | Feature Dev |
+| `CHAT-002` | [ ] | Create ChatDetailScreen for individual conversations | Feature Dev |
+| `CHAT-003` | [ ] | Implement real-time message updates (mock first) | Feature Dev |
+| `CHAT-004` | [ ] | Add typing indicators | UI Engineer |
+| `CHAT-005` | [ ] | Implement read receipts | Feature Dev |
+| `CHAT-006` | [ ] | Add image sharing in chat | Feature Dev |
+| `CHAT-007` | [ ] | Implement chat notifications | Integration Eng |
+| `CHAT-008` | [ ] | Add message search functionality | Feature Dev |
+| `CHAT-009` | [ ] | Implement chat archiving | Feature Dev |
 
 ### Search & Filters
 
-- [ ] Implement search history
-- [ ] Add recent searches persistence
-- [ ] Implement saved searches
-- [ ] Add location-based filtering
-- [ ] Implement price range persistence
-- [ ] Add category-specific filters
-- [ ] Implement sort preferences persistence
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `SRCH-001` | [ ] | Implement search history | Feature Dev |
+| `SRCH-002` | [ ] | Add recent searches persistence | Feature Dev |
+| `SRCH-003` | [ ] | Implement saved searches | Feature Dev |
+| `SRCH-004` | [ ] | Add location-based filtering | Feature Dev |
+| `SRCH-005` | [ ] | Implement price range persistence | Feature Dev |
+| `SRCH-006` | [ ] | Add category-specific filters | Feature Dev |
+| `SRCH-007` | [ ] | Implement sort preferences persistence | Feature Dev |
 
 ### Post Ad Flow
 
-- [ ] Implement image picker integration
-- [ ] Add image compression before upload
-- [ ] Implement draft saving
-- [ ] Add category-specific fields
-- [ ] Implement location picker
-- [ ] Add price suggestion based on category
-- [ ] Implement ad preview before posting
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `POST-001` | [ ] | Implement image picker integration | Feature Dev |
+| `POST-002` | [ ] | Add image compression before upload | Feature Dev |
+| `POST-003` | [ ] | Implement draft saving | Feature Dev |
+| `POST-004` | [ ] | Add category-specific fields | Feature Dev |
+| `POST-005` | [ ] | Implement location picker | Feature Dev |
+| `POST-006` | [ ] | Add price suggestion based on category | Feature Dev |
+| `POST-007` | [ ] | Implement ad preview before posting | Feature Dev |
 
 ### Profile & Settings
 
-- [ ] Implement edit profile functionality
-- [ ] Add profile image picker
-- [ ] Implement notification settings
-- [ ] Add privacy settings
-- [ ] Implement account settings
-- [ ] Add app preferences (theme, language)
-- [ ] Implement help & support section
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `PROF-001` | [ ] | Implement edit profile functionality | Feature Dev |
+| `PROF-002` | [ ] | Add profile image picker | Feature Dev |
+| `PROF-003` | [ ] | Implement notification settings | Feature Dev |
+| `PROF-004` | [ ] | Add privacy settings | Feature Dev |
+| `PROF-005` | [ ] | Implement account settings | Feature Dev |
+| `PROF-006` | [ ] | Add app preferences (theme, language) | Feature Dev |
+| `PROF-007` | [ ] | Implement help & support section | Feature Dev |
 
 ---
 
@@ -118,95 +161,113 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ### Backend Integration
 
-- [ ] Set up API client architecture
-- [ ] Implement repository pattern
-- [ ] Create data source abstractions
-- [ ] Implement caching layer
-- [ ] Add offline support
-- [ ] Implement sync mechanism
-- [ ] Add background sync for messages
-- [ ] Implement push notifications
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `API-001` | [ ] | Set up API client architecture | Integration Eng |
+| `API-002` | [ ] | Implement repository pattern | Integration Eng |
+| `API-003` | [ ] | Create data source abstractions | Integration Eng |
+| `API-004` | [ ] | Implement caching layer | Integration Eng |
+| `API-005` | [ ] | Add offline support | Integration Eng |
+| `API-006` | [ ] | Implement sync mechanism | Integration Eng |
+| `API-007` | [ ] | Add background sync for messages | Integration Eng |
+| `API-008` | [ ] | Implement push notifications | Integration Eng |
 
 ### API Endpoints
 
-- [ ] User authentication endpoints
-- [ ] User profile endpoints
-- [ ] Ad CRUD endpoints
-- [ ] Category endpoints
-- [ ] Search endpoints
-- [ ] Chat/messaging endpoints
-- [ ] Notification endpoints
-- [ ] Image upload endpoints
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `API-101` | [ ] | User authentication endpoints | Integration Eng |
+| `API-102` | [ ] | User profile endpoints | Integration Eng |
+| `API-103` | [ ] | Ad CRUD endpoints | Integration Eng |
+| `API-104` | [ ] | Category endpoints | Integration Eng |
+| `API-105` | [ ] | Search endpoints | Integration Eng |
+| `API-106` | [ ] | Chat/messaging endpoints | Integration Eng |
+| `API-107` | [ ] | Notification endpoints | Integration Eng |
+| `API-108` | [ ] | Image upload endpoints | Integration Eng |
 
 ### Real-time Features
 
-- [ ] WebSocket connection for chat
-- [ ] Real-time notifications
-- [ ] Live ad updates
-- [ ] Online status indicators
-- [ ] Typing indicators
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `RT-001` | [ ] | WebSocket connection for chat | Integration Eng |
+| `RT-002` | [ ] | Real-time notifications | Integration Eng |
+| `RT-003` | [ ] | Live ad updates | Integration Eng |
+| `RT-004` | [ ] | Online status indicators | Feature Dev |
+| `RT-005` | [ ] | Typing indicators (real-time) | Integration Eng |
 
 ### Admin Panel
 
-- [ ] Design admin dashboard
-- [ ] User management
-- [ ] Ad moderation
-- [ ] Category management
-- [ ] Analytics dashboard
-- [ ] Report handling
-- [ ] Content moderation tools
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `ADM-001` | [ ] | Design admin dashboard | Feature Dev |
+| `ADM-002` | [ ] | User management | Feature Dev |
+| `ADM-003` | [ ] | Ad moderation | Feature Dev |
+| `ADM-004` | [ ] | Category management | Feature Dev |
+| `ADM-005` | [ ] | Analytics dashboard | Feature Dev |
+| `ADM-006` | [ ] | Report handling | Feature Dev |
+| `ADM-007` | [ ] | Content moderation tools | Feature Dev |
 
 ### Advanced Features
 
-- [ ] Implement ad promotion system
-- [ ] Add payment integration
-- [ ] Implement review/rating system
-- [ ] Add seller verification
-- [ ] Implement ad boosting
-- [ ] Add analytics tracking
-- [ ] Implement A/B testing framework
-- [ ] Add deep linking support
-- [ ] Implement share functionality
-- [ ] Add QR code for ads
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `ADV-001` | [ ] | Implement ad promotion system | Feature Dev |
+| `ADV-002` | [ ] | Add payment integration | Integration Eng |
+| `ADV-003` | [ ] | Implement review/rating system | Feature Dev |
+| `ADV-004` | [ ] | Add seller verification | Feature Dev |
+| `ADV-005` | [ ] | Implement ad boosting | Feature Dev |
+| `ADV-006` | [ ] | Add analytics tracking | Integration Eng |
+| `ADV-007` | [ ] | Implement A/B testing framework | Integration Eng |
+| `ADV-008` | [ ] | Add deep linking support | Feature Dev |
+| `ADV-009` | [ ] | Implement share functionality | Feature Dev |
+| `ADV-010` | [ ] | Add QR code for ads | Feature Dev |
 
 ### Performance & Optimization
 
-- [ ] Implement lazy loading for images
-- [ ] Add pagination for all lists
-- [ ] Optimize widget rebuilds
-- [ ] Implement memory management
-- [ ] Add performance monitoring
-- [ ] Optimize app size
-- [ ] Implement code splitting
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `PERF-001` | [ ] | Implement lazy loading for images | Refactor Agent |
+| `PERF-002` | [ ] | Add pagination for all lists | Feature Dev |
+| `PERF-003` | [ ] | Optimize widget rebuilds | Refactor Agent |
+| `PERF-004` | [ ] | Implement memory management | Refactor Agent |
+| `PERF-005` | [ ] | Add performance monitoring | Integration Eng |
+| `PERF-006` | [ ] | Optimize app size | Refactor Agent |
+| `PERF-007` | [ ] | Implement code splitting | Refactor Agent |
 
 ### Testing
 
-- [ ] Set up unit testing framework
-- [ ] Write unit tests for controllers
-- [ ] Write unit tests for models
-- [ ] Set up widget testing
-- [ ] Write widget tests for screens
-- [ ] Set up integration testing
-- [ ] Write integration tests for flows
-- [ ] Set up CI/CD pipeline
-- [ ] Add code coverage reporting
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `TEST-001` | [ ] | Set up unit testing framework | QA Agent |
+| `TEST-002` | [ ] | Write unit tests for controllers | QA Agent |
+| `TEST-003` | [ ] | Write unit tests for models | QA Agent |
+| `TEST-004` | [ ] | Set up widget testing | QA Agent |
+| `TEST-005` | [ ] | Write widget tests for screens | QA Agent |
+| `TEST-006` | [ ] | Set up integration testing | QA Agent |
+| `TEST-007` | [ ] | Write integration tests for flows | QA Agent |
+| `TEST-008` | [ ] | Set up CI/CD pipeline | Integration Eng |
+| `TEST-009` | [ ] | Add code coverage reporting | QA Agent |
 
 ### Localization
 
-- [ ] Set up localization framework
-- [ ] Extract all strings to ARB files
-- [ ] Add Persian (Farsi) translation
-- [ ] Add Arabic translation
-- [ ] Implement RTL support
-- [ ] Add language switcher
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `L10N-001` | [ ] | Set up localization framework | Feature Dev |
+| `L10N-002` | [ ] | Extract all strings to ARB files | Refactor Agent |
+| `L10N-003` | [ ] | Add Persian (Farsi) translation | Feature Dev |
+| `L10N-004` | [ ] | Add Arabic translation | Feature Dev |
+| `L10N-005` | [ ] | Implement RTL support | Feature Dev |
+| `L10N-006` | [ ] | Add language switcher | Feature Dev |
 
 ### Accessibility
 
-- [ ] Add semantic labels to all widgets
-- [ ] Ensure proper contrast ratios
-- [ ] Implement screen reader support
-- [ ] Add keyboard navigation
-- [ ] Test with accessibility tools
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `A11Y-001` | [ ] | Add semantic labels to all widgets | UI Engineer |
+| `A11Y-002` | [ ] | Ensure proper contrast ratios | UI Engineer |
+| `A11Y-003` | [ ] | Implement screen reader support | UI Engineer |
+| `A11Y-004` | [ ] | Add keyboard navigation | UI Engineer |
+| `A11Y-005` | [ ] | Test with accessibility tools | QA Agent |
 
 ---
 
@@ -214,35 +275,41 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ### High Priority
 
-- [ ] Replace `withOpacity` with `withValues` (Flutter 3.8+ deprecation)
-- [ ] Add proper error boundaries
-- [ ] Implement consistent loading patterns
-- [ ] Standardize API response handling (for future)
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `DEBT-001` | [x] | Replace `withOpacity` with `withValues` (Flutter 3.8+ deprecation) | Refactor Agent |
+| `DEBT-002` | [x] | Add proper error boundaries | Arch Guardian |
+| `DEBT-003` | [x] | Implement consistent loading patterns | Arch Guardian |
+| `DEBT-004` | [ ] | Standardize API response handling (for future) | Arch Guardian |
 
 ### Medium Priority
 
-- [ ] Refactor large screen files (>500 lines)
-- [ ] Extract common widgets
-- [ ] Improve code documentation
-- [ ] Add missing type annotations
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `DEBT-101` | [ ] | Refactor large screen files (>500 lines) | Refactor Agent |
+| `DEBT-102` | [ ] | Extract common widgets | Refactor Agent |
+| `DEBT-103` | [ ] | Improve code documentation | Arch Guardian |
+| `DEBT-104` | [ ] | Add missing type annotations | Refactor Agent |
 
 ### Low Priority
 
-- [ ] Optimize import statements
-- [ ] Remove commented-out code
-- [ ] Standardize file headers
-- [ ] Add license headers
+| Code | Status | Task | Role |
+|------|--------|------|------|
+| `DEBT-201` | [ ] | Optimize import statements | Refactor Agent |
+| `DEBT-202` | [ ] | Remove commented-out code | Refactor Agent |
+| `DEBT-203` | [ ] | Standardize file headers | Arch Guardian |
+| `DEBT-204` | [ ] | Add license headers | Arch Guardian |
 
 ---
 
 ## Blocked Items
 
-| Item | Blocker | Waiting On |
-|------|---------|------------|
-| API integration | Backend not ready | Backend team |
-| Push notifications | Backend not ready | Backend team |
-| Real-time chat | WebSocket server | Backend team |
-| Payment integration | Business decision | Product owner |
+| Code | Status | Task | Blocker | Waiting On |
+|------|--------|------|---------|------------|
+| `API-001` | [!] | API integration | Backend not ready | Backend team |
+| `API-008` | [!] | Push notifications | Backend not ready | Backend team |
+| `RT-001` | [!] | Real-time chat | WebSocket server | Backend team |
+| `ADV-002` | [!] | Payment integration | Business decision | Product owner |
 
 ---
 
@@ -250,17 +317,43 @@ This document tracks all pending tasks organized by priority and timeline.
 
 ### December 2024
 
-- [x] Complete UI implementation for all screens
-- [x] Implement feature-based architecture
-- [x] Create data models (AdModel, UserModel, CategoryModel)
-- [x] Set up GetX state management
-- [x] Create constants (AppColors, AppSizes, AppTexts)
-- [x] Implement theme configuration
-- [x] Set up navigation with GetX
-- [x] Create mock data for all features
-- [x] Refactor controllers to use models
-- [x] Update screens to use constants
-- [x] Create project documentation
+| Code | Status | Task |
+|------|--------|------|
+| `DONE-001` | [x] | Complete UI implementation for all screens |
+| `DONE-002` | [x] | Implement feature-based architecture |
+| `DONE-003` | [x] | Create data models (AdModel, UserModel, CategoryModel) |
+| `DONE-004` | [x] | Set up GetX state management |
+| `DONE-005` | [x] | Create constants (AppColors, AppSizes, AppTexts) |
+| `DONE-006` | [x] | Implement theme configuration |
+| `DONE-007` | [x] | Set up navigation with GetX |
+| `DONE-008` | [x] | Create mock data for all features |
+| `DONE-009` | [x] | Refactor controllers to use models |
+| `DONE-010` | [x] | Update screens to use constants |
+| `DONE-011` | [x] | Create project documentation |
+
+---
+
+## Quick Reference
+
+### Find Tasks by Role
+
+| Role | Task Codes |
+|------|------------|
+| UI Engineer | `UI-*`, `ANI-*`, `CHAT-004`, `A11Y-*` |
+| Feature Dev | `STM-*`, `AUTH-*`, `CHAT-*`, `SRCH-*`, `POST-*`, `PROF-*`, `ADM-*`, `ADV-*`, `L10N-*` |
+| Refactor Agent | `CQ-001` to `CQ-003`, `PERF-*`, `DEBT-*`, `L10N-002` |
+| Arch Guardian | `CQ-004`, `CQ-005`, `DEBT-002` to `DEBT-004`, `DEBT-103`, `DEBT-203`, `DEBT-204` |
+| Integration Eng | `AUTH-004`, `AUTH-005`, `AUTH-007`, `CHAT-007`, `API-*`, `RT-*`, `ADV-002`, `ADV-006`, `ADV-007`, `PERF-005`, `TEST-008` |
+| QA Agent | `TEST-*`, `A11Y-005` |
+
+### Find Tasks by Priority
+
+| Priority | Task Codes |
+|----------|------------|
+| Short-term | `UI-*`, `ANI-*`, `STM-*`, `CQ-*` |
+| Mid-term | `AUTH-*`, `CHAT-*`, `SRCH-*`, `POST-*`, `PROF-*` |
+| Long-term | `API-*`, `RT-*`, `ADM-*`, `ADV-*`, `PERF-*`, `TEST-*`, `L10N-*`, `A11Y-*` |
+| Tech Debt | `DEBT-*` |
 
 ---
 
@@ -270,3 +363,4 @@ This document tracks all pending tasks organized by priority and timeline.
 - Backend integration requires approval before starting
 - New dependencies must be documented
 - All changes must follow rules in `/docs/rules.md`
+- Reference tasks by their code when reporting progress (e.g., "Completed `UI-001`")

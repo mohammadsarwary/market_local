@@ -106,12 +106,12 @@ class PostAdScreen extends GetView<PostAdController> {
                                     margin: const EdgeInsets.only(right: 12),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: AppColors.primary.withOpacity(0.5),
+                                        color: AppColors.primary.withValues(alpha: 0.5),
                                         width: 1,
                                         style: BorderStyle.solid, // Simulating dashed with opacity if needed, or just clean border
                                       ),
                                       borderRadius: BorderRadius.circular(12),
-                                      color: Colors.red[50]?.withOpacity(0.5),
+                                      color: Colors.red[50]?.withValues(alpha: 0.5),
                                     ),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +123,7 @@ class PostAdScreen extends GetView<PostAdController> {
                                             shape: BoxShape.circle,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.black.withOpacity(0.05),
+                                                color: Colors.black.withValues(alpha: 0.05),
                                                 blurRadius: 4,
                                               ),
                                             ],
@@ -163,7 +163,7 @@ class PostAdScreen extends GetView<PostAdController> {
                                             width: double.infinity,
                                             padding: const EdgeInsets.symmetric(vertical: 4),
                                             decoration: BoxDecoration(
-                                              color: Colors.black.withOpacity(0.6),
+                                              color: Colors.black.withValues(alpha: 0.6),
                                               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
                                             ),
                                             child: const Text(
@@ -303,7 +303,7 @@ class PostAdScreen extends GetView<PostAdController> {
                                     ),
                                     boxShadow: isSelected ? [
                                       BoxShadow(
-                                        color: AppColors.primary.withOpacity(0.3),
+                                        color: AppColors.primary.withValues(alpha: 0.3),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
                                       )
@@ -421,7 +421,7 @@ class PostAdScreen extends GetView<PostAdController> {
                         border: Border.all(color: Colors.grey[200]!),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.02),
+                            color: Colors.black.withValues(alpha: 0.02),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -478,7 +478,7 @@ class PostAdScreen extends GetView<PostAdController> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -491,7 +491,7 @@ class PostAdScreen extends GetView<PostAdController> {
                               width: 48,
                               height: 44,
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.2),
+                                color: AppColors.primary.withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -523,7 +523,7 @@ class PostAdScreen extends GetView<PostAdController> {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.black.withValues(alpha: 0.1),
                                     blurRadius: 8,
                                   ),
                                 ],
@@ -565,7 +565,7 @@ class PostAdScreen extends GetView<PostAdController> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -4),
             ),

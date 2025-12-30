@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'core/theme/app_theme.dart';
+import 'core/error/error_handler.dart';
+import 'core/error/error_boundary_widget.dart';
+import 'core/error/error_controller.dart';
+import 'core/loading/loading_controller.dart';
 import 'features/home/home_screen.dart';
 import 'features/search/search_screen.dart';
 import 'features/post_ad/post_ad_screen.dart';
@@ -10,6 +14,13 @@ import 'bindings/main_binding.dart';
 import 'controllers/navigation_controller.dart';
 
 void main() {
+  // Initialize global error handling
+  AppErrorHandler.initialize();
+  
+  // Initialize controllers
+  Get.put(ErrorController());
+  Get.put(LoadingController());
+  
   runApp(const MyApp());
 }
 
@@ -18,12 +29,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'MarketLocal',
-      theme: AppTheme.lightTheme,
-      initialBinding: MainBinding(),
-      home: const MainScreen(),
-      debugShowCheckedModeBanner: false,
+    return ErrorBoundary(
+      boundaryName: 'Main App',
+      child: GetMaterialApp(
+        title: 'MarketLocal',
+        theme: AppTheme.lightTheme,
+        initialBinding: MainBinding(),
+        home: const MainScreen(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
@@ -36,11 +50,26 @@ class MainScreen extends StatelessWidget {
     final controller = Get.find<NavigationController>();
     
     final List<Widget> screens = [
-      const HomeScreen(),
-      const SearchScreen(),
-      const PostAdScreen(),
-      const ChatScreen(),
-      const ProfileScreen(),
+      const ErrorBoundary(
+        boundaryName: 'Home Screen',
+        child: HomeScreen(),
+      ),
+      const ErrorBoundary(
+        boundaryName: 'Search Screen',
+        child: SearchScreen(),
+      ),
+      const ErrorBoundary(
+        boundaryName: 'Post Ad Screen',
+        child: PostAdScreen(),
+      ),
+      const ErrorBoundary(
+        boundaryName: 'Chat Screen',
+        child: ChatScreen(),
+      ),
+      const ErrorBoundary(
+        boundaryName: 'Profile Screen',
+        child: ProfileScreen(),
+      ),
     ];
 
     return Scaffold(

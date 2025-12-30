@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_texts.dart';
+import '../../core/loading/loading_widgets.dart';
 import '../../models/ad_model.dart';
 import '../ad_details/ad_details_screen.dart';
 import 'home_controller.dart';
@@ -211,7 +212,7 @@ class HomeScreen extends StatelessWidget {
                     Text(
                       'Up to 50% off on outdoor gear',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: AppSizes.fontM,
                       ),
                     ),
@@ -221,7 +222,7 @@ class HomeScreen extends StatelessWidget {
                         Text(
                           'Check it out',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: AppSizes.fontM,
                             fontWeight: FontWeight.w500,
                           ),
@@ -330,8 +331,8 @@ class _ProductCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         color: AppColors.border,
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                        child: Center(
+                          child: LoadingWidgets.circularSmall(),
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
