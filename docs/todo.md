@@ -286,7 +286,7 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `DEBT-101` | [ ] | Refactor large screen files (>500 lines) | Refactor Agent |
+| `DEBT-101` | [x] | Refactor large screen files (>500 lines) | Refactor Agent |
 | `DEBT-102` | [ ] | Extract common widgets | Refactor Agent |
 | `DEBT-103` | [ ] | Improve code documentation | Arch Guardian |
 | `DEBT-104` | [ ] | Add missing type annotations | Refactor Agent |

@@ -14,6 +14,7 @@ class PostAdController extends GetxController {
   final Rx<String?> selectedCategory = Rx<String?>(null);
   final RxString selectedCondition = 'New'.obs;
   final RxList<String> images = <String>[...PostAdMockData.mockImages].obs;
+  final RxBool useCurrentLocation = true.obs;
 
   List<String> get categories => PostAdMockData.categories;
 
@@ -34,6 +35,10 @@ class PostAdController extends GetxController {
 
   void updateCondition(String value) {
     selectedCondition.value = value;
+  }
+
+  void updateLocationPreference(bool value) {
+    useCurrentLocation.value = value;
   }
 
   void addPhoto() {
