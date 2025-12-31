@@ -258,6 +258,17 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
+  /// Builds a statistics item widget
+  /// 
+  /// Creates a column displaying a value and label for user statistics.
+  /// Used for showing metrics like active listings, sold items, etc.
+  /// 
+  /// Parameters:
+  /// - [value] The statistic value to display
+  /// - [label] The statistic label to display
+  /// 
+  /// Returns:
+  /// A widget containing the statistic value and label
   Widget _buildStatItem(String value, String label) {
     return Column(
       children: [
@@ -283,6 +294,17 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
+  /// Builds a tab widget
+  /// 
+  /// Creates a selectable tab for the profile screen.
+  /// The tab highlights when selected and updates the controller when tapped.
+  /// 
+  /// Parameters:
+  /// - [label] The tab label text
+  /// - [index] The tab index
+  /// 
+  /// Returns:
+  /// A widget representing the selectable tab
   Widget _buildTab(String label, int index) {
     return Expanded(
       child: Obx(() {
@@ -314,6 +336,16 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
+  /// Builds an item card widget for displaying user listings
+  /// 
+  /// Creates a card showing an item's image, title, price, and other details.
+  /// Used in the profile screen to display user's active or sold items.
+  /// 
+  /// Parameters:
+  /// - [item] The AdModel containing item information
+  /// 
+  /// Returns:
+  /// A widget representing the item card
   Widget _buildItemCard(AdModel item) {
     return Container(
       decoration: BoxDecoration(
@@ -426,6 +458,19 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
+  /// Builds a settings tile widget
+  /// 
+  /// Creates a tappable tile for settings options with an icon and title.
+  /// Can be styled as destructive (for logout) and includes an optional tap handler.
+  /// 
+  /// Parameters:
+  /// - [icon] The icon to display
+  /// - [title] The tile title text
+  /// - [isDestructive] Whether the tile should be styled as destructive (red color)
+  /// - [onTap] Optional callback when the tile is tapped
+  /// 
+  /// Returns:
+  /// A widget representing the settings tile
   Widget _buildSettingsTile(IconData icon, String title, {bool isDestructive = false, VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,

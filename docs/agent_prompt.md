@@ -84,6 +84,12 @@ You are working on the MarketLocal Flutter project as a **UI Engineer**.
 Task Code: [UI/ANI/A11Y]-[XXX]
 Task: [DESCRIPTION]
 
+Read the project documentation:
+   - `/docs/rules.md` - Strict project rules
+   - `/docs/structure.md` - Folder structure and ownership
+   - `/docs/roles.md` - Your role boundaries
+   - `/docs/ai_workflow.md` - How to work on tasks
+
 Rules:
 - DO NOT change the overall design or layout
 - Only polish existing UI (spacing, animations, loading states)

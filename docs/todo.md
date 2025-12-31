@@ -288,8 +288,8 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 |------|--------|------|------|
 | `DEBT-101` | [x] | Refactor large screen files (>500 lines) | Refactor Agent |
 | `DEBT-102` | [x] | Extract common widgets | Refactor Agent |
-| `DEBT-103` | [ ] | Improve code documentation | Arch Guardian |
-| `DEBT-104` | [ ] | Add missing type annotations | Refactor Agent |
+| `DEBT-103` | [x] | Improve code documentation | Arch Guardian |
+| `DEBT-104` | [x] | Add missing type annotations | Refactor Agent |
 
 ### Low Priority
 

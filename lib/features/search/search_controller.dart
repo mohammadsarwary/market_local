@@ -3,21 +3,87 @@ import 'package:get/get.dart';
 import '../../models/category_model.dart';
 import 'data/mock_data.dart';
 
+/// Controller for managing search functionality and filters
+/// 
+/// This controller handles all search-related state including:
+/// - Search query input
+/// - Price range filtering
+/// - Category selection
+/// - Sort options
+/// - Filter toggles
+/// 
+/// The controller provides a comprehensive search experience with multiple
+/// filtering options and maintains all state reactively using GetX observables.
+/// 
+/// Usage:
+/// ```dart
+/// final controller = Get.put(SearchController());
+/// 
+/// // Search for items
+/// controller.searchController.text = "laptop";
+/// 
+/// // Update price range
+/// controller.updatePriceRange(RangeValues(100, 500));
+/// 
+/// // Toggle filters
+/// controller.toggleFilter("Nearby", true);
+/// ```
 class SearchController extends GetxController {
+  /// Controller for the search text input field
+  /// 
+  /// Use this to get or set the current search query.
+  /// The UI should listen to changes on this controller to update search results.
   final TextEditingController searchController = TextEditingController();
+
+  /// Currently selected sort option
+  /// 
+  /// Defaults to 'Best Match'. Use [updateSort] to change the sorting.
+  /// Available options typically include: 'Best Match', 'Newest', 'Lowest Price'
   final RxString selectedSort = 'Best Match'.obs;
+
+  /// Current price range selection
+  /// 
+  /// Represents the min and max price values selected by the user.
+  /// Use [updatePriceRange] to modify this value.
   final Rx<RangeValues> currentRangeValues = const RangeValues(50, 1200).obs;
   
+  /// Controller for the minimum price input field
+  /// 
+  /// Automatically synchronized with [currentRangeValues].start
   final TextEditingController minPriceController = TextEditingController(text: '50');
+
+  /// Controller for the maximum price input field
+  /// 
+  /// Automatically synchronized with [currentRangeValues].end
   final TextEditingController maxPriceController = TextEditingController(text: '1200');
 
+  /// Currently selected category index
+  /// 
+  /// Defaults to 0 (all categories). Used to filter search results by category.
   final RxInt selectedCategoryIndex = 0.obs;
 
+  /// List of available filter options
+  /// 
+  /// Returns mock data from [SearchMockData.filters].
+  /// These are the filter options that users can toggle on/off.
   List<String> get filters => SearchMockData.filters;
+
+  /// List of currently active filters
+  /// 
+  /// Contains the filters that are currently applied to the search.
+  /// Use [toggleFilter] to add or remove filters from this list.
   final RxList<String> selectedFilters = ['Nearby'].obs;
 
+  /// List of available categories for filtering
+  /// 
+  /// Returns mock data from [SearchMockData.categories].
+  /// These categories can be used to filter search results.
   List<CategoryModel> get categories => SearchMockData.categories;
 
+  /// Disposes of all controllers when the controller is removed
+  /// 
+  /// This is important to prevent memory leaks. Always call super.onClose()
+  /// after disposing custom controllers.
   @override
   void onClose() {
     searchController.dispose();
@@ -26,6 +92,19 @@ class SearchController extends GetxController {
     super.onClose();
   }
 
+  /// Toggles a filter on or off
+  /// 
+  /// Adds or removes a filter from [selectedFilters] based on the [selected] parameter.
+  /// 
+  /// Parameters:
+  /// - [filter] The filter name to toggle
+  /// - [selected] Whether the filter should be active (true) or inactive (false)
+  /// 
+  /// Example:
+  /// ```dart
+  /// controller.toggleFilter("Nearby", true); // Add filter
+  /// controller.toggleFilter("Nearby", false); // Remove filter
+  /// ```
   void toggleFilter(String filter, bool selected) {
     if (selected) {
       selectedFilters.add(filter);
@@ -34,16 +113,48 @@ class SearchController extends GetxController {
     }
   }
 
+  /// Updates the price range and synchronizes text controllers
+  /// 
+  /// Updates [currentRangeValues] and updates the text in both price
+  /// input controllers to reflect the new range.
+  /// 
+  /// Parameters:
+  /// - [values] The new price range values
+  /// 
+  /// Example:
+  /// ```dart
+  /// controller.updatePriceRange(RangeValues(100, 500));
+  /// ```
   void updatePriceRange(RangeValues values) {
     currentRangeValues.value = values;
     minPriceController.text = values.start.round().toString();
     maxPriceController.text = values.end.round().toString();
   }
 
+  /// Updates the selected sort option
+  /// 
+  /// Changes the [selectedSort] to the provided [sort] option.
+  /// 
+  /// Parameters:
+  /// - [sort] The sort option to select (e.g., 'Best Match', 'Newest', 'Lowest Price')
+  /// 
+  /// Example:
+  /// ```dart
+  /// controller.updateSort('Newest');
+  /// ```
   void updateSort(String sort) {
     selectedSort.value = sort;
   }
 
+  /// Resets all filters to their default state
+  /// 
+  /// Clears all selected filters, resets sort to 'Best Match',
+  /// and resets price range to the full range (0-2000).
+  /// 
+  /// Example:
+  /// ```dart
+  /// controller.resetFilters(); // All filters cleared
+  /// ```
   void resetFilters() {
     selectedFilters.clear();
     selectedSort.value = 'Best Match';

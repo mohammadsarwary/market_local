@@ -22,7 +22,17 @@ class LoadingUtils {
   }
 
   /// Create debounced loading operation
-  static Function() debouncedLoading(
+  /// 
+  /// Creates a function that will execute the [operation] after the specified [delay].
+  /// If called multiple times within the delay period, only the last call will execute.
+  /// 
+  /// Parameters:
+  /// - [operation] The operation to execute after delay
+  /// - [delay] The delay duration before executing (default: 500ms)
+  /// 
+  /// Returns:
+  /// A function that when called will execute the operation after delay
+  static VoidCallback debouncedLoading(
     VoidCallback operation, {
     Duration delay = const Duration(milliseconds: 500),
   }) {
@@ -37,7 +47,17 @@ class LoadingUtils {
   }
 
   /// Create throttled loading operation
-  static Function() throttledLoading(
+  /// 
+  /// Creates a function that will execute the [operation] but limit execution
+  /// to once per [interval]. Subsequent calls within the interval will be ignored.
+  /// 
+  /// Parameters:
+  /// - [operation] The operation to throttle
+  /// - [interval] The minimum time between executions (default: 1000ms)
+  /// 
+  /// Returns:
+  /// A function that when called will execute the operation with throttling
+  static VoidCallback throttledLoading(
     VoidCallback operation, {
     Duration interval = const Duration(milliseconds: 1000),
   }) {

@@ -1,29 +1,89 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
+/// A customizable text field widget with consistent styling
+/// 
+/// This widget provides a standardized text field that can be used throughout
+/// the application. It includes common styling options and sensible defaults
+/// while allowing for extensive customization.
+/// 
+/// Example usage:
+/// ```dart
+/// AppTextField(
+///   controller: _nameController,
+///   hintText: 'Enter your name',
+///   prefixIcon: Icons.person,
+///   validator: (value) => value!.isEmpty ? 'Required' : null,
+/// )
+/// ```
 class AppTextField extends StatelessWidget {
+  /// Controller for managing the text field's value
   final TextEditingController? controller;
+  
+  /// Text displayed when the field is empty
   final String? hintText;
+  
+  /// Label text displayed above the field
   final String? labelText;
+  
+  /// Icon displayed before the input text
   final IconData? prefixIcon;
+  
+  /// Icon displayed after the input text
   final IconData? suffixIcon;
+  
+  /// Whether to obscure the text (for passwords)
   final bool obscureText;
+  
+  /// Type of keyboard to show
   final TextInputType? keyboardType;
+  
+  /// Action to perform when user submits
   final TextInputAction? textInputAction;
+  
+  /// Maximum number of lines for multi-line input
   final int? maxLines;
+  
+  /// Function to validate the input
   final String? Function(String?)? validator;
+  
+  /// Callback when text changes
   final void Function(String)? onChanged;
+  
+  /// Callback when field is tapped
   final void Function()? onTap;
+  
+  /// Whether the field is read-only
   final bool readOnly;
+  
+  /// Whether the field is enabled
   final bool enabled;
+  
+  /// Focus node for managing focus state
   final FocusNode? focusNode;
+  
+  /// Padding inside the text field
   final EdgeInsets? contentPadding;
+  
+  /// Border styling
   final InputBorder? border;
+  
+  /// Border styling when enabled
   final InputBorder? enabledBorder;
+  
+  /// Border styling when focused
   final InputBorder? focusedBorder;
+  
+  /// Text styling
   final TextStyle? textStyle;
+  
+  /// Hint text styling
   final TextStyle? hintStyle;
+  
+  /// Background color
   final Color? fillColor;
+  
+  /// Border radius for rounded corners
   final double? borderRadius;
 
   const AppTextField({

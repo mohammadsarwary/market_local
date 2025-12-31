@@ -321,6 +321,16 @@ class SearchScreen extends GetView<SearchController> {
     );
   }
 
+  /// Builds a sort button widget
+  /// 
+  /// Creates a button that can be used to sort search results.
+  /// The button highlights when selected and updates the sort option when tapped.
+  /// 
+  /// Parameters:
+  /// - [title] The sort option title to display
+  /// 
+  /// Returns:
+  /// A widget representing the sort button
   Widget _buildSortButton(String title) {
     return Obx(() {
       final isSelected = controller.selectedSort.value == title;
