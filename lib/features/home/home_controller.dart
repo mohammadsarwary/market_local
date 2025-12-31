@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../../models/ad_model.dart';
 import '../../models/category_model.dart';
+import '../../core/utils/haptic_feedback.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing the home screen state and data
@@ -27,6 +28,15 @@ import 'data/mock_data.dart';
 /// String timeAgo = controller.getTimeAgo(DateTime.now());
 /// ```
 class HomeController extends GetxController {
+  /// Loading state for the home screen
+  final RxBool isLoading = false.obs;
+
+  /// Error state for the home screen
+  final RxBool hasError = false.obs;
+
+  /// Error message to display
+  final RxString errorMessage = ''.obs;
+
   /// Currently selected category index for filtering products
   /// 
   /// Defaults to 0 (all categories). When changed, the UI can filter
@@ -46,6 +56,41 @@ class HomeController extends GetxController {
   /// populated from API calls.
   List<AdModel> get products => HomeMockData.products;
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadInitialData();
+  }
+
+  /// Load initial data for the home screen
+  Future<void> loadInitialData() async {
+    await refreshData();
+  }
+
+  /// Refresh data from the server
+  Future<void> refreshData() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      // Simulate network delay
+      await Future.delayed(const Duration(seconds: 1));
+
+      // In a real app, this would fetch data from an API
+      // For now, we're using mock data so no actual loading is needed
+      
+      // Add haptic feedback on successful refresh
+      await HapticFeedback.success();
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = 'Failed to load data. Please try again.';
+      await HapticFeedback.error();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   /// Changes the selected category index
   /// 
   /// Updates the [selectedCategoryIndex] to the provided [index].
@@ -58,8 +103,17 @@ class HomeController extends GetxController {
   /// ```dart
   /// controller.changeCategory(1); // Selects second category
   /// ```
-  void changeCategory(int index) {
+  void changeCategory(int index) async {
+    await HapticFeedback.selection();
     selectedCategoryIndex.value = index;
+  }
+
+  /// Toggle favorite status for a product
+  Future<void> toggleFavorite(String productId) async {
+    await HapticFeedback.light();
+    
+    // In a real app, this would update the backend
+    // For now, we'll just provide haptic feedback
   }
 
   /// Formats a DateTime into a human-readable "time ago" string

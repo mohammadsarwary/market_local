@@ -68,6 +68,14 @@ class AppTexts {
   static const String commonPromoted = 'Promoted';
   static const String commonFree = 'Free';
 
+  // Empty States
+  static const String emptyStateTitle = 'No items found';
+  static const String emptyStateSubtitle = 'Check back later or try adjusting your filters';
+
+  // Error States
+  static const String errorTitle = 'Something went wrong';
+  static const String errorSubtitle = 'Please try again in a moment';
+
   // Validation Messages
   static const String validationRequired = 'This field is required';
   static const String validationEmail = 'Please enter a valid email';

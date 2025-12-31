@@ -46,16 +46,16 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `UI-001` | [ ] | Add loading shimmer effects to product grids | UI Engineer |
-| `UI-002` | [ ] | Add pull-to-refresh on list screens | UI Engineer |
-| `UI-003` | [ ] | Implement empty state widgets for all lists | UI Engineer |
-| `UI-004` | [ ] | Add error state widgets with retry buttons | UI Engineer |
-| `UI-005` | [ ] | Improve image loading placeholders | UI Engineer |
-| `UI-006` | [ ] | Add haptic feedback on button taps | UI Engineer |
+| `UI-001` | [x] | Add loading shimmer effects to product grids | UI Engineer |
+| `UI-002` | [x] | Add pull-to-refresh on list screens | UI Engineer |
+| `UI-003` | [x] | Implement empty state widgets for all lists | UI Engineer |
+| `UI-004` | [x] | Add error state widgets with retry buttons | UI Engineer |
+| `UI-005` | [x] | Improve image loading placeholders | UI Engineer |
+| `UI-006` | [x] | Add haptic feedback on button taps | UI Engineer |
 | `UI-007` | [ ] | Implement skeleton loading for profile screen | UI Engineer |
 | `UI-008` | [ ] | Add smooth page transitions between screens | UI Engineer |
 | `UI-009` | [ ] | Fix any remaining overflow issues on small screens | UI Engineer |
-| `UI-010` | [ ] | Add scroll-to-top button on long lists | UI Engineer |
+| `UI-010` | [x] | Add scroll-to-top button on long lists | UI Engineer |
 
 ### Animations
 
