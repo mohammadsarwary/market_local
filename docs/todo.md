@@ -96,8 +96,8 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | Code | Status | Task | Role |
 |------|--------|------|------|
 | `AUTH-001` | [ ] | Design authentication flow (login, register, forgot password) | Feature Dev |
-| `AUTH-002` | [ ] | Create auth screens (login, register, OTP verification) | Feature Dev |
-| `AUTH-003` | [ ] | Implement AuthController | Feature Dev |
+| `AUTH-002` | [x] | Create auth screens (login, register, OTP verification) | Feature Dev |
+| `AUTH-003` | [x] | Implement AuthController | Feature Dev |
 | `AUTH-004` | [ ] | Add secure token storage | Integration Eng |
 | `AUTH-005` | [ ] | Implement session management | Integration Eng |
 | `AUTH-006` | [ ] | Add biometric authentication option | Feature Dev |

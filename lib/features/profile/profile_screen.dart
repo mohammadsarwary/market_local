@@ -5,6 +5,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_texts.dart';
 import '../../models/ad_model.dart';
+import '../auth/login_screen.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
@@ -240,6 +241,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   const SizedBox(height: 16),
                   _buildSettingsTile(Icons.account_circle_outlined, 'Account Details'),
                   _buildSettingsTile(Icons.notifications_outlined, 'Notifications'),
+                  _buildSettingsTile(Icons.login_outlined, 'Test Login Page', onTap: () => Get.to(() => const LoginScreen())),
                   _buildSettingsTile(Icons.help_outline, 'Help & Support'),
                   _buildSettingsTile(Icons.logout, 'Log Out', isDestructive: true, onTap: controller.logout),
                 ],
