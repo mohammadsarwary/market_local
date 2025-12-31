@@ -13,6 +13,36 @@ import 'features/profile/profile_screen.dart';
 import 'bindings/main_binding.dart';
 import 'controllers/navigation_controller.dart';
 
+/// Custom page transition for smooth navigation
+class FadeInTransition extends CustomTransition {
+  @override
+  Widget buildTransition(
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: animation,
+        curve: curve ?? Curves.easeInOut,
+      ),
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.0, 0.05),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(
+          parent: animation,
+          curve: curve ?? Curves.easeInOut,
+        )),
+        child: child,
+      ),
+    );
+  }
+}
+
 /// Entry point for the MarketLocal Flutter application
 /// 
 /// This file initializes the app and sets up global services including:
@@ -69,6 +99,9 @@ class MyApp extends StatelessWidget {
         initialBinding: MainBinding(),
         home: const MainScreen(),
         debugShowCheckedModeBanner: false,
+        transitionDuration: const Duration(milliseconds: 300),
+        defaultTransition: Transition.fadeIn,
+        customTransition: FadeInTransition(),
       ),
     );
   }

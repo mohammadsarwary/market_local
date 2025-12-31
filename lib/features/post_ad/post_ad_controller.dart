@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/haptic_feedback.dart';
 import 'data/mock_data.dart';
 
 class PostAdController extends GetxController {
+  /// Loading state for ad posting operations
+  final RxBool isLoading = false.obs;
+
+  /// Error state for ad posting operations
+  final RxBool hasError = false.obs;
+
+  /// Error message to display
+  final RxString errorMessage = ''.obs;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
   final TextEditingController titleController = TextEditingController();
@@ -104,16 +114,50 @@ class PostAdController extends GetxController {
   /// 
   /// Validates the form and shows a success message if valid.
   /// In a real app, this would send the ad data to the backend API.
-  void postAd() {
-    if (formKey.currentState?.validate() ?? false) {
+  Future<void> postAd() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      if (formKey.currentState?.validate() ?? false) {
+        // Simulate network delay
+        await Future.delayed(const Duration(seconds: 2));
+
+        // In a real app, this would send ad data to an API
+        await HapticFeedback.success();
+
+        Get.snackbar(
+          'Success',
+          'Ad published successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.success,
+          colorText: Colors.white,
+          margin: const EdgeInsets.all(16),
+        );
+      }
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = 'Failed to publish ad. Please try again.';
+      await HapticFeedback.error();
+
       Get.snackbar(
-        'Success',
-        'Ad published successfully!',
+        'Error',
+        errorMessage.value,
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: AppColors.success,
+        backgroundColor: AppColors.error,
         colorText: Colors.white,
         margin: const EdgeInsets.all(16),
       );
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  /// Retries posting the ad
+  /// 
+  /// Clears error state and attempts to post the ad again.
+  Future<void> retryPostAd() async {
+    await postAd();
   }
 }

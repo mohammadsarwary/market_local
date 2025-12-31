@@ -52,9 +52,9 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `UI-004` | [x] | Add error state widgets with retry buttons | UI Engineer |
 | `UI-005` | [x] | Improve image loading placeholders | UI Engineer |
 | `UI-006` | [x] | Add haptic feedback on button taps | UI Engineer |
-| `UI-007` | [ ] | Implement skeleton loading for profile screen | UI Engineer |
-| `UI-008` | [ ] | Add smooth page transitions between screens | UI Engineer |
-| `UI-009` | [ ] | Fix any remaining overflow issues on small screens | UI Engineer |
+| `UI-007` | [x] | Implement skeleton loading for profile screen | UI Engineer |
+| `UI-008` | [x] | Add smooth page transitions between screens | UI Engineer |
+| `UI-009` | [x] | Fix any remaining overflow issues on small screens | UI Engineer |
 | `UI-010` | [x] | Add scroll-to-top button on long lists | UI Engineer |
 
 ### Animations
@@ -71,9 +71,9 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `STM-001` | [ ] | Implement proper loading states in all controllers | Feature Dev |
-| `STM-002` | [ ] | Add error handling states to controllers | Feature Dev |
-| `STM-003` | [ ] | Implement retry logic for failed operations | Feature Dev |
+| `STM-001` | [x] | Implement proper loading states in all controllers | Feature Dev |
+| `STM-002` | [x] | Add error handling states to controllers | Feature Dev |
+| `STM-003` | [x] | Implement retry logic for failed operations | Feature Dev |
 | `STM-004` | [ ] | Add state persistence for filters | Feature Dev |
 | `STM-005` | [ ] | Implement optimistic updates for favorites | Feature Dev |
 
@@ -81,9 +81,9 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `CQ-001` | [ ] | Remove all remaining `withOpacity` deprecation warnings | Refactor Agent |
-| `CQ-002` | [ ] | Add `const` constructors where missing | Refactor Agent |
-| `CQ-003` | [ ] | Remove unused imports across all files | Refactor Agent |
+| `CQ-001` | [x] | Remove all remaining `withOpacity` deprecation warnings | Refactor Agent |
+| `CQ-002` | [x] | Add `const` constructors where missing | Refactor Agent |
+| `CQ-003` | [x] | Remove unused imports across all files | Refactor Agent |
 | `CQ-004` | [ ] | Add documentation comments to public APIs | Arch Guardian |
 | `CQ-005` | [ ] | Ensure consistent error handling patterns | Arch Guardian |
 

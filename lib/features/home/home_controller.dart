@@ -91,6 +91,13 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Retries loading data
+  /// 
+  /// Clears error state and loads data again.
+  Future<void> retryLoadData() async {
+    await refreshData();
+  }
+
   /// Changes the selected category index
   /// 
   /// Updates the [selectedCategoryIndex] to the provided [index].

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../models/category_model.dart';
+import '../../core/utils/haptic_feedback.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing search functionality and filters
@@ -29,6 +30,15 @@ import 'data/mock_data.dart';
 /// controller.toggleFilter("Nearby", true);
 /// ```
 class SearchController extends GetxController {
+  /// Loading state for search operations
+  final RxBool isLoading = false.obs;
+
+  /// Error state for search operations
+  final RxBool hasError = false.obs;
+
+  /// Error message to display
+  final RxString errorMessage = ''.obs;
+
   /// Controller for the search text input field
   /// 
   /// Use this to get or set the current search query.
@@ -161,5 +171,36 @@ class SearchController extends GetxController {
     currentRangeValues.value = const RangeValues(0, 2000);
     minPriceController.text = '0';
     maxPriceController.text = '2000';
+  }
+
+  /// Performs a search with current filters
+  /// 
+  /// Simulates a search operation with loading and error states.
+  /// In a real app, this would call an API to fetch search results.
+  Future<void> performSearch() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      // Simulate network delay
+      await Future.delayed(const Duration(seconds: 1));
+
+      // In a real app, this would fetch search results from an API
+      await HapticFeedback.success();
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = 'Search failed. Please try again.';
+      await HapticFeedback.error();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Retries the last search operation
+  /// 
+  /// Clears error state and performs the search again.
+  Future<void> retrySearch() async {
+    await performSearch();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../core/utils/haptic_feedback.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing chat functionality and conversations
@@ -8,6 +9,15 @@ import 'data/mock_data.dart';
 /// - Conversation filtering based on selected tab
 /// - Chat conversation management
 class ChatController extends GetxController {
+  /// Loading state for chat operations
+  final RxBool isLoading = false.obs;
+
+  /// Error state for chat operations
+  final RxBool hasError = false.obs;
+
+  /// Error message to display
+  final RxString errorMessage = ''.obs;
+
   /// Currently selected tab index
   /// 
   /// Defaults to 0 (All chats). Use [changeTab] to update this value.
@@ -50,5 +60,36 @@ class ChatController extends GetxController {
   /// - [index] The index of the tab to select from [tabs]
   void changeTab(int index) {
     selectedTabIndex.value = index;
+  }
+
+  /// Loads chat conversations
+  /// 
+  /// Simulates loading chat data with loading and error states.
+  /// In a real app, this would fetch conversations from an API.
+  Future<void> loadConversations() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      // Simulate network delay
+      await Future.delayed(const Duration(seconds: 1));
+
+      // In a real app, this would fetch conversations from an API
+      await HapticFeedback.success();
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = 'Failed to load conversations. Please try again.';
+      await HapticFeedback.error();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Retries loading conversations
+  /// 
+  /// Clears error state and loads conversations again.
+  Future<void> retryLoadConversations() async {
+    await loadConversations();
   }
 }

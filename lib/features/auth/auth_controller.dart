@@ -10,6 +10,9 @@ class AuthController extends GetxController {
   /// Loading state for verification code sending
   final RxBool isLoading = false.obs;
 
+  /// Error state for authentication operations
+  final RxBool hasError = false.obs;
+
   /// Error message to display
   final RxString errorMessage = ''.obs;
 
@@ -18,6 +21,7 @@ class AuthController extends GetxController {
     try {
       await HapticFeedback.light();
       isLoading.value = true;
+      hasError.value = false;
       errorMessage.value = '';
 
       // Simulate API call
@@ -40,6 +44,7 @@ class AuthController extends GetxController {
       
     } catch (e) {
       await HapticFeedback.error();
+      hasError.value = true;
       errorMessage.value = 'Failed to send verification code. Please try again.';
       Get.snackbar(
         'Error',
@@ -50,6 +55,13 @@ class AuthController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// Retries sending verification code
+  /// 
+  /// Clears error state and attempts to send code again.
+  Future<void> retrySendCode() async {
+    await sendVerificationCode();
   }
 
   /// Sign in with Apple
@@ -109,6 +121,7 @@ class AuthController extends GetxController {
   /// Update phone number
   void updatePhoneNumber(String value) {
     phoneNumber.value = value;
+    hasError.value = false;
     errorMessage.value = '';
   }
 
