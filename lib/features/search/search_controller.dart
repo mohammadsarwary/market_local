@@ -4,6 +4,7 @@ import '../../models/category_model.dart';
 import 'data/mock_data.dart';
 
 class SearchController extends GetxController {
+  final TextEditingController searchController = TextEditingController();
   final RxString selectedSort = 'Best Match'.obs;
   final Rx<RangeValues> currentRangeValues = const RangeValues(50, 1200).obs;
   
@@ -19,6 +20,7 @@ class SearchController extends GetxController {
 
   @override
   void onClose() {
+    searchController.dispose();
     minPriceController.dispose();
     maxPriceController.dispose();
     super.onClose();

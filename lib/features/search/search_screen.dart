@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_texts.dart';
+import '../../core/widgets/common_input_fields.dart';
 import 'search_controller.dart';
 
 class SearchScreen extends GetView<SearchController> {
@@ -20,30 +21,17 @@ class SearchScreen extends GetView<SearchController> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: AppTexts.searchHint,
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: const Icon(Icons.close, color: Colors.grey),
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      ),
+                    child: AppSearchField(
+                      controller: controller.searchController,
+                      hintText: AppTexts.searchHint,
                     ),
                   ),
                   const SizedBox(width: 12),
                   TextButton(
                     onPressed: () {},
-                    child: const Text(
+                    child: Text(
                       'Cancel',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                         fontSize: AppSizes.fontL,

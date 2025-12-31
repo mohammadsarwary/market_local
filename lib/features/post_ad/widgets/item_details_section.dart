@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/common_input_fields.dart';
 import '../post_ad_controller.dart';
 
 class ItemDetailsSection extends StatelessWidget {
@@ -22,28 +23,9 @@ class ItemDetailsSection extends StatelessWidget {
         // Title Field
         const Text('Title', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87)),
         const SizedBox(height: 10),
-        TextFormField(
+        AppTextField(
           controller: controller.titleController,
-          style: const TextStyle(fontSize: 16),
-          decoration: InputDecoration(
-            hintText: 'What are you selling?',
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-            ),
-          ),
+          hintText: 'What are you selling?',
         ),
 
         const SizedBox(height: 24),
@@ -122,31 +104,8 @@ class ItemDetailsSection extends StatelessWidget {
         // Price Field
         const Text('Price', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87)),
         const SizedBox(height: 10),
-        TextFormField(
+        AppPriceField(
           controller: controller.priceController,
-          keyboardType: TextInputType.number,
-          style: const TextStyle(fontSize: 16),
-          decoration: InputDecoration(
-            prefixText: '\$',
-            prefixStyle: const TextStyle(fontSize: 16, color: Colors.black87),
-            hintText: '0.00',
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-            ),
-          ),
         ),
 
         const SizedBox(height: 24),
@@ -154,29 +113,9 @@ class ItemDetailsSection extends StatelessWidget {
         // Description Field
         const Text('Description', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87)),
         const SizedBox(height: 10),
-        TextFormField(
+        AppTextArea(
           controller: controller.descriptionController,
-          maxLines: 5,
-          style: const TextStyle(fontSize: 16),
-          decoration: InputDecoration(
-            hintText: 'Describe your item in detail (brand, usage, faults)...',
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.all(16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-            ),
-          ),
+          hintText: 'Describe your item in detail (brand, usage, faults)...',
         ),
       ],
     );

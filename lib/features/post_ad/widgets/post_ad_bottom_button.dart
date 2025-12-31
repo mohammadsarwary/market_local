@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/common_buttons.dart';
 import '../post_ad_controller.dart';
 
 class PostAdBottomButton extends StatelessWidget {
@@ -27,28 +27,11 @@ class PostAdBottomButton extends StatelessWidget {
           ),
         ],
       ),
-      child: ElevatedButton(
+      child: AppButton(
+        text: 'Publish Ad',
         onPressed: controller.postAd,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Publish Ad',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(width: 10),
-            Icon(Icons.arrow_forward, size: 20),
-          ],
-        ),
+        icon: Icons.arrow_forward,
+        height: 56,
       ),
     );
   }

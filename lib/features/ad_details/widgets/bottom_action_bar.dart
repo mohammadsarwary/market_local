@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/common_buttons.dart';
 
 class BottomActionBar extends StatelessWidget {
   const BottomActionBar({super.key});
@@ -22,47 +23,32 @@ class BottomActionBar extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: SizedBox(
+            child: AppOutlinedButton(
+              text: 'Call',
+              onPressed: () {},
+              icon: Icons.call,
               height: 56,
-              child: OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.call),
-                label: const Text('Call'),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFFE53935)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
+              borderColor: const Color(0xFFE53935),
+              textColor: const Color(0xFFE53935),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
             flex: 2,
-            child: SizedBox(
-              height: 56,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.snackbar(
-                    'Message Sent',
-                    'Your message has been sent to the seller',
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: AppColors.primary,
-                    colorText: Colors.white,
-                    margin: const EdgeInsets.all(16),
-                  );
-                },
-                icon: const Icon(Icons.message),
-                label: const Text('Message'),
-                style: ElevatedButton.styleFrom(
+            child: AppButton(
+              text: 'Message',
+              onPressed: () {
+                Get.snackbar(
+                  'Message Sent',
+                  'Your message has been sent to the seller',
+                  snackPosition: SnackPosition.BOTTOM,
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
+                  colorText: Colors.white,
+                  margin: const EdgeInsets.all(16),
+                );
+              },
+              icon: Icons.message,
+              height: 56,
             ),
           ),
         ],
