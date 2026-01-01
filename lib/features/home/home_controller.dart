@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../models/ad_model.dart';
 import '../../models/category_model.dart';
 import '../../core/utils/haptic_feedback.dart';
+import '../../core/services/storage_service.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing the home screen state and data
@@ -37,6 +39,12 @@ class HomeController extends GetxController {
   /// Error message to display
   final RxString errorMessage = ''.obs;
 
+  /// Storage service for persisting favorites
+  late final StorageService _storageService;
+
+  /// Set of favorite item IDs for quick lookup
+  final RxSet<String> favoriteIds = <String>{}.obs;
+
   /// Currently selected category index for filtering products
   /// 
   /// Defaults to 0 (all categories). When changed, the UI can filter
@@ -59,7 +67,15 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _storageService = Get.find<StorageService>();
+    _loadFavorites();
     loadInitialData();
+  }
+
+  /// Load favorite IDs from storage
+  void _loadFavorites() {
+    final savedFavorites = _storageService.loadFavorites();
+    favoriteIds.assignAll(savedFavorites);
   }
 
   /// Load initial data for the home screen
@@ -98,6 +114,53 @@ class HomeController extends GetxController {
     await refreshData();
   }
 
+  /// Check if an item is favorited
+  bool isFavorite(String itemId) {
+    return favoriteIds.contains(itemId);
+  }
+
+  /// Toggle favorite status with optimistic update
+  /// 
+  /// Optimistically updates the UI immediately, then persists the change.
+  /// If the operation fails, the state is reverted.
+  /// 
+  /// Parameters:
+  /// - [itemId] The ID of the item to toggle favorite status for
+  Future<void> toggleFavorite(String itemId) async {
+    final wasFavorite = isFavorite(itemId);
+    
+    // Optimistic update - update UI immediately
+    if (wasFavorite) {
+      favoriteIds.remove(itemId);
+      await HapticFeedback.light();
+    } else {
+      favoriteIds.add(itemId);
+      await HapticFeedback.medium();
+    }
+
+    try {
+      // Persist the change
+      await _storageService.saveFavorites(favoriteIds.toList());
+      await HapticFeedback.success();
+    } catch (e) {
+      // Revert on error
+      if (wasFavorite) {
+        favoriteIds.add(itemId);
+      } else {
+        favoriteIds.remove(itemId);
+      }
+      await HapticFeedback.error();
+      
+      Get.snackbar(
+        'Error',
+        'Failed to update favorites. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   /// Changes the selected category index
   /// 
   /// Updates the [selectedCategoryIndex] to the provided [index].
@@ -113,14 +176,6 @@ class HomeController extends GetxController {
   void changeCategory(int index) async {
     await HapticFeedback.selection();
     selectedCategoryIndex.value = index;
-  }
-
-  /// Toggle favorite status for a product
-  Future<void> toggleFavorite(String productId) async {
-    await HapticFeedback.light();
-    
-    // In a real app, this would update the backend
-    // For now, we'll just provide haptic feedback
   }
 
   /// Formats a DateTime into a human-readable "time ago" string

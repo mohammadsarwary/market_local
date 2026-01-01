@@ -61,11 +61,11 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `ANI-001` | [ ] | Add hero animations for product images | UI Engineer |
-| `ANI-002` | [ ] | Implement fade transitions for tab switches | UI Engineer |
-| `ANI-003` | [ ] | Add scale animation on favorite button tap | UI Engineer |
-| `ANI-004` | [ ] | Implement slide-in animation for bottom sheets | UI Engineer |
-| `ANI-005` | [ ] | Add staggered animation for grid items | UI Engineer |
+| `ANI-001` | [x] | Add hero animations for product images | UI Engineer |
+| `ANI-002` | [x] | Implement fade transitions for tab switches | UI Engineer |
+| `ANI-003` | [x] | Add scale animation on favorite button tap | UI Engineer |
+| `ANI-004` | [x] | Implement slide-in animation for bottom sheets | UI Engineer |
+| `ANI-005` | [x] | Add staggered animation for grid items | UI Engineer |
 
 ### State Management
 
@@ -74,8 +74,8 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `STM-001` | [x] | Implement proper loading states in all controllers | Feature Dev |
 | `STM-002` | [x] | Add error handling states to controllers | Feature Dev |
 | `STM-003` | [x] | Implement retry logic for failed operations | Feature Dev |
-| `STM-004` | [ ] | Add state persistence for filters | Feature Dev |
-| `STM-005` | [ ] | Implement optimistic updates for favorites | Feature Dev |
+| `STM-004` | [x] | Add state persistence for filters | Feature Dev |
+| `STM-005` | [x] | Implement optimistic updates for favorites | Feature Dev |
 
 ### Code Quality
 
@@ -84,8 +84,8 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `CQ-001` | [x] | Remove all remaining `withOpacity` deprecation warnings | Refactor Agent |
 | `CQ-002` | [x] | Add `const` constructors where missing | Refactor Agent |
 | `CQ-003` | [x] | Remove unused imports across all files | Refactor Agent |
-| `CQ-004` | [ ] | Add documentation comments to public APIs | Arch Guardian |
-| `CQ-005` | [ ] | Ensure consistent error handling patterns | Arch Guardian |
+| `CQ-004` | [x] | Add documentation comments to public APIs | Arch Guardian |
+| `CQ-005` | [x] | Ensure consistent error handling patterns | Arch Guardian |
 
 ---
 
@@ -95,7 +95,7 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Role |
 |------|--------|------|------|
-| `AUTH-001` | [ ] | Design authentication flow (login, register, forgot password) | Feature Dev |
+| `AUTH-001` | [x] | Design authentication flow (login, register, forgot password) | Feature Dev |
 | `AUTH-002` | [x] | Create auth screens (login, register, OTP verification) | Feature Dev |
 | `AUTH-003` | [x] | Implement AuthController | Feature Dev |
 | `AUTH-004` | [ ] | Add secure token storage | Integration Eng |

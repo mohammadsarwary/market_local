@@ -5,6 +5,10 @@ import '../features/search/search_screen.dart';
 import '../features/post_ad/post_ad_screen.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/auth/login_screen.dart';
+import '../features/auth/register_screen.dart';
+import '../features/auth/otp_verification_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
 
 /// App-wide route configuration using GoRouter
 /// All navigation routes should be defined here
@@ -21,12 +25,40 @@ class AppRouter {
   static const String chatDetail = '/chat/:id';
   static const String editProfile = '/profile/edit';
   static const String settings = '/settings';
+  
+  // Auth routes
+  static const String login = '/auth/login';
+  static const String register = '/auth/register';
+  static const String verifyOTP = '/auth/verify-otp';
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String resetPassword = '/auth/reset-password';
 
   // GoRouter configuration
   static final GoRouter router = GoRouter(
     initialLocation: home,
     debugLogDiagnostics: true,
     routes: [
+      // Authentication routes (outside shell)
+      GoRoute(
+        path: login,
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: register,
+        name: 'register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: verifyOTP,
+        name: 'verifyOTP',
+        builder: (context, state) => const OTPVerificationScreen(),
+      ),
+      GoRoute(
+        path: forgotPassword,
+        name: 'forgotPassword',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
       // Main shell route with bottom navigation
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

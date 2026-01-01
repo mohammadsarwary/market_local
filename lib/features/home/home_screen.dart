@@ -146,11 +146,25 @@ class HomeScreen extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final product = controller.products[index];
-                    return GestureDetector(
-                      onTap: () => Get.to(() => const AdDetailsScreen(), arguments: product),
-                      child: _ProductCard(
-                        product: product,
-                        timeAgo: controller.getTimeAgo(product.createdAt),
+                    return TweenAnimationBuilder<double>(
+                      duration: Duration(milliseconds: 300 + (index * 50)),
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      curve: Curves.easeOut,
+                      builder: (context, value, child) {
+                        return Transform.translate(
+                          offset: Offset(0, 50 * (1 - value)),
+                          child: Opacity(
+                            opacity: value,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: GestureDetector(
+                        onTap: () => Get.to(() => const AdDetailsScreen(), arguments: product),
+                        child: _ProductCard(
+                          product: product,
+                          timeAgo: controller.getTimeAgo(product.createdAt),
+                        ),
                       ),
                     );
                   },
@@ -460,23 +474,33 @@ class _ProductCard extends StatelessWidget {
                 Positioned(
                   top: AppSizes.paddingS,
                   right: AppSizes.paddingS,
-                  child: Container(
-                    width: AppSizes.avatarS,
-                    height: AppSizes.avatarS,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.shadow,
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: AppSizes.iconS - 2,
-                      color: product.isFavorite ? AppColors.primary : AppColors.textHint,
+                  child: GestureDetector(
+                    onTap: () {
+                      final homeController = Get.find<HomeController>();
+                      homeController.toggleFavorite(product.id);
+                    },
+                    child: Container(
+                      width: AppSizes.avatarS,
+                      height: AppSizes.avatarS,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.shadow,
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Obx(() {
+                        final homeController = Get.find<HomeController>();
+                        final isFav = homeController.isFavorite(product.id);
+                        return Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          size: AppSizes.iconS - 2,
+                          color: isFav ? AppColors.primary : AppColors.textHint,
+                        );
+                      }),
                     ),
                   ),
                 ),

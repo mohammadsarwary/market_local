@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../models/category_model.dart';
 import '../../core/utils/haptic_feedback.dart';
+import '../../core/services/storage_service.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing search functionality and filters
@@ -38,6 +39,9 @@ class SearchController extends GetxController {
 
   /// Error message to display
   final RxString errorMessage = ''.obs;
+
+  /// Storage service for persisting filter state
+  late final StorageService _storageService;
 
   /// Controller for the search text input field
   /// 
@@ -95,11 +99,33 @@ class SearchController extends GetxController {
   /// This is important to prevent memory leaks. Always call super.onClose()
   /// after disposing custom controllers.
   @override
-  void onClose() {
-    searchController.dispose();
-    minPriceController.dispose();
-    maxPriceController.dispose();
-    super.onClose();
+  void onInit() {
+    super.onInit();
+    _storageService = Get.find<StorageService>();
+    _loadPersistedState();
+  }
+
+  /// Load persisted filter state from storage
+  void _loadPersistedState() {
+    final savedFilters = _storageService.loadSearchFilters();
+    final savedSort = _storageService.loadSearchSort();
+    final (min, max) = _storageService.loadPriceRange();
+
+    selectedFilters.assignAll(savedFilters);
+    selectedSort.value = savedSort;
+    currentRangeValues.value = RangeValues(min, max);
+    minPriceController.text = min.round().toString();
+    maxPriceController.text = max.round().toString();
+  }
+
+  /// Save current filter state to storage
+  Future<void> _saveFilterState() async {
+    await _storageService.saveSearchFilters(selectedFilters.toList());
+    await _storageService.saveSearchSort(selectedSort.value);
+    await _storageService.savePriceRange(
+      currentRangeValues.value.start,
+      currentRangeValues.value.end,
+    );
   }
 
   /// Toggles a filter on or off
@@ -121,6 +147,7 @@ class SearchController extends GetxController {
     } else {
       selectedFilters.remove(filter);
     }
+    _saveFilterState();
   }
 
   /// Updates the price range and synchronizes text controllers
@@ -139,6 +166,7 @@ class SearchController extends GetxController {
     currentRangeValues.value = values;
     minPriceController.text = values.start.round().toString();
     maxPriceController.text = values.end.round().toString();
+    _saveFilterState();
   }
 
   /// Updates the selected sort option
@@ -154,6 +182,7 @@ class SearchController extends GetxController {
   /// ```
   void updateSort(String sort) {
     selectedSort.value = sort;
+    _saveFilterState();
   }
 
   /// Resets all filters to their default state
@@ -171,6 +200,15 @@ class SearchController extends GetxController {
     currentRangeValues.value = const RangeValues(0, 2000);
     minPriceController.text = '0';
     maxPriceController.text = '2000';
+    _saveFilterState();
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    minPriceController.dispose();
+    maxPriceController.dispose();
+    super.onClose();
   }
 
   /// Performs a search with current filters

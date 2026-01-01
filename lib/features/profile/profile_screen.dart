@@ -6,6 +6,7 @@ import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_texts.dart';
 import '../../models/ad_model.dart';
 import '../auth/login_screen.dart';
+import '../home/home_controller.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
@@ -493,25 +494,33 @@ class ProfileScreen extends GetView<ProfileController> {
     return Expanded(
       child: Obx(() {
         final isSelected = controller.selectedTabIndex.value == index;
-        return GestureDetector(
-          onTap: () => controller.changeTab(index),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: isSelected ? AppColors.primary : Colors.transparent,
-                  width: 2,
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: GestureDetector(
+            onTap: () => controller.changeTab(index),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    width: 2,
+                  ),
                 ),
               ),
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? AppColors.primary : Colors.grey[500],
-                fontSize: 14,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: isSelected ? 1.0 : 0.6,
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? AppColors.primary : Colors.grey[500],
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ),
           ),
@@ -562,16 +571,26 @@ class ProfileScreen extends GetView<ProfileController> {
                 Positioned(
                   top: AppSizes.paddingS,
                   right: AppSizes.paddingS,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      item.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: 16,
-                      color: item.isFavorite ? AppColors.primary : Colors.grey,
+                  child: GestureDetector(
+                    onTap: () {
+                      final homeController = Get.find<HomeController>();
+                      homeController.toggleFavorite(item.id);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Obx(() {
+                        final homeController = Get.find<HomeController>();
+                        final isFav = homeController.isFavorite(item.id);
+                        return Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          size: 16,
+                          color: isFav ? AppColors.primary : Colors.grey,
+                        );
+                      }),
                     ),
                   ),
                 ),

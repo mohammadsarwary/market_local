@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
+/// A reusable product card widget for displaying product information
+/// 
+/// This widget displays a product with its image, title, price, location,
+/// and time posted. It includes a favorite button with animation and optional
+/// condition badge. The card is designed for use in grid layouts.
+/// 
+/// Features:
+/// - Hero animation for smooth image transitions
+/// - Animated favorite button with scale effect
+/// - Optional condition badge (New, Used, etc.)
+/// - Tap handlers for card and favorite button
+/// 
+/// Example:
+/// ```dart
+/// ProductCard(
+///   imageUrl: 'https://example.com/image.jpg',
+///   title: 'Mountain Bike',
+///   price: 299.99,
+///   location: 'San Francisco, CA',
+///   timeAgo: '2h ago',
+///   isLiked: true,
+///   condition: 'New',
+///   onTap: () => Navigator.pushNamed(context, '/details'),
+///   onFavoriteTap: () => controller.toggleFavorite(id),
+///   heroTag: 'product_123',
+/// )
+/// ```
 class ProductCard extends StatelessWidget {
   final String imageUrl;
   final String title;
@@ -8,9 +35,27 @@ class ProductCard extends StatelessWidget {
   final String location;
   final String timeAgo;
   final bool isLiked;
-  final String? condition; // 'New', 'Used', etc.
+  final String? condition;
   final VoidCallback? onTap;
+  final VoidCallback? onFavoriteTap;
+  final String heroTag;
 
+  /// Creates a product card widget
+  /// 
+  /// All parameters except [onTap] and [onFavoriteTap] are required.
+  /// 
+  /// Parameters:
+  /// - [imageUrl] The URL of the product image
+  /// - [title] The product title
+  /// - [price] The product price
+  /// - [location] The product location
+  /// - [timeAgo] Time since the product was posted (e.g., '2h ago')
+  /// - [isLiked] Whether the product is favorited (defaults to false)
+  /// - [condition] Optional condition badge text (e.g., 'New', 'Used')
+  /// - [onTap] Optional callback when the card is tapped
+  /// - [onFavoriteTap] Optional callback when the favorite button is tapped
+  /// - [heroTag] Unique tag for Hero animation (defaults to empty string)
+  /// - [key] Optional widget key
   const ProductCard({
     super.key,
     required this.imageUrl,
@@ -21,6 +66,8 @@ class ProductCard extends StatelessWidget {
     this.isLiked = false,
     this.condition,
     this.onTap,
+    this.onFavoriteTap,
+    this.heroTag = '',
   });
 
   @override
@@ -42,19 +89,21 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Section
             Stack(
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   child: AspectRatio(
                     aspectRatio: 1.1,
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                    child: Hero(
+                      tag: 'product_image_$heroTag',
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
@@ -62,16 +111,24 @@ class ProductCard extends StatelessWidget {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border,
-                      size: 18,
-                      color: isLiked ? Colors.red : Colors.grey,
+                  child: GestureDetector(
+                    onTap: onFavoriteTap,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: AnimatedScale(
+                        scale: isLiked ? 1.2 : 1.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          size: 18,
+                          color: isLiked ? Colors.red : Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -97,7 +154,6 @@ class ProductCard extends StatelessWidget {
                   ),
               ],
             ),
-            // Details Section
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
