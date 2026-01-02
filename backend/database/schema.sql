@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS ads (
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    `condition` ENUM('new', 'like_new', 'good', 'fair', 'poor') DEFAULT 'good',
+    condition ENUM('new', 'like_new', 'good', 'fair', 'poor') DEFAULT 'good',
     location VARCHAR(100) NOT NULL,
     latitude DECIMAL(10,8),
     longitude DECIMAL(11,8),

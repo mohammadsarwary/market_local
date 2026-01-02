@@ -173,7 +173,7 @@ Visit: `https://yourdomain.com/api/`
 **Using Postman or curl:**
 
 ```bash
-curl -X POST https://yourdomain.com/api/auth/registe  
+curl -X POST https://yourdomain.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Test User",

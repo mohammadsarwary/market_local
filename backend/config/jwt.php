@@ -7,7 +7,7 @@
 
 class JWTConfig {
     // Change this to a random, secure string in production
-    public static $secret_key = "your-secret-key-change-this-in-production-2026";
+    public static $secret_key = "cZJbBb9EuUbKko1PvUeKxCaKkzCjMVKW";
     
     // Token expiration times (in seconds)
     public static $access_token_expiry = 3600;        // 1 hour

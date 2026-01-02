@@ -7,9 +7,9 @@
 
 class Database {
     private $host = "localhost";
-    private $db_name = "market_local";
-    private $username = "root";  // Change this to your cPanel MySQL username
-    private $password = "";      // Change this to your cPanel MySQL password
+    private $db_name = "bazapndu_market";
+    private $username = "bazapndu_market";  // Change this to your cPanel MySQL username
+    private $password = "rezasarwary123";      // Change this to your cPanel MySQL password
     private $conn;
 
     /**

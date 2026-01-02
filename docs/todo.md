@@ -2,7 +2,7 @@
 
 This document tracks all pending tasks organized by priority and timeline.
 
-**Last Updated:** December 2024
+**Last Updated:** January 2026
 
 ---
 
@@ -142,6 +142,7 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `POST-005` | [x] | Implement location picker<br>**Description:** Create location selection interface for ad posting. Integrate map view (Google Maps/OpenStreetMap) with pin placement. Support current location detection, address search, and manual pin adjustment. Display selected address and allow editing. Store coordinates and formatted address. Handle location permissions gracefully. | Feature Dev |
 | `POST-006` | [ ] | Add price suggestion based on category<br>**Description:** Provide price suggestions based on similar ads in same category. Show price range (min, avg, max) from recent listings. Display as hint below price field: "Similar items: $100-$150". Calculate from mock data initially, later from backend analytics. Help users price competitively and improve listing success. | Feature Dev |
 | `POST-007` | [x] | Implement ad preview before posting<br>**Description:** Create preview screen showing how ad will appear to buyers before publishing. Display all entered information in actual ad detail layout. Allow editing from preview with back navigation preserving data. Add "Looks good, post it" confirmation button. Validate all required fields before showing preview. | Feature Dev |
+| `POST-008` | [ ] | Connect Post Ad to backend API<br>**Description:** Integrate Post Ad screen with backend API. Call POST /ads endpoint to create ad with form data. Upload images using POST /ads/:id/images endpoint with progress tracking. Handle API responses (success, validation errors, network errors). Show loading state during submission. Navigate to ad details on success. Store returned ad ID and update local cache. Handle offline scenario with queue for later sync. | Integration Eng |
 
 ### Profile & Settings
 
@@ -306,9 +307,7 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 
 | Code | Status | Task | Blocker | Waiting On |
 |------|--------|------|---------|------------|
-| `API-001` | [!] | API integration | Backend not ready | Backend team |
-| `API-008` | [!] | Push notifications | Backend not ready | Backend team |
-| `RT-001` | [!] | Real-time chat | WebSocket server | Backend team |
+| `RT-001` | [!] | Real-time chat | WebSocket server | Backend WebSocket implementation |
 | `ADV-002` | [!] | Payment integration | Business decision | Product owner |
 
 ---
@@ -330,6 +329,20 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `DONE-009` | [x] | Refactor controllers to use models |
 | `DONE-010` | [x] | Update screens to use constants |
 | `DONE-011` | [x] | Create project documentation |
+
+### January 2026
+
+| Code | Status | Task |
+|------|--------|------|
+| `DONE-012` | [x] | Design and implement PHP backend API |
+| `DONE-013` | [x] | Create database schema with 13 tables |
+| `DONE-014` | [x] | Implement JWT authentication system |
+| `DONE-015` | [x] | Build user management endpoints |
+| `DONE-016` | [x] | Create ad/listing CRUD endpoints |
+| `DONE-017` | [x] | Implement search and filter functionality |
+| `DONE-018` | [x] | Add image upload system |
+| `DONE-019` | [x] | Deploy backend to production (cPanel) |
+| `DONE-020` | [x] | Configure SSL and production environment |
 
 ---
 

@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // App settings
 define('APP_NAME', 'Market Local API');
 define('APP_VERSION', '1.0.0');
-define('BASE_URL', 'http://localhost/market_local_api'); // Change this to your domain
+define('BASE_URL', 'https://market.bazarino.store/api'); // Change this to your domain
 
 // Upload settings
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');

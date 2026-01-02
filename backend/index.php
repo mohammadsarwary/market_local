@@ -13,7 +13,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Remove base path if API is in subdirectory
-$basePath = '/market_local_api'; // Change this if your API is in a different folder
+$basePath = '/api'; // Change this if your API is in a different folder
 $uri = str_replace($basePath, '', $uri);
 
 // Remove trailing slash
@@ -51,30 +51,40 @@ try {
             case 'register':
                 if ($method === 'POST') {
                     $controller->register();
+                } else {
+                    Response::error('Method not allowed. Use POST', 405);
                 }
                 break;
 
             case 'login':
                 if ($method === 'POST') {
                     $controller->login();
+                } else {
+                    Response::error('Method not allowed. Use POST', 405);
                 }
                 break;
 
             case 'refresh':
                 if ($method === 'POST') {
                     $controller->refresh();
+                } else {
+                    Response::error('Method not allowed. Use POST', 405);
                 }
                 break;
 
             case 'logout':
                 if ($method === 'POST') {
                     $controller->logout();
+                } else {
+                    Response::error('Method not allowed. Use POST', 405);
                 }
                 break;
 
             case 'me':
                 if ($method === 'GET') {
                     $controller->me();
+                } else {
+                    Response::error('Method not allowed. Use GET', 405);
                 }
                 break;
 

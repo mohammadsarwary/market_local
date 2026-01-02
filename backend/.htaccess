@@ -2,10 +2,10 @@
 RewriteEngine On
 
 # Set base directory (change if your API is in a subdirectory)
-RewriteBase /market_local_api/
+RewriteBase /api/
 
 # Allow access to uploads directory
-RewriteCond %{REQUEST_URI} ^/market_local_api/uploads/
+RewriteCond %{REQUEST_URI} ^/api/uploads/
 RewriteRule ^ - [L]
 
 # Route all other requests to index.php
