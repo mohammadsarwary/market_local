@@ -33,16 +33,16 @@ class GuestProfileScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingXL),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingL),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: AppSizes.paddingXL),
+              const SizedBox(height: AppSizes.paddingL),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                  vertical: AppSizes.paddingXL,
-                  horizontal: AppSizes.paddingL,
+                  vertical: AppSizes.paddingL,
+                  horizontal: AppSizes.paddingM,
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF8E1),
@@ -51,11 +51,11 @@ class GuestProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 200.0,
+                      height: 140.0,
                       child: Center(
                         child: Icon(
                           Icons.shopping_bag,
-                          size: 120.0,
+                          size: 80.0,
                           color: AppColors.primary.withOpacity(0.3),
                         ),
                       ),
@@ -63,28 +63,28 @@ class GuestProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: AppSizes.paddingXL),
+              const SizedBox(height: AppSizes.paddingL),
               const Text(
                 'Join the Community',
                 style: TextStyle(
-                  fontSize: 28.0,
+                  fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                   height: 1.2,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppSizes.paddingM),
+              const SizedBox(height: AppSizes.paddingS),
               const Text(
                 'Buy, sell, and chat with locals. Sign up now to start selling your items or finding great deals nearby.',
                 style: TextStyle(
-                  fontSize: AppSizes.fontL,
+                  fontSize: AppSizes.fontM,
                   color: AppColors.textSecondary,
-                  height: 1.5,
+                  height: 1.4,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppSizes.paddingXL),
+              const SizedBox(height: AppSizes.paddingL),
               _buildFeatureCard(
                 icon: Icons.shopping_bag,
                 title: 'Sell in seconds',
@@ -99,7 +99,7 @@ class GuestProfileScreen extends StatelessWidget {
               const SizedBox(height: AppSizes.paddingXL),
               SizedBox(
                 width: double.infinity,
-                height: 56.0,
+                height: 48.0,
                 child: ElevatedButton(
                   onPressed: () => Get.to(const SignupScreen()),
                   style: ElevatedButton.styleFrom(
@@ -112,17 +112,17 @@ class GuestProfileScreen extends StatelessWidget {
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(
-                      fontSize: AppSizes.fontXL,
+                      fontSize: AppSizes.fontL,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textOnPrimary,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppSizes.paddingM),
+              const SizedBox(height: AppSizes.paddingS),
               SizedBox(
                 width: double.infinity,
-                height: 56.0,
+                height: 48.0,
                 child: OutlinedButton(
                   onPressed: () => Get.to(const LoginScreen()),
                   style: OutlinedButton.styleFrom(
@@ -134,45 +134,45 @@ class GuestProfileScreen extends StatelessWidget {
                   child: const Text(
                     'Log In',
                     style: TextStyle(
-                      fontSize: AppSizes.fontXL,
+                      fontSize: AppSizes.fontL,
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppSizes.paddingXL),
+              const SizedBox(height: AppSizes.paddingM),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Privacy Policy',
                     style: TextStyle(
-                      fontSize: AppSizes.fontS,
+                      fontSize: AppSizes.fontXS,
                       color: AppColors.textSecondary,
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                  const SizedBox(width: AppSizes.paddingM),
+                  const SizedBox(width: AppSizes.paddingS),
                   Text(
                     '•',
                     style: TextStyle(
-                      fontSize: AppSizes.fontS,
+                      fontSize: AppSizes.fontXS,
                       color: AppColors.textSecondary,
                     ),
                   ),
-                  const SizedBox(width: AppSizes.paddingM),
+                  const SizedBox(width: AppSizes.paddingS),
                   Text(
                     'Terms of Service',
                     style: TextStyle(
-                      fontSize: AppSizes.fontS,
+                      fontSize: AppSizes.fontXS,
                       color: AppColors.textSecondary,
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppSizes.paddingXL),
+              const SizedBox(height: AppSizes.paddingL),
             ],
           ),
         ),

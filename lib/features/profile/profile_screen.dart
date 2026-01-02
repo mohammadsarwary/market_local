@@ -6,6 +6,7 @@ import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_texts.dart';
 import '../../models/ad_model.dart';
 import '../auth/login_screen.dart';
+import '../auth/auth_controller.dart';
 import '../home/home_controller.dart';
 import 'profile_controller.dart';
 import 'guest_profile_screen.dart';
@@ -15,43 +16,45 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoggedIn = true;
+    final authController = Get.find<AuthController>();
     
-    if (!isLoggedIn) {
-      return const GuestProfileScreen();
-    }
-    
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        centerTitle: false,
+    return Obx(() {
+      if (!authController.isLoggedIn.value) {
+        return const GuestProfileScreen();
+      }
+      
+      return Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share_outlined, color: Colors.black),
-            onPressed: () {},
+        appBar: AppBar(
+          title: const Text(
+            'Profile',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return _buildSkeletonLoader();
-        }
-        if (controller.hasError.value) {
-          return _buildErrorState();
-        }
-        return _buildContent();
-      }),
-    );
+          centerTitle: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.share_outlined, color: Colors.black),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings_outlined, color: Colors.black),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return _buildSkeletonLoader();
+          }
+          if (controller.hasError.value) {
+            return _buildErrorState();
+          }
+          return _buildContent();
+        }),
+      );
+    });
   }
 
   Widget _buildContent() {

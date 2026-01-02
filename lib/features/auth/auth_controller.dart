@@ -16,6 +16,9 @@ class AuthController extends GetxController {
   /// Error message to display
   final RxString errorMessage = ''.obs;
 
+  /// User login status
+  final RxBool isLoggedIn = false.obs;
+
   /// Send verification code to phone number
   Future<void> sendVerificationCode() async {
     try {
