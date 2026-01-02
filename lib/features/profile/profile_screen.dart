@@ -8,12 +8,19 @@ import '../../models/ad_model.dart';
 import '../auth/login_screen.dart';
 import '../home/home_controller.dart';
 import 'profile_controller.dart';
+import 'guest_profile_screen.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bool isLoggedIn = true;
+    
+    if (!isLoggedIn) {
+      return const GuestProfileScreen();
+    }
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

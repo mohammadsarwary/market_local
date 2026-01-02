@@ -6,6 +6,7 @@ import '../features/post_ad/post_ad_screen.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/auth/login_screen.dart';
+import '../features/auth/signup_screen.dart';
 import '../features/auth/register_screen.dart';
 import '../features/auth/otp_verification_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
@@ -28,6 +29,7 @@ class AppRouter {
   
   // Auth routes
   static const String login = '/auth/login';
+  static const String signup = '/auth/signup';
   static const String register = '/auth/register';
   static const String verifyOTP = '/auth/verify-otp';
   static const String forgotPassword = '/auth/forgot-password';
@@ -43,6 +45,11 @@ class AppRouter {
         path: login,
         name: 'login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: signup,
+        name: 'signup',
+        builder: (context, state) => const SignupScreen(),
       ),
       GoRoute(
         path: register,

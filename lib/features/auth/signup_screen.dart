@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import 'auth_controller.dart';
-import 'signup_screen.dart';
 
-/// Login screen with email and password
-class LoginScreen extends GetView<AuthController> {
-  const LoginScreen({super.key});
+/// Sign up screen with phone number verification
+class SignupScreen extends GetView<AuthController> {
+  const SignupScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
+  Widget build(BuildContext context) {  
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -32,7 +29,7 @@ class LoginScreen extends GetView<AuthController> {
             children: [
               const SizedBox(height: AppSizes.paddingXL),
               const Text(
-                "Welcome back",
+                "Create your account",
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
@@ -42,7 +39,7 @@ class LoginScreen extends GetView<AuthController> {
               ),
               const SizedBox(height: AppSizes.paddingM),
               const Text(
-                "Sign in to your account to continue buying and selling.",
+                "Join MarketLocal to buy and sell items in your area.",
                 style: TextStyle(
                   fontSize: AppSizes.fontL,
                   color: AppColors.textSecondary,
@@ -50,59 +47,86 @@ class LoginScreen extends GetView<AuthController> {
                 ),
               ),
               const SizedBox(height: 32.0),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(AppSizes.radiusM),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(
-                    fontSize: AppSizes.fontL,
-                    color: AppColors.textPrimary,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Email address',
-                    hintStyle: TextStyle(
-                      fontSize: AppSizes.fontL,
-                      color: AppColors.textHint,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: AppSizes.paddingL,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.paddingM,
                       vertical: AppSizes.paddingL,
                     ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(AppSizes.radiusM),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '🇺🇸',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        const SizedBox(width: AppSizes.paddingXS),
+                        const Text(
+                          '+1',
+                          style: TextStyle(
+                            fontSize: AppSizes.fontL,
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: AppSizes.paddingXS),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          size: AppSizes.iconS,
+                          color: AppColors.textSecondary,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  const SizedBox(width: AppSizes.paddingM),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(AppSizes.radiusM),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: TextField(
+                        onChanged: controller.updatePhoneNumber,
+                        keyboardType: TextInputType.phone,
+                        style: const TextStyle(
+                          fontSize: AppSizes.fontL,
+                          color: AppColors.textPrimary,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: '(555) 000-0000',
+                          hintStyle: TextStyle(
+                            fontSize: AppSizes.fontL,
+                            color: AppColors.textHint,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: AppSizes.paddingL,
+                            vertical: AppSizes.paddingL,
+                          ),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: AppSizes.paddingM),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(AppSizes.radiusM),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  style: const TextStyle(
-                    fontSize: AppSizes.fontL,
-                    color: AppColors.textPrimary,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: TextStyle(
-                      fontSize: AppSizes.fontL,
-                      color: AppColors.textHint,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: AppSizes.paddingL,
-                      vertical: AppSizes.paddingL,
-                    ),
-                  ),
+              const Text(
+                'Standard message and data rates may apply.',
+                style: TextStyle(
+                  fontSize: AppSizes.fontS,
+                  color: AppColors.textSecondary,
                 ),
               ),
               const SizedBox(height: 200.0),
@@ -119,7 +143,7 @@ class LoginScreen extends GetView<AuthController> {
                     elevation: 0,
                   ),
                   child: const Text(
-                    'Sign In',
+                    'Continue',
                     style: TextStyle(
                       fontSize: AppSizes.fontXL,
                       fontWeight: FontWeight.w600,
@@ -244,25 +268,24 @@ class LoginScreen extends GetView<AuthController> {
                 child: Center(
                   child: RichText(
                     textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
+                    text: const TextSpan(
+                      style: TextStyle(
                         fontSize: AppSizes.fontS,
                         color: AppColors.textSecondary,
                       ),
                       children: [
-                        const TextSpan(text: "Don't have an account? "),
-                        WidgetSpan(
-                          child: GestureDetector(
-                            onTap: () => Get.to(const SignupScreen()),
-                            child: const Text(
-                              'Sign up',
-                              style: TextStyle(
-                                fontSize: AppSizes.fontS,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
+                        TextSpan(text: 'By continuing, you agree to our '),
+                        TextSpan(
+                          text: 'Terms of Service',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                          text: 'Privacy Policy.',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ],
