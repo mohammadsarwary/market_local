@@ -76,6 +76,16 @@ class SearchController extends GetxController {
   /// Defaults to 0 (all categories). Used to filter search results by category.
   final RxInt selectedCategoryIndex = 0.obs;
 
+  /// Search history list
+  /// 
+  /// Contains recent search queries, most recent first.
+  final RxList<String> searchHistory = <String>[].obs;
+
+  /// Whether to show search history
+  /// 
+  /// Toggles visibility of search history in the UI.
+  final RxBool showSearchHistory = false.obs;
+
   /// List of available filter options
   /// 
   /// Returns mock data from [SearchMockData.filters].
@@ -110,12 +120,14 @@ class SearchController extends GetxController {
     final savedFilters = _storageService.loadSearchFilters();
     final savedSort = _storageService.loadSearchSort();
     final (min, max) = _storageService.loadPriceRange();
+    final history = _storageService.loadSearchHistory();
 
     selectedFilters.assignAll(savedFilters);
     selectedSort.value = savedSort;
     currentRangeValues.value = RangeValues(min, max);
     minPriceController.text = min.round().toString();
     maxPriceController.text = max.round().toString();
+    searchHistory.assignAll(history);
   }
 
   /// Save current filter state to storage
@@ -126,6 +138,57 @@ class SearchController extends GetxController {
       currentRangeValues.value.start,
       currentRangeValues.value.end,
     );
+  }
+
+  /// Updates the selected category and loads category-specific preferences
+  /// 
+  /// Changes the selected category and loads saved price range and sort
+  /// preferences for that category.
+  /// 
+  /// Parameters:
+  /// - [index] The category index to select
+  void updateCategory(int index) {
+    selectedCategoryIndex.value = index;
+    _loadCategoryPreferences();
+  }
+
+  /// Load category-specific preferences
+  void _loadCategoryPreferences() {
+    if (selectedCategoryIndex.value == 0) {
+      // All categories - use global preferences
+      final (min, max) = _storageService.loadPriceRange();
+      currentRangeValues.value = RangeValues(min, max);
+      minPriceController.text = min.round().toString();
+      maxPriceController.text = max.round().toString();
+      selectedSort.value = _storageService.loadSearchSort();
+    } else {
+      // Specific category - use category preferences
+      final category = categories[selectedCategoryIndex.value];
+      final (min, max) = _storageService.loadPriceRangeForCategory(category.id);
+      currentRangeValues.value = RangeValues(min, max);
+      minPriceController.text = min.round().toString();
+      maxPriceController.text = max.round().toString();
+      selectedSort.value = _storageService.loadSortForCategory(category.id);
+    }
+  }
+
+  /// Save category-specific preferences
+  Future<void> _saveCategoryPreferences() async {
+    if (selectedCategoryIndex.value == 0) {
+      // All categories - save to global preferences
+      await _saveFilterState();
+    } else {
+      // Specific category - save to category preferences
+      final category = categories[selectedCategoryIndex.value];
+      await _storageService.savePriceRangeForCategory(
+        category.id,
+        currentRangeValues.value.start,
+        currentRangeValues.value.end,
+      );
+      await _storageService.saveSortForCategory(category.id, selectedSort.value);
+      // Still save filters globally
+      await _storageService.saveSearchFilters(selectedFilters.toList());
+    }
   }
 
   /// Toggles a filter on or off
@@ -147,7 +210,7 @@ class SearchController extends GetxController {
     } else {
       selectedFilters.remove(filter);
     }
-    _saveFilterState();
+    _saveCategoryPreferences();
   }
 
   /// Updates the price range and synchronizes text controllers
@@ -166,7 +229,7 @@ class SearchController extends GetxController {
     currentRangeValues.value = values;
     minPriceController.text = values.start.round().toString();
     maxPriceController.text = values.end.round().toString();
-    _saveFilterState();
+    _saveCategoryPreferences();
   }
 
   /// Updates the selected sort option
@@ -182,7 +245,7 @@ class SearchController extends GetxController {
   /// ```
   void updateSort(String sort) {
     selectedSort.value = sort;
-    _saveFilterState();
+    _saveCategoryPreferences();
   }
 
   /// Resets all filters to their default state
@@ -200,7 +263,58 @@ class SearchController extends GetxController {
     currentRangeValues.value = const RangeValues(0, 2000);
     minPriceController.text = '0';
     maxPriceController.text = '2000';
-    _saveFilterState();
+    _saveCategoryPreferences();
+  }
+
+  /// Adds a search query to history
+  /// 
+  /// Saves the search query to history and persists it to storage.
+  /// 
+  /// Parameters:
+  /// - [query] The search query to add to history
+  Future<void> addToSearchHistory(String query) async {
+    if (query.trim().isEmpty) return;
+    
+    await _storageService.saveSearchHistory(query);
+    searchHistory.value = _storageService.loadSearchHistory();
+    await HapticFeedback.light();
+  }
+
+  /// Removes a search query from history
+  /// 
+  /// Parameters:
+  /// - [query] The search query to remove
+  Future<void> removeFromSearchHistory(String query) async {
+    await _storageService.removeSearchHistoryItem(query);
+    searchHistory.value = _storageService.loadSearchHistory();
+  }
+
+  /// Clears all search history
+  Future<void> clearSearchHistory() async {
+    await _storageService.clearSearchHistory();
+    searchHistory.clear();
+  }
+
+  /// Performs a search with the given query
+  /// 
+  /// Parameters:
+  /// - [query] The search query string
+  Future<void> search(String query) async {
+    if (query.trim().isNotEmpty) {
+      await addToSearchHistory(query);
+      showSearchHistory.value = false;
+      await performSearch();
+    }
+  }
+
+  /// Shows the search history
+  void showHistory() {
+    showSearchHistory.value = true;
+  }
+
+  /// Hides the search history
+  void hideHistory() {
+    showSearchHistory.value = false;
   }
 
   @override

@@ -50,6 +50,9 @@ class AppTextField extends StatelessWidget {
   /// Callback when text changes
   final void Function(String)? onChanged;
   
+  /// Callback when user submits the field
+  final void Function(String)? onSubmitted;
+  
   /// Callback when field is tapped
   final void Function()? onTap;
   
@@ -99,6 +102,7 @@ class AppTextField extends StatelessWidget {
     this.maxLines = 1,
     this.validator,
     this.onChanged,
+    this.onSubmitted,
     this.onTap,
     this.readOnly = false,
     this.enabled = true,
@@ -123,6 +127,7 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       validator: validator,
       onChanged: onChanged,
+      onFieldSubmitted: onSubmitted,
       onTap: onTap,
       readOnly: readOnly,
       enabled: enabled,
@@ -159,6 +164,7 @@ class AppSearchField extends StatelessWidget {
   final String hintText;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
   final void Function()? onTap;
   final bool readOnly;
   final bool enabled;
@@ -169,6 +175,7 @@ class AppSearchField extends StatelessWidget {
     this.hintText = 'Search...',
     this.validator,
     this.onChanged,
+    this.onSubmitted,
     this.onTap,
     this.readOnly = false,
     this.enabled = true,
@@ -182,6 +189,7 @@ class AppSearchField extends StatelessWidget {
       prefixIcon: Icons.search,
       validator: validator,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       onTap: onTap,
       readOnly: readOnly,
       enabled: enabled,

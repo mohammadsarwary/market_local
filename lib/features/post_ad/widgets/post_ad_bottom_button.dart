@@ -28,9 +28,9 @@ class PostAdBottomButton extends StatelessWidget {
         ],
       ),
       child: AppButton(
-        text: 'Publish Ad',
-        onPressed: controller.postAd,
-        icon: Icons.arrow_forward,
+        text: 'Preview Ad',
+        onPressed: () => controller.showAdPreview(),
+        icon: Icons.visibility,
         height: 56,
       ),
     );

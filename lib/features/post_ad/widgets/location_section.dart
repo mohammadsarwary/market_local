@@ -52,21 +52,32 @@ class LocationSection extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      'Seattle, WA',
+                    Obx(() => Text(
+                      controller.selectedAddress.value.isEmpty 
+                          ? 'Tap to get location' 
+                          : controller.selectedAddress.value,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 13,
                       ),
-                    ),
+                    )),
                   ],
                 ),
               ),
-              Obx(() => Switch(
-                    value: controller.useCurrentLocation.value,
-                    onChanged: (value) => controller.updateLocationPreference(value),
-                    activeColor: AppColors.primary,
-                  )),
+              Obx(() {
+                if (controller.isPickingLocation.value) {
+                  return const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  );
+                }
+                return Switch(
+                  value: controller.useCurrentLocation.value,
+                  onChanged: (value) => controller.updateLocationPreference(value),
+                  activeColor: AppColors.primary,
+                );
+              }),
             ],
           ),
         ),
@@ -101,54 +112,58 @@ class LocationSection extends StatelessWidget {
                   ),
                 ),
                 // Location marker
-                Positioned(
-                  top: 80,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
+                Obx(() => controller.currentPosition.value != null
+                    ? Positioned(
+                        top: 80,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                        ),
+                      )
+                    : const SizedBox.shrink()),
                 Positioned(
                   bottom: 16,
                   left: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 8,
+                  child: Obx(() => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.location_on, size: 16, color: Colors.black87),
-                        SizedBox(width: 6),
-                        Text(
-                          'Seattle, WA',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.location_on, size: 16, color: Colors.black87),
+                            const SizedBox(width: 6),
+                            Text(
+                              controller.selectedAddress.value.isEmpty 
+                                  ? 'No location selected' 
+                                  : controller.selectedAddress.value,
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      )),
                 ),
               ],
             ),
