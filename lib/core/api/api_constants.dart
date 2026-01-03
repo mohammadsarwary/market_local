@@ -48,7 +48,12 @@ class CategoryEndpoints {
 
 class SearchEndpoints {
   static const String search = '/search';
+  static const String filter = '/search/filter';
   static const String suggestions = '/search/suggestions';
+  static const String saveSearch = '/search/saved';
+  static const String savedSearches = '/search/saved';
+  static const String deleteSavedSearch = '/search/saved/:id';
+  static const String favorites = '/search/favorites';
 }
 
 class ChatEndpoints {

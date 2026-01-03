@@ -147,20 +147,20 @@
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **API-105** | 🟡 Medium | **Integrate search endpoints** | 5-6 hours | [ ] |
-| - | - | Create SearchRepository | 1 hour | [ ] |
-| - | - | Implement search with query | 2 hours | [ ] |
-| - | - | Implement filters (category, price, location) | 2 hours | [ ] |
-| - | - | Update SearchController to use API | 2 hours | [ ] |
+| **API-105** | 🟡 Medium | **Integrate search endpoints** | 5-6 hours | [x] |
+| - | - | Create SearchRepository | 1 hour | [x] |
+| - | - | Implement search with query | 2 hours | [x] |
+| - | - | Implement filters (category, price, location) | 2 hours | [x] |
+| - | - | Update SearchController to use API | 2 hours | [x] |
 
 ### 13. Favorites Integration
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **NEW** | 🟡 Medium | **Integrate favorites** | 3-4 hours | [ ] |
-| - | - | Implement get favorites API call | 1 hour | [ ] |
-| - | - | Update FavoritesController to use API | 2 hours | [ ] |
-| - | - | Sync favorites with backend | 1 hour | [ ] |
+| **NEW** | 🟡 Medium | **Integrate favorites** | 3-4 hours | [x] |
+| - | - | Implement get favorites API call | 1 hour | [x] |
+| - | - | Update FavoritesController to use API | 2 hours | [x] |
+| - | - | Sync favorites with backend | 1 hour | [x] |
 
 ---
 
@@ -184,22 +184,22 @@
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **NEW** | 🟠 High | **Test complete integration** | 6-8 hours | [ ] |
-| - | - | Test registration and login flow | 1 hour | [ ] |
-| - | - | Test profile management | 1 hour | [ ] |
-| - | - | Test create ad with images | 2 hours | [ ] |
-| - | - | Test search and filters | 1 hour | [ ] |
-| - | - | Test favorites functionality | 1 hour | [ ] |
-| - | - | Test error handling scenarios | 2 hours | [ ] |
+| **NEW** | 🟠 High | **Test complete integration** | 6-8 hours | [x] |
+| - | - | Test registration and login flow | 1 hour | [x] |
+| - | - | Test profile management | 1 hour | [x] |
+| - | - | Test create ad with images | 2 hours | [x] |
+| - | - | Test search and filters | 1 hour | [x] |
+| - | - | Test favorites functionality | 1 hour | [x] |
+| - | - | Test error handling scenarios | 2 hours | [x] |
 
 ### 16. Error Handling & UX
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **NEW** | 🟠 High | **Improve error handling** | 3-4 hours | [ ] |
-| - | - | Add user-friendly error messages | 2 hours | [ ] |
-| - | - | Implement retry mechanisms | 1 hour | [ ] |
-| - | - | Add loading states everywhere | 1 hour | [ ] |
+| **NEW** | 🟠 High | **Improve error handling** | 3-4 hours | [x] |
+| - | - | Add user-friendly error messages | 2 hours | [x] |
+| - | - | Implement retry mechanisms | 1 hour | [x] |
+| - | - | Add loading states everywhere | 1 hour | [x] |
 
 ---
 
