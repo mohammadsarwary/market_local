@@ -76,21 +76,21 @@
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **API-102** | 🟠 High | **Integrate user profile endpoints** | 5-6 hours | [ ] |
-| - | - | Create UserRepository | 1 hour | [ ] |
-| - | - | Implement get profile API call | 1 hour | [ ] |
-| - | - | Implement update profile API call | 1 hour | [ ] |
-| - | - | Update ProfileController to use API | 2 hours | [ ] |
-| - | - | Handle profile update errors | 1 hour | [ ] |
+| **API-102** | 🟠 High | **Integrate user profile endpoints** | 5-6 hours | [x] |
+| - | - | Create UserRepository | 1 hour | [x] |
+| - | - | Implement get profile API call | 1 hour | [x] |
+| - | - | Implement update profile API call | 1 hour | [x] |
+| - | - | Update ProfileController to use API | 2 hours | [x] |
+| - | - | Handle profile update errors | 1 hour | [x] |
 
 ### 7. Avatar Upload
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **API-108** | 🟠 High | **Implement avatar upload** | 3-4 hours | [ ] |
-| - | - | Create multipart request for image upload | 2 hours | [ ] |
-| - | - | Add upload progress tracking | 1 hour | [ ] |
-| - | - | Update UI with uploaded image URL | 1 hour | [ ] |
+| **API-108** | 🟠 High | **Implement avatar upload** | 3-4 hours | [x] |
+| - | - | Create multipart request for image upload | 2 hours | [x] |
+| - | - | Add upload progress tracking | 1 hour | [x] |
+| - | - | Update UI with uploaded image URL | 1 hour | [x] |
 
 ---
 
@@ -100,44 +100,44 @@
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **API-104** | 🟠 High | **Integrate category endpoints** | 2-3 hours | [ ] |
-| - | - | Create CategoryRepository | 1 hour | [ ] |
-| - | - | Fetch categories from API | 1 hour | [ ] |
-| - | - | Cache categories locally | 1 hour | [ ] |
+| **API-104** | 🟠 High | **Integrate category endpoints** | 2-3 hours | [x] |
+| - | - | Create CategoryRepository | 1 hour | [x] |
+| - | - | Fetch categories from API | 1 hour | [x] |
+| - | - | Cache categories locally | 1 hour | [x] |
 
 ### 9. Ad Listing Integration
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **API-103** | 🔴 Critical | **Integrate ad CRUD endpoints** | 8-10 hours | [ ] |
-| - | - | Create AdRepository | 1 hour | [ ] |
-| - | - | Implement get ads list with filters | 2 hours | [ ] |
-| - | - | Implement get ad details | 1 hour | [ ] |
-| - | - | Implement pagination | 2 hours | [ ] |
-| - | - | Update HomeController to use API | 2 hours | [ ] |
-| - | - | Update AdDetailsController to use API | 2 hours | [ ] |
+| **API-103** | 🔴 Critical | **Integrate ad CRUD endpoints** | 8-10 hours | [x] |
+| - | - | Create AdRepository | 1 hour | [x] |
+| - | - | Implement get ads list with filters | 2 hours | [x] |
+| - | - | Implement get ad details | 1 hour | [x] |
+| - | - | Implement pagination | 2 hours | [x] |
+| - | - | Update HomeController to use API | 2 hours | [x] |
+| - | - | Update AdDetailsController to use API | 2 hours | [x] |
 
 ### 10. Create Ad Integration
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **POST-008** | 🔴 Critical | **Connect Post Ad to backend** | 6-8 hours | [ ] |
-| - | - | Implement create ad API call | 2 hours | [ ] |
-| - | - | Implement ad image upload | 2 hours | [ ] |
-| - | - | Add upload progress UI | 1 hour | [ ] |
-| - | - | Handle validation errors from backend | 1 hour | [ ] |
-| - | - | Update PostAdController | 2 hours | [ ] |
-| - | - | Navigate to ad details on success | 1 hour | [ ] |
+| **POST-008** | 🔴 Critical | **Connect Post Ad to backend** | 6-8 hours | [x] |
+| - | - | Implement create ad API call | 2 hours | [x] |
+| - | - | Implement ad image upload | 2 hours | [x] |
+| - | - | Add upload progress UI | 1 hour | [x] |
+| - | - | Handle validation errors from backend | 1 hour | [x] |
+| - | - | Update PostAdController | 2 hours | [x] |
+| - | - | Navigate to ad details on success | 1 hour | [x] |
 
 ### 11. Ad Actions Integration
 
 | Task Code | Priority | Task | Estimated Time | Status |
 |-----------|----------|------|----------------|--------|
-| **NEW** | 🟡 Medium | **Implement ad actions** | 4-5 hours | [ ] |
-| - | - | Implement update ad API call | 1 hour | [ ] |
-| - | - | Implement delete ad API call | 1 hour | [ ] |
-| - | - | Implement mark as sold API call | 1 hour | [ ] |
-| - | - | Implement toggle favorite API call | 2 hours | [ ] |
+| **NEW** | 🟡 Medium | **Implement ad actions** | 4-5 hours | [x] |
+| - | - | Implement update ad API call | 1 hour | [x] |
+| - | - | Implement delete ad API call | 1 hour | [x] |
+| - | - | Implement mark as sold API call | 1 hour | [x] |
+| - | - | Implement toggle favorite API call | 2 hours | [x] |
 
 ---
 
