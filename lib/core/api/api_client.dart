@@ -203,6 +203,10 @@ class ApiClient {
     return await _secureStorage.read(key: 'access_token');
   }
 
+  Future<String?> getRefreshToken() async {
+    return await _secureStorage.read(key: 'refresh_token');
+  }
+
   Future<void> clearTokens() async {
     await _secureStorage.delete(key: 'access_token');
     await _secureStorage.delete(key: 'refresh_token');

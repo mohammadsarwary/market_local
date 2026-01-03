@@ -58,6 +58,7 @@
 | - | - | Add secure token storage (flutter_secure_storage) | 1 hour | [x] |
 | - | - | Update AuthController to use API | 2 hours | [x] |
 | - | - | Handle auth errors and validation | 1 hour | [x] |
+| - | - | Fix getRefreshToken bug and add missing method | 30 min | [x] |
 
 ### 5. Token Management
 

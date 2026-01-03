@@ -21,6 +21,12 @@ class HomeScreen extends StatelessWidget {
     final controller = Get.find<HomeController>();
     final scrollController = ScrollController();
 
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+        controller.loadMoreAds();
+      }
+    });
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
       body: RefreshIndicator(
@@ -172,6 +178,15 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+            if (controller.isLoadingMore)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: LoadingWidgets.circularSmall(),
+                  ),
+                ),
+              ),
             const SliverToBoxAdapter(
               child: SizedBox(height: 24),
             ),

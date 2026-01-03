@@ -118,7 +118,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   @override
   Future<String?> getRefreshToken() async {
     return handleException(() async {
-      return await apiClient.getAuthToken();
+      return await apiClient.getRefreshToken();
     });
   }
 

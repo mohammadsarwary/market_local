@@ -4,6 +4,9 @@ import '../../models/ad_model.dart';
 import '../../models/category_model.dart';
 import '../../core/utils/haptic_feedback.dart';
 import '../../core/services/storage_service.dart';
+import '../../core/repositories/local_data_source_impl.dart';
+import '../ad_details/repositories/ad_service.dart';
+import '../ad_details/models/ad_response.dart';
 import 'data/mock_data.dart';
 
 /// Controller for managing the home screen state and data
@@ -12,9 +15,8 @@ import 'data/mock_data.dart';
 /// - Category selection and filtering
 /// - Product listing management
 /// - Time formatting for post timestamps
-/// 
-/// The controller uses mock data for demonstration purposes but is structured
-/// to easily integrate with real API calls.
+/// - Fetching ads from API with pagination
+/// - Local caching for offline viewing
 /// 
 /// Usage:
 /// ```dart
@@ -42,6 +44,12 @@ class HomeController extends GetxController {
   /// Storage service for persisting favorites
   late final StorageService _storageService;
 
+  /// Local data source for caching
+  late final LocalDataSourceImpl _localDataSource;
+
+  /// Ad service for API calls
+  late final AdService _adService;
+
   /// Set of favorite item IDs for quick lookup
   final RxSet<String> favoriteIds = <String>{}.obs;
 
@@ -51,6 +59,15 @@ class HomeController extends GetxController {
   /// products based on the selected category.
   final RxInt selectedCategoryIndex = 0.obs;
 
+  /// List of products/ads to display
+  final RxList<AdModel> _products = <AdModel>[].obs;
+
+  /// Pagination state
+  final RxInt _currentPage = 1.obs;
+  final RxInt _totalPages = 1.obs;
+  final RxBool _isLoadingMore = false.obs;
+  final RxBool _hasMoreData = true.obs;
+
   /// List of available categories for filtering
   /// 
   /// Returns mock data from [HomeMockData.categories]. In a production
@@ -58,16 +75,20 @@ class HomeController extends GetxController {
   List<CategoryModel> get categories => HomeMockData.categories;
 
   /// List of products/ads to display
-  /// 
-  /// Returns mock data from [HomeMockData.products]. In a production
-  /// app, this would be filtered based on the selected category and
-  /// populated from API calls.
-  List<AdModel> get products => HomeMockData.products;
+  List<AdModel> get products => _products;
+
+  /// Check if loading more items
+  bool get isLoadingMore => _isLoadingMore.value;
+
+  /// Check if has more data to load
+  bool get hasMoreData => _hasMoreData.value;
 
   @override
   void onInit() {
     super.onInit();
     _storageService = Get.find<StorageService>();
+    _localDataSource = LocalDataSourceImpl();
+    _adService = AdService.instance;
     _loadFavorites();
     loadInitialData();
   }
@@ -89,21 +110,128 @@ class HomeController extends GetxController {
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = '';
+      _currentPage.value = 1;
+      _hasMoreData.value = true;
 
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
-
-      // In a real app, this would fetch data from an API
-      // For now, we're using mock data so no actual loading is needed
+      await _fetchAds(page: 1, clearExisting: true);
       
-      // Add haptic feedback on successful refresh
       await HapticFeedback.success();
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'Failed to load data. Please try again.';
       await HapticFeedback.error();
+      
+      await _loadCachedAds();
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Fetch ads from API
+  Future<void> _fetchAds({required int page, bool clearExisting = false}) async {
+    try {
+      final categoryId = selectedCategoryIndex.value == 0 
+          ? null 
+          : categories[selectedCategoryIndex.value].id;
+
+      final response = await _adService.getAds(
+        page: page,
+        limit: 20,
+        categoryId: categoryId,
+        sortBy: 'created_at',
+      );
+
+      final fetchedAds = response.ads.map((ad) => _mapAdToAdModel(ad)).toList();
+
+      if (clearExisting) {
+        _products.value = fetchedAds;
+      } else {
+        _products.addAll(fetchedAds);
+      }
+
+      _currentPage.value = response.page;
+      _totalPages.value = (response.total / response.limit).ceil();
+      _hasMoreData.value = response.page < _totalPages.value;
+
+      await _cacheAds(fetchedAds);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Load more ads for pagination
+  Future<void> loadMoreAds() async {
+    if (_isLoadingMore.value || !_hasMoreData.value || isLoading.value) {
+      return;
+    }
+
+    try {
+      _isLoadingMore.value = true;
+      await _fetchAds(page: _currentPage.value + 1);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load more items',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      _isLoadingMore.value = false;
+    }
+  }
+
+  /// Map API Ad model to app AdModel
+  AdModel _mapAdToAdModel(Ad ad) {
+    return AdModel(
+      id: ad.id,
+      title: ad.title,
+      description: ad.description,
+      price: ad.price,
+      currency: 'USD',
+      images: ad.images,
+      categoryId: ad.categoryId,
+      categoryName: ad.categoryName,
+      sellerId: ad.userId,
+      sellerName: ad.userName,
+      sellerAvatar: ad.userAvatar ?? '',
+      isSellerVerified: false,
+      location: ad.location,
+      latitude: ad.latitude,
+      longitude: ad.longitude,
+      createdAt: ad.createdAt,
+      updatedAt: ad.updatedAt,
+      isPromoted: false,
+      isSold: ad.status == 'sold',
+      isFavorite: ad.isFavorite,
+      viewCount: ad.views,
+      condition: AdCondition.used,
+    );
+  }
+
+  /// Cache ads locally
+  Future<void> _cacheAds(List<AdModel> ads) async {
+    try {
+      final adsJson = ads.map((ad) => ad.toJson()).toList();
+      await _localDataSource.save('home_ads', adsJson);
+      await _localDataSource.save('home_ads_timestamp', DateTime.now().toIso8601String());
+    } catch (e) {
+      // Silently fail caching
+    }
+  }
+
+  /// Load cached ads
+  Future<void> _loadCachedAds() async {
+    try {
+      final cached = await _localDataSource.get('home_ads');
+      if (cached != null && cached is List) {
+        final cachedAds = cached
+            .map((item) => AdModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+        _products.value = cachedAds;
+      }
+    } catch (e) {
+      // Silently fail loading cache
     }
   }
 
@@ -176,6 +304,7 @@ class HomeController extends GetxController {
   void changeCategory(int index) async {
     await HapticFeedback.selection();
     selectedCategoryIndex.value = index;
+    await refreshData();
   }
 
   /// Formats a DateTime into a human-readable "time ago" string

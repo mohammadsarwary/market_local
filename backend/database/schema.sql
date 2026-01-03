@@ -21,12 +21,15 @@ CREATE TABLE IF NOT EXISTS users (
     followers INT DEFAULT 0,
     is_verified BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
+    is_admin TINYINT(1) DEFAULT 0,
+    admin_role ENUM('super_admin', 'admin', 'moderator') NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     INDEX idx_email (email),
     INDEX idx_phone (phone),
-    INDEX idx_location (location)
+    INDEX idx_location (location),
+    INDEX idx_is_admin (is_admin)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
@@ -219,6 +222,25 @@ CREATE TABLE IF NOT EXISTS reports (
     FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_reporter (reporter_id),
     INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- Admin Logs Table
+-- ============================================
+CREATE TABLE IF NOT EXISTS admin_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id INT NOT NULL,
+    action VARCHAR(100) NOT NULL,
+    target_id INT,
+    target_type VARCHAR(50),
+    details TEXT,
+    ip_address VARCHAR(45),
+    user_agent VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_admin (admin_id),
+    INDEX idx_action (action),
+    INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
