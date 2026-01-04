@@ -1,5 +1,7 @@
 const API_BASE_URL = '/admin_api.php';
 
+let activeRequests = 0;
+
 function getAuthToken() {
     return localStorage.getItem('admin_token');
 }
@@ -12,7 +14,31 @@ function getAuthHeaders() {
     };
 }
 
-async function apiRequest(action, data = {}, method = 'GET') {
+function showLoading(show = true) {
+    activeRequests += show ? 1 : -1;
+    if (activeRequests < 0) activeRequests = 0;
+    
+    const loader = document.getElementById('global-loader');
+    if (loader) {
+        loader.style.display = activeRequests > 0 ? 'flex' : 'none';
+    }
+}
+
+function handleApiError(error, customMessage = null) {
+    console.error('API Error:', error);
+    
+    // Don't show notification for auth errors as user will be redirected
+    if (error.message && (error.message.includes('401') || error.message.includes('Unauthorized'))) {
+        return;
+    }
+    
+    const message = customMessage || error.message || 'An error occurred. Please try again.';
+    showNotification(message, 'error');
+}
+
+async function apiRequest(action, data = {}, method = 'GET', showLoader = true) {
+    if (showLoader) showLoading(true);
+    
     try {
         const options = {
             method: method,
@@ -29,21 +55,46 @@ async function apiRequest(action, data = {}, method = 'GET') {
         }
 
         const response = await fetch(url, options);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
 
-        if (!result.success && result.message === 'Unauthorized') {
-            localStorage.removeItem('admin_token');
-            localStorage.removeItem('admin_user');
-            window.location.href = '../login.php';
-            return null;
+        if (!result.success) {
+            if (result.message === 'Unauthorized' || result.message === 'Invalid token') {
+                localStorage.removeItem('admin_token');
+                localStorage.removeItem('admin_user');
+                window.location.href = '../login.php';
+                return null;
+            }
+            throw new Error(result.message || 'Request failed');
         }
 
         return result;
     } catch (error) {
-        console.error('API Request Error:', error);
-        showNotification('Connection error. Please try again.', 'error');
+        handleApiError(error);
         return null;
+    } finally {
+        if (showLoader) showLoading(false);
     }
+}
+
+async function apiGet(action, params = {}) {
+    return apiRequest(action, params, 'GET');
+}
+
+async function apiPost(action, data = {}) {
+    return apiRequest(action, data, 'POST');
+}
+
+async function apiPut(action, data = {}) {
+    return apiRequest(action, data, 'PUT');
+}
+
+async function apiDelete(action, data = {}) {
+    return apiRequest(action, data, 'DELETE');
 }
 
 function showNotification(message, type = 'success') {
@@ -140,6 +191,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function loadPendingCounts() {
+    const token = getAuthToken();
+    if (!token) {
+        console.warn('No auth token available, skipping pending counts load');
+        return;
+    }
+    
     const result = await apiRequest('stats');
     if (result && result.success) {
         const pendingCount = document.getElementById('pending-count');
@@ -151,6 +208,9 @@ async function loadPendingCounts() {
 }
 
 if (document.getElementById('pending-count') || document.getElementById('reports-count')) {
-    loadPendingCounts();
-    setInterval(loadPendingCounts, 60000);
+    // Wait a moment for token to be set from PHP session
+    setTimeout(() => {
+        loadPendingCounts();
+        setInterval(loadPendingCounts, 60000);
+    }, 100);
 }

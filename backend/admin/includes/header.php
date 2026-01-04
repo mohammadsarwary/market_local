@@ -18,6 +18,16 @@
             <link rel="stylesheet" href="<?php echo $css; ?>">
         <?php endforeach; ?>
     <?php endif; ?>
+    
+    <?php if (isset($admin_token)): ?>
+    <script>
+        // Set admin token from PHP session to localStorage for JavaScript API calls
+        localStorage.setItem('admin_token', '<?php echo $admin_token; ?>');
+        <?php if (isset($admin_user)): ?>
+        localStorage.setItem('admin_user', '<?php echo json_encode($admin_user); ?>');
+        <?php endif; ?>
+    </script>
+    <?php endif; ?>
 </head>
 <body>
     <div class="admin-container">

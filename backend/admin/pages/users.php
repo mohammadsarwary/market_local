@@ -2,6 +2,7 @@
 $current_page = 'users';
 $page_title = 'User Management';
 $breadcrumb = [['label' => 'User Management']];
+$extra_js = ['/admin/assets/js/users.js'];
 
 include '../includes/auth_check.php';
 include '../includes/header.php';
@@ -66,7 +67,7 @@ include '../includes/sidebar.php';
                 <i class="fas fa-download"></i>
                 Export
             </button>
-            <button class="btn btn-primary" onclick="window.location.href='user_add.php'">
+            <button class="btn btn-primary" id="add-user-btn">
                 <i class="fas fa-plus"></i>
                 Add New User
             </button>
@@ -271,83 +272,14 @@ include '../includes/sidebar.php';
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title">User Details</h2>
-            <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <button class="close-modal" id="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <div id="modal-body">
         </div>
     </div>
 </div>
-
-<script>
-const API_BASE_URL = '/admin_api.php';
-
-function viewUser(userId) {
-    document.getElementById('userModal').classList.add('active');
-}
-
-function editUser(userId) {
-    window.location.href = `user_edit.php?id=${userId}`;
-}
-
-async function banUser(userId) {
-    const result = await Swal.fire({
-        title: 'Ban User?',
-        text: 'This will permanently ban the user from the platform.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#EF4444',
-        cancelButtonColor: '#6B7280',
-        confirmButtonText: 'Yes, ban user',
-        background: '#1A1A1A',
-        color: '#FFFFFF'
-    });
-
-    if (result.isConfirmed) {
-        Swal.fire({
-            title: 'Banned!',
-            text: 'User has been banned successfully.',
-            icon: 'success',
-            background: '#1A1A1A',
-            color: '#FFFFFF',
-            confirmButtonColor: '#EF4444'
-        });
-    }
-}
-
-async function activateUser(userId) {
-    const result = await Swal.fire({
-        title: 'Activate User?',
-        text: 'This will reactivate the user account.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#10B981',
-        cancelButtonColor: '#6B7280',
-        confirmButtonText: 'Yes, activate',
-        background: '#1A1A1A',
-        color: '#FFFFFF'
-    });
-
-    if (result.isConfirmed) {
-        Swal.fire({
-            title: 'Activated!',
-            text: 'User has been activated successfully.',
-            icon: 'success',
-            background: '#1A1A1A',
-            color: '#FFFFFF',
-            confirmButtonColor: '#10B981'
-        });
-    }
-}
-
-function closeModal() {
-    document.getElementById('userModal').classList.remove('active');
-}
-
-document.getElementById('select-all').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-    checkboxes.forEach(cb => cb.checked = this.checked);
-});
-</script>
 
 <?php
 include '../includes/footer.php';
