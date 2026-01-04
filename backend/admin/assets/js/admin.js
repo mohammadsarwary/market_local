@@ -1,4 +1,4 @@
-const API_BASE_URL = '../admin_api.php';
+const API_BASE_URL = '/admin_api.php';
 
 function getAuthToken() {
     return localStorage.getItem('admin_token');
@@ -19,13 +19,13 @@ async function apiRequest(action, data = {}, method = 'GET') {
             headers: getAuthHeaders()
         };
 
-        let url = `${API_BASE_URL}?action=${action}`;
+        let url = `${API_BASE_URL}/${action}`;
 
         if (method === 'POST' || method === 'PUT') {
-            options.body = JSON.stringify({ action, ...data });
+            options.body = JSON.stringify(data);
         } else if (method === 'GET' && Object.keys(data).length > 0) {
             const params = new URLSearchParams(data);
-            url += `&${params.toString()}`;
+            url += `?${params.toString()}`;
         }
 
         const response = await fetch(url, options);

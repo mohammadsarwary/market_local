@@ -17,7 +17,7 @@ $controller = new AdminController();
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-$basePath = '/backend/admin_api.php';
+$basePath = '/admin_api.php';
 $path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 $path = trim($path, '/');
 

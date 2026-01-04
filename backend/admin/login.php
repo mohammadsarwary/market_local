@@ -313,7 +313,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = '../admin_api.php';
+        const API_BASE_URL = '/admin_api.php';
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
         const alert = document.getElementById('alert');
@@ -336,13 +336,12 @@
             loginBtn.disabled = true;
 
             try {
-                const response = await fetch(API_BASE_URL, {
+                const response = await fetch(API_BASE_URL + '/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        action: 'login',
                         email: email,
                         password: password
                     })
@@ -355,7 +354,7 @@
                     localStorage.setItem('admin_user', JSON.stringify(data.user));
                     showAlert('Login successful! Redirecting...', 'success');
                     setTimeout(() => {
-                        window.location.href = 'index.php';
+                        window.location.href = 'pages/dashboard.php';
                     }, 1000);
                 } else {
                     showAlert(data.message || 'Invalid credentials. Please try again.');

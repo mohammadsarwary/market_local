@@ -7,7 +7,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <script src="../assets/js/admin.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
     
     <?php if (isset($extra_js)): ?>
         <?php foreach ($extra_js as $js): ?>

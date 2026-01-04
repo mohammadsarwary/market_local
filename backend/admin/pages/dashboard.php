@@ -294,12 +294,12 @@ include '../includes/sidebar.php';
 </div>
 
 <script>
-const API_BASE_URL = '../../admin_api.php';
+const API_BASE_URL = '/admin_api.php';
 
 async function loadDashboardStats() {
     try {
         const token = localStorage.getItem('admin_token');
-        const response = await fetch(`${API_BASE_URL}?action=stats`, {
+        const response = await fetch(`${API_BASE_URL}/stats`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

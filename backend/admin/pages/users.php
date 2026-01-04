@@ -279,7 +279,7 @@ include '../includes/sidebar.php';
 </div>
 
 <script>
-const API_BASE_URL = '../../admin_api.php';
+const API_BASE_URL = '/admin_api.php';
 
 function viewUser(userId) {
     document.getElementById('userModal').classList.add('active');

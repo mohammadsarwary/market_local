@@ -71,10 +71,18 @@ class AdminController {
 
         $this->saveRefreshToken($user['id'], $refreshToken);
 
+        // Set PHP session for admin panel pages
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['admin_token'] = $accessToken;
+        $_SESSION['admin_user'] = $user;
+
         Response::success([
             'user' => $user,
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
+            'token' => $accessToken,
             'token_type' => 'Bearer',
             'expires_in' => JWTConfig::$access_token_expiry
         ], "Admin login successful");

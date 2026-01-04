@@ -4,6 +4,11 @@ RewriteEngine On
 # Set base directory (change if your API is in a subdirectory)
 RewriteBase /api/
 
+# Allow direct access to admin_api.php and admin directory
+RewriteCond %{REQUEST_URI} ^/admin_api\.php [OR]
+RewriteCond %{REQUEST_URI} ^/admin/
+RewriteRule ^ - [L]
+
 # Allow access to uploads directory
 RewriteCond %{REQUEST_URI} ^/api/uploads/
 RewriteRule ^ - [L]
