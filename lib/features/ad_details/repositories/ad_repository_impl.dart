@@ -31,7 +31,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
   Future<Ad> getAdDetails(String adId) async {
     return handleException(() async {
       try {
-        final endpoint = AdEndpoints.adDetails.replaceAll(':id', adId);
+        final endpoint = AdEndpoints.adDetails.replaceAll('{ad}', adId);
         final response = await apiClient.get(endpoint);
         final ad = Ad.fromJson(response as Map<String, dynamic>);
         await cacheAd(ad);
@@ -60,7 +60,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
   @override
   Future<UpdateAdResponse> updateAd(UpdateAdRequest request) async {
     return handleException(() async {
-      final endpoint = AdEndpoints.updateAd.replaceAll(':id', request.adId);
+      final endpoint = AdEndpoints.updateAd.replaceAll('{ad}', request.adId);
       final response = await apiClient.put(
         endpoint,
         data: request.toJson(),
@@ -72,7 +72,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
   @override
   Future<DeleteAdResponse> deleteAd(String adId) async {
     return handleException(() async {
-      final endpoint = AdEndpoints.deleteAd.replaceAll(':id', adId);
+      final endpoint = AdEndpoints.deleteAd.replaceAll('{ad}', adId);
       final response = await apiClient.delete(endpoint);
       await clearAdCache(adId);
       return DeleteAdResponse.fromJson(response as Map<String, dynamic>);
@@ -82,7 +82,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
   @override
   Future<MarkAsSoldResponse> markAsSold(String adId) async {
     return handleException(() async {
-      final endpoint = AdEndpoints.markAsSold.replaceAll(':id', adId);
+      final endpoint = AdEndpoints.markAsSold.replaceAll('{ad}', adId);
       final response = await apiClient.post(endpoint);
       return MarkAsSoldResponse.fromJson(response as Map<String, dynamic>);
     });
@@ -91,7 +91,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
   @override
   Future<ToggleFavoriteResponse> toggleFavorite(String adId) async {
     return handleException(() async {
-      final endpoint = AdEndpoints.toggleFavorite.replaceAll(':id', adId);
+      final endpoint = AdEndpoints.toggleFavorite.replaceAll('{ad}', adId);
       final response = await apiClient.post(endpoint);
       return ToggleFavoriteResponse.fromJson(response as Map<String, dynamic>);
     });
@@ -105,7 +105,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
         files.add(await MultipartFile.fromFile(filePath));
       }
 
-      final endpoint = AdEndpoints.uploadImages.replaceAll(':id', adId);
+      final endpoint = AdEndpoints.uploadImages.replaceAll('{ad}', adId);
       final response = await apiClient.upload(
         endpoint,
         files: files,

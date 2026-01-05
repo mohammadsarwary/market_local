@@ -14,30 +14,30 @@ class AuthEndpoints {
   static const String login = '/auth/login';
   static const String logout = '/auth/logout';
   static const String refreshToken = '/auth/refresh';
-  static const String forgotPassword = '/auth/forgot-password';
-  static const String resetPassword = '/auth/reset-password';
-  static const String verifyOtp = '/auth/verify-otp';
-  static const String resendOtp = '/auth/resend-otp';
+  static const String me = '/auth/me';
 }
 
 class UserEndpoints {
-  static const String profile = '/user/profile';
-  static const String updateProfile = '/user/profile';
-  static const String uploadAvatar = '/user/avatar';
-  static const String userAds = '/user/ads';
-  static const String favorites = '/user/favorites';
-  static const String settings = '/user/settings';
+  static const String profile = '/users/profile';
+  static const String updateProfile = '/users/profile';
+  static const String uploadAvatar = '/users/avatar';
+  static const String changePassword = '/users/change-password';
+  static const String deleteAccount = '/users/account';
+  static const String favorites = '/users/favorites';
+  static const String userAds = '/users/ads';
+  static const String getUserProfile = '/users/{user}';
+  static const String getUserAds = '/users/{user}/ads';
 }
 
 class AdEndpoints {
   static const String ads = '/ads';
   static const String createAd = '/ads';
-  static const String adDetails = '/ads/:id';
-  static const String updateAd = '/ads/:id';
-  static const String deleteAd = '/ads/:id';
-  static const String uploadImages = '/ads/:id/images';
-  static const String markAsSold = '/ads/:id/mark-sold';
-  static const String toggleFavorite = '/ads/:id/favorite';
+  static const String adDetails = '/ads/{ad}';
+  static const String updateAd = '/ads/{ad}';
+  static const String deleteAd = '/ads/{ad}';
+  static const String uploadImages = '/ads/{ad}/images';
+  static const String markAsSold = '/ads/{ad}/sold';
+  static const String toggleFavorite = '/ads/{ad}/favorite';
 }
 
 class CategoryEndpoints {

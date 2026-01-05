@@ -87,6 +87,117 @@ flutter analyze
 
 ---
 
+## How to Integrate an API Endpoint
+
+### Step 1: Define Models
+
+```dart
+// Request model
+class CreateAdRequest {
+  final String title;
+  final double price;
+  
+  CreateAdRequest({required this.title, required this.price});
+  
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'price': price,
+  };
+}
+
+// Response model
+class CreateAdResponse {
+  final Ad ad;
+  final String message;
+  
+  CreateAdResponse({required this.ad, required this.message});
+  
+  factory CreateAdResponse.fromJson(Map<String, dynamic> json) => 
+    CreateAdResponse(
+      ad: Ad.fromJson(json['data']['ad']),
+      message: json['message'],
+    );
+}
+```
+
+### Step 2: Add Endpoint Constant
+
+```dart
+// lib/core/api/api_constants.dart
+class AdEndpoints {
+  static const String createAd = '/ads';
+  static const String getAd = '/ads/{ad}';
+}
+```
+
+### Step 3: Implement Repository
+
+```dart
+// Repository interface
+abstract class AdRepository {
+  Future<CreateAdResponse> createAd(CreateAdRequest request);
+}
+
+// Repository implementation
+class AdRepositoryImpl extends BaseRepository implements AdRepository {
+  final ApiClient apiClient;
+  
+  @override
+  Future<CreateAdResponse> createAd(CreateAdRequest request) async {
+    return handleException(() async {
+      final response = await apiClient.post(
+        AdEndpoints.createAd,
+        data: request.toJson(),
+      );
+      return CreateAdResponse.fromJson(response);
+    });
+  }
+}
+```
+
+### Step 4: Create Service
+
+```dart
+// Service layer
+class AdService {
+  final AdRepository _repository;
+  
+  Future<CreateAdResponse> createAd({
+    required String title,
+    required double price,
+  }) async {
+    final request = CreateAdRequest(title: title, price: price);
+    return await _repository.createAd(request);
+  }
+}
+```
+
+### Step 5: Use in Controller
+
+```dart
+class PostAdController extends GetxController {
+  final AdService _service = AdService.instance;
+  final RxBool isLoading = false.obs;
+  
+  Future<void> submitAd() async {
+    isLoading.value = true;
+    try {
+      final response = await _service.createAd(
+        title: titleController.text,
+        price: double.parse(priceController.text),
+      );
+      Get.snackbar('Success', response.message);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}
+```
+
+---
+
 ## How to Add a New Feature
 
 ### Phase 1: Planning

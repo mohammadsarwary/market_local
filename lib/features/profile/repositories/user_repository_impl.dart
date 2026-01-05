@@ -52,11 +52,55 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   }
 
   @override
+  Future<void> changePassword(String currentPassword, String newPassword) async {
+    return handleException(() async {
+      await apiClient.post(
+        UserEndpoints.changePassword,
+        data: {
+          'current_password': currentPassword,
+          'new_password': newPassword,
+        },
+      );
+    });
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    return handleException(() async {
+      await apiClient.delete(UserEndpoints.deleteAccount);
+    });
+  }
+
+  @override
+  Future<UserProfile> getUserProfile(String userId) async {
+    return handleException(() async {
+      final endpoint = UserEndpoints.getUserProfile.replaceAll('{user}', userId);
+      final response = await apiClient.get(endpoint);
+      return UserProfile.fromJson(response as Map<String, dynamic>);
+    });
+  }
+
+  @override
   Future<UserAdsResponse> getUserAds(GetUserAdsRequest request) async {
     return handleException(() async {
       final response = await apiClient.get(
         UserEndpoints.userAds,
         queryParameters: request.toJson(),
+      );
+      return UserAdsResponse.fromJson(response as Map<String, dynamic>);
+    });
+  }
+
+  @override
+  Future<UserAdsResponse> getUserPublicAds(String userId, {int page = 1, int limit = 20}) async {
+    return handleException(() async {
+      final endpoint = UserEndpoints.getUserAds.replaceAll('{user}', userId);
+      final response = await apiClient.get(
+        endpoint,
+        queryParameters: {
+          'page': page,
+          'limit': limit,
+        },
       );
       return UserAdsResponse.fromJson(response as Map<String, dynamic>);
     });

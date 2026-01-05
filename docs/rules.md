@@ -31,15 +31,20 @@ These rules are non-negotiable. Violation requires immediate rollback.
 | ❌ DO NOT create circular dependencies | Breaks architecture |
 | ❌ DO NOT bypass GetX state management | Consistency |
 
-### Backend Rules
+### API Integration Rules
 
 | Rule | Reason |
 |------|--------|
-| ❌ DO NOT add real API calls yet | Backend not ready |
-| ❌ DO NOT add authentication logic yet | Backend not ready |
-| ❌ DO NOT add database connections | Backend not ready |
-| ❌ DO NOT add Firebase or other BaaS | Not approved |
-| ❌ DO NOT store sensitive data | Security risk |
+| ✅ USE ApiClient for all HTTP requests | Centralized API management |
+| ✅ USE ApiConstants for endpoint definitions | Consistency |
+| ✅ USE repository pattern for data access | Clean architecture |
+| ✅ IMPLEMENT proper error handling | User experience |
+| ✅ USE interceptors for auth/logging/retry | Cross-cutting concerns |
+| ❌ DO NOT hardcode API URLs | Use ApiConstants |
+| ❌ DO NOT make direct Dio calls in features | Use repositories |
+| ❌ DO NOT skip error boundaries | Breaks error handling |
+| ❌ DO NOT store tokens insecurely | Use flutter_secure_storage |
+| ❌ DO NOT expose sensitive data in logs | Security risk |
 
 ### Dependency Rules
 
@@ -117,16 +122,31 @@ final product = AdModel(title: 'Bike', price: 100);
 | ✅ Use `.obs` for reactive state | `RxInt`, `RxString`, etc. |
 | ✅ Use `Obx()` for reactive widgets | Automatic rebuilds |
 | ✅ Register controllers in bindings | `main_binding.dart` |
+| ✅ Use services for business logic | Separate from controllers |
+| ✅ Use repositories for data access | Clean separation |
 
 ```dart
 // Controller
 class HomeController extends GetxController {
-  final RxInt count = 0.obs;
-  void increment() => count.value++;
+  final HomeService _service = HomeService.instance;
+  final RxBool isLoading = false.obs;
+  final RxList<Ad> ads = <Ad>[].obs;
+  
+  Future<void> loadAds() async {
+    isLoading.value = true;
+    try {
+      final response = await _service.getAds();
+      ads.value = response.ads;
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
 
 // Widget
-Obx(() => Text('${controller.count.value}'))
+Obx(() => controller.isLoading.value 
+  ? CircularProgressIndicator()
+  : ListView.builder(...))
 ```
 
 ---
@@ -373,19 +393,78 @@ if (user == null) return const SizedBox.shrink();
 
 ---
 
+## API Integration Patterns
+
+### Repository Pattern
+
+```dart
+// Repository Interface
+abstract class UserRepository {
+  Future<UserProfile> getProfile();
+  Future<void> updateProfile(UpdateProfileRequest request);
+}
+
+// Repository Implementation
+class UserRepositoryImpl extends BaseRepository implements UserRepository {
+  final ApiClient apiClient;
+  final LocalDataSource localDataSource;
+  
+  @override
+  Future<UserProfile> getProfile() async {
+    return handleException(() async {
+      final response = await apiClient.get('/users/profile');
+      final profile = UserProfile.fromJson(response);
+      await localDataSource.save('profile', profile.toJson());
+      return profile;
+    });
+  }
+}
+
+// Service Layer
+class UserService {
+  final UserRepository _repository;
+  
+  Future<UserProfile> getProfile() async {
+    return await _repository.getProfile();
+  }
+}
+```
+
+### Error Handling
+
+```dart
+// Wrap screens in ErrorBoundary
+ErrorBoundary(
+  boundaryName: 'Profile Screen',
+  child: ProfileScreen(),
+)
+
+// Use try-catch in repositories
+try {
+  final response = await apiClient.get(endpoint);
+  return Model.fromJson(response);
+} catch (e) {
+  throw ApiException(message: 'Failed to load data');
+}
+```
+
+---
+
 ## Summary Checklist
 
 Before submitting any change, verify:
 
 - [ ] No UI design changes
-- [ ] Using constants (colors, sizes, texts)
-- [ ] Using typed models
+- [ ] Using constants (colors, sizes, texts, API endpoints)
+- [ ] Using typed models (requests, responses)
 - [ ] Following naming conventions
 - [ ] Imports properly ordered
 - [ ] No cross-feature imports
 - [ ] Controllers registered in bindings
 - [ ] Routes defined in router
 - [ ] Null safety handled
-- [ ] No hardcoded values
-- [ ] No backend/API calls
+- [ ] No hardcoded values (including API URLs)
+- [ ] API calls through repositories
+- [ ] Error boundaries implemented
+- [ ] Loading states handled
 - [ ] Documentation updated if needed

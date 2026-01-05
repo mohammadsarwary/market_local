@@ -193,7 +193,7 @@ Responsible for code cleanup, performance optimization, and technical debt reduc
 
 ### Description
 
-Responsible for backend integration, API connections, and data persistence. This role is **not active** until backend development begins.
+Responsible for backend integration, API connections, data persistence, and repository pattern implementation. This role is **ACTIVE** and critical for the project.
 
 ### Responsibilities
 
@@ -229,7 +229,14 @@ Responsible for backend integration, API connections, and data persistence. This
 - `features/*/data/*` (extend)
 - `pubspec.yaml`
 
-### Status: 🔒 NOT ACTIVE
+### Status: ✅ ACTIVE
+
+**Current Focus:**
+- API client architecture is implemented
+- Repository pattern is in place
+- Authentication endpoints integrated
+- User, Ad, Category, and Search APIs connected
+- Ongoing: Additional endpoint integration and optimization
 
 ---
 
@@ -284,6 +291,8 @@ Responsible for testing, bug detection, and quality assurance. Identifies issues
 | Add constants | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
 | Write tests | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Add API calls | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Implement repositories | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Update API endpoints | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | Update docs | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ---

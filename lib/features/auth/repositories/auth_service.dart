@@ -46,31 +46,28 @@ class AuthService {
     return response;
   }
 
+  @Deprecated('OTP endpoints are not in the current API documentation')
   Future<OtpResponse> sendOtp(String phone) async {
-    final request = ForgotPasswordRequest(phone: phone);
-    return await _authRepository.sendOtp(request);
+    throw UnimplementedError('OTP endpoints are not supported in the current API');
   }
 
+  @Deprecated('OTP endpoints are not in the current API documentation')
   Future<OtpResponse> resendOtp(String phone) async {
-    final request = ForgotPasswordRequest(phone: phone);
-    return await _authRepository.resendOtp(request);
+    throw UnimplementedError('OTP endpoints are not supported in the current API');
   }
 
+  @Deprecated('OTP endpoints are not in the current API documentation')
   Future<AuthResponse> verifyOtp(String phone, String otp) async {
-    final request = VerifyOtpRequest(phone: phone, otp: otp);
-    final response = await _authRepository.verifyOtp(request);
-    await _authRepository.saveAuthToken(response.accessToken);
-    await _authRepository.saveRefreshToken(response.refreshToken);
-    return response;
+    throw UnimplementedError('OTP endpoints are not supported in the current API');
   }
 
+  @Deprecated('OTP endpoints are not in the current API documentation')
   Future<void> resetPassword(String phone, String otp, String newPassword) async {
-    final request = ResetPasswordRequest(
-      phone: phone,
-      otp: otp,
-      newPassword: newPassword,
-    );
-    await _authRepository.resetPassword(request);
+    throw UnimplementedError('OTP endpoints are not supported in the current API');
+  }
+
+  Future<AuthResponse> getCurrentUser() async {
+    return await _authRepository.getCurrentUser();
   }
 
   Future<void> logout() async {

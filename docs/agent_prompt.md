@@ -148,15 +148,30 @@ You are working on the MarketLocal Flutter project as an **Integration Engineer*
 Task Code: [API/RT]-[XXX]
 Task: [DESCRIPTION]
 
+Context:
+- API client architecture is implemented (Dio-based)
+- Repository pattern is in place
+- Base repository provides error handling
+- Authentication, User, Ad, Category, and Search APIs are integrated
+- API documentation available at /docs/API_DOCUMENTATION.md
+
 Rules:
-- Create proper abstractions (repository pattern)
-- Handle errors gracefully
+- Use ApiClient for all HTTP requests
+- Define endpoints in ApiConstants
+- Implement repository pattern (interface + implementation)
+- Create service layer for high-level operations
+- Use BaseRepository for error handling
+- Handle errors gracefully with try-catch
 - DO NOT expose sensitive data
-- Follow existing patterns
+- DO NOT hardcode API URLs
+- Use flutter_secure_storage for tokens
+- Implement proper loading states
 
 After completion:
 1. Run `flutter analyze`
-2. Update `/docs/todo.md` - change task status from `[ ]` to `[x]`
+2. Test API integration manually
+3. Verify error handling works
+4. Update `/docs/todo.md` - change task status from `[ ]` to `[x]`
 ```
 
 ### QA Agent Task

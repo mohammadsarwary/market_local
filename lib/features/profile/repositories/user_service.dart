@@ -62,6 +62,18 @@ class UserService {
     return await _userRepository.uploadAvatar(filePath);
   }
 
+  Future<void> changePassword(String currentPassword, String newPassword) async {
+    await _userRepository.changePassword(currentPassword, newPassword);
+  }
+
+  Future<void> deleteAccount() async {
+    await _userRepository.deleteAccount();
+  }
+
+  Future<UserProfile> getUserProfile(String userId) async {
+    return await _userRepository.getUserProfile(userId);
+  }
+
   Future<UserAdsResponse> getUserAds({
     int page = 1,
     int limit = 20,
@@ -73,6 +85,10 @@ class UserService {
       status: status,
     );
     return await _userRepository.getUserAds(request);
+  }
+
+  Future<UserAdsResponse> getUserPublicAds(String userId, {int page = 1, int limit = 20}) async {
+    return await _userRepository.getUserPublicAds(userId, page: page, limit: limit);
   }
 
   Future<FavoritesResponse> getFavorites({

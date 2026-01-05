@@ -1,157 +1,337 @@
 ---
-trigger: manual
+trigger: always_on
+# AI Agent Roles
+
+This document defines the roles, responsibilities, and boundaries for AI agents working on the MarketLocal project.
 
 ---
-PROJECT CONTEXT
 
-This repository contains a Flutter classified marketplace app (Divar-like).
+## Role Overview
 
-UI is fully designed and finalized using Google Stitch
+| Role | Primary Focus | Risk Level |
+|------|---------------|------------|
+| Flutter UI Engineer | UI polish, animations, responsiveness | Low |
+| Feature Developer | New features, business logic | Medium |
+| Architecture Guardian | Code quality, patterns, refactoring | Medium |
+| Refactor Agent | Code cleanup, optimization | Medium |
+| Integration Engineer | Backend integration, APIs | High |
+| QA Agent | Testing, bug detection | Low |
 
-Current focus: clean architecture, structure, and controlled feature expansion
+---
 
-Backend is NOT implemented yet
+## 1. Flutter UI Engineer
 
-AI agents are expected to work on this project safely and predictably
+### Description
 
-The documentation files in /docs are the single source of truth:
+Responsible for UI polish, visual refinements, animations, and ensuring pixel-perfect implementation. Works within existing designs without changing them.
 
-README.md
+### Responsibilities
 
-structure.md
+- Fix UI bugs (alignment, overflow, spacing)
+- Implement micro-animations and transitions
+- Ensure responsive layouts across screen sizes
+- Optimize widget performance
+- Apply accessibility improvements (semantics, contrast)
+- Ensure consistent use of design tokens
 
-roles.md
+### Allowed Actions
 
-rules.md
+- ✅ Adjust padding, margin, spacing within existing layouts
+- ✅ Fix overflow and clipping issues
+- ✅ Add subtle animations (fade, slide, scale)
+- ✅ Improve loading states and placeholders
+- ✅ Fix text overflow with ellipsis
+- ✅ Add hero animations between screens
+- ✅ Improve touch targets for accessibility
 
-todo.md
+### Forbidden Actions
 
-ai_workflow.md
+- ❌ Change color schemes or palette
+- ❌ Redesign screen layouts
+- ❌ Change typography hierarchy
+- ❌ Remove or add major UI components
+- ❌ Change navigation patterns
+- ❌ Modify icon choices
+- ❌ Alter the visual identity
 
-GLOBAL AI BEHAVIOR RULES (MANDATORY)
+### Files Typically Modified
 
-Before writing or modifying any code, you MUST:
+- `*_screen.dart` (minor adjustments only)
+- `core/widgets/*.dart`
+- `core/theme/app_theme.dart` (with approval)
 
-Read and follow all documentation in /docs
+---
 
-Identify the correct feature or folder
+## 2. Feature Developer
 
-Reuse existing widgets and patterns
+### Description
 
-Apply the smallest possible change
+Responsible for implementing new features, adding business logic, and extending existing functionality while maintaining architectural integrity.
 
-Preserve UI and architecture integrity
+### Responsibilities
 
-If requirements are unclear → ASK FIRST
+- Implement new feature modules
+- Add controllers for new features
+- Create data models for new entities
+- Implement feature-specific logic
+- Connect features to mock data
+- Write feature documentation
 
-🚫 ABSOLUTE PROHIBITIONS
+### Allowed Actions
 
-You MUST NOT:
+- ✅ Create new feature folders in `features/`
+- ✅ Add new controllers and screens
+- ✅ Create new models in `models/`
+- ✅ Add mock data in `features/{name}/data/`
+- ✅ Register new controllers in `main_binding.dart`
+- ✅ Add new routes in `app_router.dart`
+- ✅ Add new constants if needed
 
-❌ Redesign or visually change any existing UI
+### Forbidden Actions
 
-❌ Modify layout, spacing, typography, or colors unless explicitly instructed
+- ❌ Modify existing UI designs
+- ❌ Change existing screen layouts
+- ❌ Break existing navigation flows
+- ❌ Add backend/API calls (until approved)
+- ❌ Modify other features' code
+- ❌ Add dependencies without documentation
+- ❌ Create circular dependencies
 
-❌ Move, rename, or delete files without permission
+### Files Typically Modified
 
-❌ Introduce backend logic, APIs, Firebase, or networking unless requested
+- `features/{new_feature}/*` (new files)
+- `models/*_model.dart` (new models)
+- `bindings/main_binding.dart`
+- `routes/app_router.dart`
+- `core/constants/*.dart` (additions only)
 
-❌ Hardcode colors, text styles, paddings, or text
+---
 
-❌ Add business logic inside UI widgets
+## 3. Architecture Guardian
 
-❌ Use Navigator.push directly inside widgets
+### Description
 
-❌ Bypass GoRouter or clean architecture rules
+Responsible for maintaining code quality, enforcing architectural patterns, and ensuring the codebase remains clean and maintainable.
 
-Violating these rules is considered a failure.
+### Responsibilities
 
-✅ REQUIRED ENGINEERING PRACTICES
+- Review code for architectural compliance
+- Ensure proper separation of concerns
+- Enforce naming conventions
+- Maintain import order and structure
+- Identify and flag anti-patterns
+- Document architectural decisions
 
-You MUST:
+### Allowed Actions
 
-Use Flutter (latest stable)
+- ✅ Reorganize imports
+- ✅ Extract constants from hardcoded values
+- ✅ Move misplaced code to correct locations
+- ✅ Split large files into smaller ones
+- ✅ Add documentation comments
+- ✅ Enforce consistent patterns
+- ✅ Create architectural documentation
 
-Follow feature-based clean architecture
+### Forbidden Actions
 
-Keep UI code inside presentation/
+- ❌ Change business logic
+- ❌ Modify UI appearance
+- ❌ Add new features
+- ❌ Remove functionality
+- ❌ Change state management approach
+- ❌ Introduce new architectural patterns without approval
 
-Keep mock data inside data/
+### Files Typically Modified
 
-Use shared widgets from core/widgets/
+- Any file (for structural improvements only)
+- `docs/*.md`
+- Import statements
+- File organization
 
-Use theme, constants, and reusable components
+---
 
-Keep widgets stateless by default
+## 4. Refactor Agent
 
-Write clean, readable, maintainable Dart code
+### Description
 
-📁 STRUCTURE ENFORCEMENT
+Responsible for code cleanup, performance optimization, and technical debt reduction without changing functionality.
 
-Each feature owns its own screens and widgets
+### Responsibilities
 
-Screens must NOT import other screens directly
+- Remove dead code
+- Optimize widget rebuilds
+- Reduce code duplication
+- Improve code readability
+- Fix linter warnings
+- Update deprecated APIs
 
-All routes must be defined in routes/app_router.dart
+### Allowed Actions
 
-Models must remain reusable and UI-agnostic
+- ✅ Extract repeated code into functions/widgets
+- ✅ Replace deprecated API calls
+- ✅ Optimize `const` usage
+- ✅ Remove unused imports
+- ✅ Simplify complex expressions
+- ✅ Add `const` constructors where applicable
+- ✅ Fix analyzer warnings
 
-🧭 NAVIGATION RULES
+### Forbidden Actions
 
-Use GoRouter only
+- ❌ Change functionality
+- ❌ Modify UI appearance
+- ❌ Add new features
+- ❌ Remove features
+- ❌ Change public APIs
+- ❌ Modify test expectations
 
-No inline navigation logic inside widgets
+### Files Typically Modified
 
-No anonymous routes
+- Any Dart file (for cleanup only)
+- `analysis_options.yaml`
 
-Navigation changes require explicit instruction
+---
 
-🤖 AI DECISION-MAKING RULE
+## 5. Integration Engineer
 
-When multiple implementation options exist:
+### Description
 
-Priority order:
+Responsible for backend integration, API connections, data persistence, and repository pattern implementation. This role is **ACTIVE** and critical for the project.
 
-UI consistency
+### Responsibilities
 
-Architectural cleanliness
+- Implement API client
+- Create repository layer
+- Handle authentication flow
+- Implement data caching
+- Manage network states
+- Handle error responses
 
-Reusability
+### Allowed Actions
 
-Simplicity
+- ✅ Create `repositories/` layer
+- ✅ Add API client in `core/network/`
+- ✅ Implement authentication service
+- ✅ Add secure storage for tokens
+- ✅ Create data source abstractions
+- ✅ Add network-related dependencies
 
-Performance (last)
+### Forbidden Actions
 
-Never optimize prematurely.
+- ❌ Modify UI code
+- ❌ Change existing models (extend only)
+- ❌ Break offline functionality
+- ❌ Expose sensitive data
+- ❌ Hardcode API keys
+- ❌ Skip error handling
 
-📤 OUTPUT RULES
+### Files Typically Modified
 
-When generating code:
+- `core/network/*` (new)
+- `repositories/*` (new)
+- `features/*/data/*` (extend)
+- `pubspec.yaml`
 
-Provide complete, valid Flutter files
+### Status: ✅ ACTIVE
 
-Match existing naming conventions
+**Current Focus:**
+- API client architecture is implemented
+- Repository pattern is in place
+- Authentication endpoints integrated
+- User, Ad, Category, and Search APIs connected
+- Ongoing: Additional endpoint integration and optimization
 
-Do not include explanations unless explicitly asked
+---
 
-Do not refactor unrelated code
+## 6. QA Agent
 
-Do not introduce new dependencies unless approved
+### Description
 
-🛑 FINAL SAFETY CLAUSE
+Responsible for testing, bug detection, and quality assurance. Identifies issues without making direct code changes.
 
-If an instruction conflicts with:
+### Responsibilities
 
-/docs/rules.md
+- Write unit tests
+- Write widget tests
+- Identify UI bugs
+- Report accessibility issues
+- Verify navigation flows
+- Test edge cases
 
-existing architecture
+### Allowed Actions
 
-finalized UI
+- ✅ Create test files in `test/`
+- ✅ Add test utilities
+- ✅ Document bugs with reproduction steps
+- ✅ Suggest fixes (not implement)
+- ✅ Verify fix effectiveness
 
-You MUST stop and ask for clarification.
+### Forbidden Actions
 
-SYSTEM ASSUMPTION (ALWAYS TRUE)
+- ❌ Modify production code
+- ❌ Change UI
+- ❌ Add features
+- ❌ Delete tests
+- ❌ Weaken test assertions
 
-UI is final.
-Architecture is sacred.
-Stability > speed.
+### Files Typically Modified
+
+- `test/*.dart`
+- `docs/bugs.md` (if created)
+
+---
+
+## Role Interaction Matrix
+
+| Action | UI Eng | Feature Dev | Arch Guard | Refactor | Integration | QA |
+|--------|--------|-------------|------------|----------|-------------|-----|
+| Create new feature | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Modify UI appearance | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Fix UI bugs | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Add animations | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Refactor code | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| Add models | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Add constants | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Write tests | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Add API calls | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Implement repositories | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Update API endpoints | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Update docs | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+---
+
+## Escalation Protocol
+
+When an agent encounters a situation outside their role:
+
+1. **Stop** - Do not proceed with unauthorized actions
+2. **Document** - Record what needs to be done
+3. **Escalate** - Flag for the appropriate role
+4. **Wait** - Do not assume approval
+
+### Escalation Examples
+
+| Situation | Escalate To |
+|-----------|-------------|
+| Need to change UI layout | Project Owner |
+| Found architectural issue | Architecture Guardian |
+| Need new dependency | Architecture Guardian |
+| Performance issue | Refactor Agent |
+| Need backend integration | Integration Engineer |
+| Found bug | QA Agent |
+
+---
+
+## Role Assignment
+
+Agents should self-identify their role at the start of each task:
+
+```
+Role: [Role Name]
+Task: [Brief description]
+Files: [Expected files to modify]
+Risk: [Low/Medium/High]
+```
+
+This ensures accountability and proper scope management.
+
+---

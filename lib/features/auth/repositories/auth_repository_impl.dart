@@ -44,53 +44,18 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   }
 
   @override
-  Future<OtpResponse> sendOtp(ForgotPasswordRequest request) async {
-    return handleException(() async {
-      final response = await apiClient.post(
-        AuthEndpoints.forgotPassword,
-        data: request.toJson(),
-      );
-      return OtpResponse.fromJson(response as Map<String, dynamic>);
-    });
-  }
-
-  @override
-  Future<OtpResponse> resendOtp(ForgotPasswordRequest request) async {
-    return handleException(() async {
-      final response = await apiClient.post(
-        AuthEndpoints.resendOtp,
-        data: request.toJson(),
-      );
-      return OtpResponse.fromJson(response as Map<String, dynamic>);
-    });
-  }
-
-  @override
-  Future<AuthResponse> verifyOtp(VerifyOtpRequest request) async {
-    return handleException(() async {
-      final response = await apiClient.post(
-        AuthEndpoints.verifyOtp,
-        data: request.toJson(),
-      );
-      return AuthResponse.fromJson(response as Map<String, dynamic>);
-    });
-  }
-
-  @override
-  Future<void> resetPassword(ResetPasswordRequest request) async {
-    return handleException(() async {
-      await apiClient.post(
-        AuthEndpoints.resetPassword,
-        data: request.toJson(),
-      );
-    });
-  }
-
-  @override
   Future<LogoutResponse> logout() async {
     return handleException(() async {
       final response = await apiClient.post(AuthEndpoints.logout);
       return LogoutResponse.fromJson(response as Map<String, dynamic>);
+    });
+  }
+
+  @override
+  Future<AuthResponse> getCurrentUser() async {
+    return handleException(() async {
+      final response = await apiClient.get(AuthEndpoints.me);
+      return AuthResponse.fromJson(response as Map<String, dynamic>);
     });
   }
 

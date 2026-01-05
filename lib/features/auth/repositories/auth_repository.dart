@@ -8,15 +8,9 @@ abstract class AuthRepository {
 
   Future<RefreshTokenResponse> refreshToken(RefreshTokenRequest request);
 
-  Future<OtpResponse> sendOtp(ForgotPasswordRequest request);
-
-  Future<OtpResponse> resendOtp(ForgotPasswordRequest request);
-
-  Future<AuthResponse> verifyOtp(VerifyOtpRequest request);
-
-  Future<void> resetPassword(ResetPasswordRequest request);
-
   Future<LogoutResponse> logout();
+
+  Future<AuthResponse> getCurrentUser();
 
   Future<void> saveAuthToken(String token);
 

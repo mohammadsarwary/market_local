@@ -8,7 +8,15 @@ abstract class UserRepository {
 
   Future<AvatarUploadResponse> uploadAvatar(String filePath);
 
+  Future<void> changePassword(String currentPassword, String newPassword);
+
+  Future<void> deleteAccount();
+
+  Future<UserProfile> getUserProfile(String userId);
+
   Future<UserAdsResponse> getUserAds(GetUserAdsRequest request);
+
+  Future<UserAdsResponse> getUserPublicAds(String userId, {int page = 1, int limit = 20});
 
   Future<FavoritesResponse> getFavorites(GetFavoritesRequest request);
 

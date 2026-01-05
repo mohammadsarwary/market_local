@@ -10,20 +10,26 @@ MarketLocal is a Flutter marketplace application built with GetX for state manag
 
 ```
 lib/
-├── core/                   # Core application utilities
+├── core/                   # Core infrastructure and utilities
+│   ├── api/               # API client infrastructure (Dio-based)
 │   ├── constants/         # App-wide constants (colors, sizes, texts)
 │   ├── error/             # Error handling system
 │   ├── loading/           # Loading state management
+│   ├── repositories/      # Base repository abstractions
+│   ├── services/          # Core services
 │   ├── theme/             # App theming
 │   ├── utils/             # Utility functions
 │   └── widgets/           # Reusable UI components
 ├── features/              # Feature modules
+│   ├── auth/             # Authentication (login, register, OTP)
 │   ├── home/             # Home screen and related components
 │   ├── search/           # Search functionality
 │   ├── post_ad/          # Ad posting workflow
 │   ├── chat/             # Messaging system
-│   └── profile/          # User profile management
-├── models/                # Data models
+│   ├── profile/          # User profile management
+│   ├── ad_details/       # Ad details and actions
+│   └── category/         # Category browsing
+├── models/                # Shared data models
 ├── controllers/           # Global controllers
 ├── bindings/             # Dependency injection bindings
 └── main.dart             # App entry point
@@ -32,12 +38,70 @@ lib/
 ### Key Architectural Patterns
 
 1. **Feature-Based Structure**: Each feature is organized in its own directory
-2. **GetX State Management**: Reactive state management with GetX
-3. **Error Boundaries**: Isolated error handling per screen
-4. **Dependency Injection**: GetX binding system for DI
-5. **Common Widgets**: Reusable UI components in core/widgets
+2. **Clean Architecture**: Separation of UI, business logic, and data layers
+3. **Repository Pattern**: Repositories coordinate between API and local storage
+4. **Service Layer**: Services provide high-level operations for controllers
+5. **GetX State Management**: Reactive state management with GetX
+6. **API Integration**: Dio-based HTTP client with interceptors
+7. **Error Boundaries**: Isolated error handling per screen
+8. **Dependency Injection**: GetX binding system for DI
+9. **Common Widgets**: Reusable UI components in core/widgets
+10. **Local Caching**: Data persistence with local storage
 
 ## Core Components
+
+### API Client Infrastructure
+
+The app uses Dio-based HTTP client for all API communication:
+
+- **ApiClient**: Dio wrapper with interceptors for auth, logging, and retry
+- **ApiService**: Singleton service managing ApiClient instance
+- **ApiConstants**: Centralized API endpoint definitions
+- **ApiInterceptors**: Auth token injection, logging, and automatic retry logic
+
+**Usage:**
+```dart
+final apiClient = ApiService.instance.apiClient;
+final response = await apiClient.get('/users/profile');
+```
+
+### Repository Pattern
+
+Data access follows the repository pattern:
+
+- **BaseRepository**: Base class with error handling utilities
+- **Repository Interface**: Defines data operations contract
+- **Repository Implementation**: Implements interface, coordinates API and cache
+- **Service Layer**: Provides high-level operations for controllers
+- **LocalDataSource**: Local storage abstraction
+
+**Example:**
+```dart
+// Repository
+class UserRepositoryImpl extends BaseRepository implements UserRepository {
+  final ApiClient apiClient;
+  final LocalDataSource localDataSource;
+  
+  @override
+  Future<UserProfile> getProfile() async {
+    return handleException(() async {
+      final response = await apiClient.get('/users/profile');
+      final profile = UserProfile.fromJson(response);
+      await localDataSource.save('profile', profile.toJson());
+      return profile;
+    });
+  }
+}
+
+// Service
+class UserService {
+  final UserRepository _repository;
+  
+  Future<UserProfile> getProfile() async {
+    return await _repository.getProfile();
+  }
+}
+```
 
 ### Error Handling System
 
@@ -332,13 +396,26 @@ Text(
 3. Add comprehensive documentation
 4. Keep functions focused and small
 5. Use GetX for state management consistently
+6. Follow repository pattern for data access
+7. Use ApiClient for all HTTP requests
+8. Define endpoints in ApiConstants
+9. Implement proper error handling
+10. Use error boundaries for screens
 
 ### File Organization
 
 1. Group related files in feature directories
-2. Use barrel exports for clean imports
-3. Separate UI, logic, and data layers
-4. Keep widget files focused on single responsibilities
+2. Follow clean architecture layers:
+   - **Screen**: UI layer
+   - **Controller**: State management
+   - **Service**: Business logic
+   - **Repository**: Data coordination
+   - **Models**: Data transfer objects
+3. Use barrel exports for clean imports
+4. Separate UI, logic, and data layers
+5. Keep widget files focused on single responsibilities
+6. Feature-specific models in feature folders
+7. Shared models in `/models/` directory
 
 ### Error Handling
 
