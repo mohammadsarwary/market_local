@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:market_local/core/api/api_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/error/error_handler.dart';
 import 'core/error/error_boundary_widget.dart';
@@ -46,6 +47,7 @@ class FadeInTransition extends CustomTransition {
 /// Entry point for the MarketLocal Flutter application
 /// 
 /// This file initializes the app and sets up global services including:
+/// - API client and services
 /// - Error handling and boundaries
 /// - Loading state management
 /// - Navigation controller
@@ -60,6 +62,9 @@ class FadeInTransition extends CustomTransition {
 /// 
 /// Run the app with: flutter run
 void main() {
+  // Initialize API service first before any controllers
+  ApiService.instance.initialize();
+  
   // Initialize global error handling
   // This sets up error handlers for Flutter framework and platform errors
   AppErrorHandler.initialize();

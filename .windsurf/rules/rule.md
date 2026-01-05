@@ -3,7 +3,7 @@ trigger: always_on
 # AI Agent Roles
 
 This document defines the roles, responsibilities, and boundaries for AI agents working on the MarketLocal project.
-
+After every command run flutter analyze
 ---
 
 ## Role Overview

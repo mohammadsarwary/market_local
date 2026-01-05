@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/haptic_feedback.dart';
+import '../ad_details/repositories/ad_service.dart';
 import 'data/mock_data.dart';
 
 class PostAdController extends GetxController {
@@ -43,6 +44,7 @@ class PostAdController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
   final GetStorage _storage = GetStorage();
+  final AdService _adService = AdService.instance;
   Timer? _draftTimer;
   static const String _draftKey = 'ad_draft';
 
@@ -53,6 +55,7 @@ class PostAdController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _adService.initialize();
     _loadDraft();
     _startDraftAutoSave();
   }
@@ -403,8 +406,8 @@ class PostAdController extends GetxController {
 
   /// Posts the ad after validation
   /// 
-  /// Validates the form and shows a success message if valid.
-  /// In a real app, this would send the ad data to the backend API.
+  /// Validates the form and sends ad data to the backend API.
+  /// Creates the ad first, then uploads images separately.
   Future<void> postAd() async {
     try {
       isLoading.value = true;
@@ -412,10 +415,76 @@ class PostAdController extends GetxController {
       errorMessage.value = '';
 
       if (formKey.currentState?.validate() ?? false) {
-        // Simulate network delay
-        await Future.delayed(const Duration(seconds: 2));
+        // Validate required fields
+        if (selectedCategory.value == null) {
+          hasError.value = true;
+          errorMessage.value = 'Please select a category';
+          await HapticFeedback.error();
+          Get.snackbar(
+            'Error',
+            errorMessage.value,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: AppColors.error,
+            colorText: Colors.white,
+          );
+          return;
+        }
 
-        // In a real app, this would send ad data to an API
+        if (images.isEmpty) {
+          hasError.value = true;
+          errorMessage.value = 'Please add at least one image';
+          await HapticFeedback.error();
+          Get.snackbar(
+            'Error',
+            errorMessage.value,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: AppColors.error,
+            colorText: Colors.white,
+          );
+          return;
+        }
+
+        // Get location coordinates
+        double latitude = 0.0;
+        double longitude = 0.0;
+        
+        if (useCurrentLocation.value && currentPosition.value != null) {
+          latitude = currentPosition.value!.latitude;
+          longitude = currentPosition.value!.longitude;
+        } else {
+          // Use default coordinates if location not available
+          latitude = 35.6892; // Default: Tehran
+          longitude = 51.3890;
+        }
+
+        // Create the ad
+        final response = await _adService.createAd(
+          title: titleController.text.trim(),
+          description: descriptionController.text.trim(),
+          categoryId: selectedCategory.value!,
+          price: double.parse(priceController.text.trim()),
+          location: locationController.text.trim(),
+          latitude: latitude,
+          longitude: longitude,
+          imagePaths: images.map((file) => file.path).toList(),
+          customFields: {
+            'condition': selectedCondition.value,
+          },
+        );
+
+        // Upload images to the created ad
+        if (images.isNotEmpty) {
+          try {
+            final imageResponse = await _adService.uploadAdImages(
+              response.ad.id,
+              images.map((file) => file.path).toList(),
+            );
+          } catch (imageError) {
+            // Log image upload error but don't fail the entire post
+            print('Image upload failed: $imageError');
+          }
+        }
+
         await HapticFeedback.success();
 
         // Clear draft after successful post
@@ -425,12 +494,15 @@ class PostAdController extends GetxController {
 
         Get.snackbar(
           'Success',
-          'Ad published successfully!',
+          response.message,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: AppColors.success,
           colorText: Colors.white,
           margin: const EdgeInsets.all(16),
         );
+
+        // Navigate to home or ad details
+        Get.back();
       }
     } catch (e) {
       hasError.value = true;

@@ -82,7 +82,7 @@ class AuthControllerImpl extends GetxController {
   }
 
   Future<void> login({
-    required String phone,
+    required String email,
     required String password,
   }) async {
     try {
@@ -92,7 +92,7 @@ class AuthControllerImpl extends GetxController {
       errorMessage.value = '';
 
       final request = LoginRequest(
-        phone: phone,
+        email: email,
         password: password,
       );
 

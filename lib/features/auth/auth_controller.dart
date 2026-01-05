@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/haptic_feedback.dart';
+import '../auth/repositories/auth_service.dart';
+import '../auth/models/auth_request.dart';
 
 /// Controller for authentication functionality
 class AuthController extends GetxController {
@@ -18,6 +21,140 @@ class AuthController extends GetxController {
 
   /// User login status
   final RxBool isLoggedIn = false.obs;
+
+  /// Auth service for API calls
+  final AuthService _authService = AuthService.instance;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _authService.initialize();
+    _checkAuthStatus();
+    // Initialize with empty phone number
+    phoneNumber.value = '';
+  }
+
+  /// Check if user is logged in
+  Future<void> _checkAuthStatus() async {
+    isLoggedIn.value = await _authService.isAuthenticated();
+  }
+
+  /// Login with email and password
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await HapticFeedback.light();
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      final request = LoginRequest(
+        email: email.trim(),
+        password: password,
+      );
+
+      await _authService.login(request);
+
+      await HapticFeedback.success();
+      isLoggedIn.value = true;
+
+      Get.snackbar(
+        'Success',
+        'Welcome back!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.success,
+        colorText: Colors.white,
+      );
+
+      // Navigate to home screen
+      Get.offAllNamed('/');
+    } catch (e) {
+      await HapticFeedback.error();
+      hasError.value = true;
+      errorMessage.value = 'Invalid email or password';
+      
+      Get.snackbar(
+        'Login Failed',
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.error,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Register new user
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+    String? phone,
+  }) async {
+    try {
+      await HapticFeedback.light();
+      isLoading.value = true;
+      hasError.value = false;
+      errorMessage.value = '';
+
+      final request = RegisterRequest(
+        name: name.trim(),
+        email: email.trim(),
+        password: password,
+        phone: phone ?? '',
+      );
+
+      final response = await _authService.register(request);
+
+      await HapticFeedback.success();
+      isLoggedIn.value = true;
+
+      Get.snackbar(
+        'Success',
+        'Account created successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.success,
+        colorText: Colors.white,
+      );
+
+      // Navigate to home screen
+      Get.offAllNamed('/');
+    } catch (e) {
+      await HapticFeedback.error();
+      hasError.value = true;
+      errorMessage.value = 'Registration failed. Please try again.';
+      
+      Get.snackbar(
+        'Registration Failed',
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.error,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Logout user
+  Future<void> logout() async {
+    try {
+      await _authService.logout();
+    } catch (e) {
+      // Error during logout is handled silently
+    } finally {
+      isLoggedIn.value = false;
+      Get.snackbar(
+        'Logged Out',
+        'You have been logged out',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.offAllNamed('/login');
+    }
+  }
 
   /// Send verification code to phone number
   Future<void> sendVerificationCode() async {
@@ -133,12 +270,5 @@ class AuthController extends GetxController {
     // Basic validation - check if phone number has at least 10 digits
     final digitsOnly = phoneNumber.value.replaceAll(RegExp(r'[^0-9]'), '');
     return digitsOnly.length >= 10;
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    // Initialize with empty phone number
-    phoneNumber.value = '';
   }
 }

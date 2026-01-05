@@ -22,17 +22,17 @@ class RegisterRequest {
 }
 
 class LoginRequest {
-  final String phone;
+  final String email;
   final String password;
 
   LoginRequest({
-    required this.phone,
+    required this.email,
     required this.password,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'phone': phone,
+      'email': email,
       'password': password,
     };
   }

@@ -77,6 +77,19 @@ class LoggingInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    print('\n╔═══════════════════════════════════════════════════════════════');
+    print('║ API REQUEST');
+    print('╠═══════════════════════════════════════════════════════════════');
+    print('║ Method: ${options.method.toUpperCase()}');
+    print('║ URL: ${options.uri}');
+    print('║ Headers: ${options.headers}');
+    if (options.data != null) {
+      print('║ Body: ${options.data}');
+    }
+    if (options.queryParameters.isNotEmpty) {
+      print('║ Query Params: ${options.queryParameters}');
+    }
+    print('╚═══════════════════════════════════════════════════════════════\n');
     return handler.next(options);
   }
 
@@ -85,6 +98,13 @@ class LoggingInterceptor extends Interceptor {
     Response response,
     ResponseInterceptorHandler handler,
   ) async {
+    print('\n╔═══════════════════════════════════════════════════════════════');
+    print('║ API RESPONSE');
+    print('╠═══════════════════════════════════════════════════════════════');
+    print('║ Status: ${response.statusCode} ${response.statusMessage}');
+    print('║ URL: ${response.requestOptions.uri}');
+    print('║ Data: ${response.data}');
+    print('╚═══════════════════════════════════════════════════════════════\n');
     return handler.next(response);
   }
 
@@ -93,6 +113,17 @@ class LoggingInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+    print('\n╔═══════════════════════════════════════════════════════════════');
+    print('║ API ERROR');
+    print('╠═══════════════════════════════════════════════════════════════');
+    print('║ Type: ${err.type}');
+    print('║ Message: ${err.message}');
+    print('║ URL: ${err.requestOptions.uri}');
+    if (err.response != null) {
+      print('║ Status: ${err.response!.statusCode} ${err.response!.statusMessage}');
+      print('║ Data: ${err.response!.data}');
+    }
+    print('╚═══════════════════════════════════════════════════════════════\n');
     return handler.next(err);
   }
 }

@@ -6,13 +6,27 @@ import 'auth_controller.dart';
 import 'signup_screen.dart';
 
 /// Login screen with email and password
-class LoginScreen extends GetView<AuthController> {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+    final controller = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -109,8 +123,13 @@ class LoginScreen extends GetView<AuthController> {
               SizedBox(
                 width: double.infinity,
                 height: 56.0,
-                child: ElevatedButton(
-                  onPressed: () => controller.sendVerificationCode(),
+                child: Obx(() => ElevatedButton(
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => controller.login(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
@@ -118,7 +137,16 @@ class LoginScreen extends GetView<AuthController> {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: controller.isLoading.value
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
                     'Sign In',
                     style: TextStyle(
                       fontSize: AppSizes.fontXL,
@@ -126,7 +154,7 @@ class LoginScreen extends GetView<AuthController> {
                       color: AppColors.textOnPrimary,
                     ),
                   ),
-                ),
+                )),
               ),
               const SizedBox(height: 32.0),
               Row(
