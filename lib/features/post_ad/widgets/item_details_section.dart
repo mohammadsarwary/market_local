@@ -26,6 +26,12 @@ class ItemDetailsSection extends StatelessWidget {
         AppTextField(
           controller: controller.titleController,
           hintText: 'What are you selling?',
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Please enter a title';
+            }
+            return null;
+          },
         ),
 
         const SizedBox(height: 24),
@@ -58,6 +64,12 @@ class ItemDetailsSection extends StatelessWidget {
                   .map((c) => DropdownMenuItem(value: c, child: Text(c)))
                   .toList(),
               onChanged: (value) => controller.updateCategory(value),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please select a category';
+                }
+                return null;
+              },
             )),
 
         const SizedBox(height: 24),
@@ -106,6 +118,16 @@ class ItemDetailsSection extends StatelessWidget {
         const SizedBox(height: 10),
         AppPriceField(
           controller: controller.priceController,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Please enter a price';
+            }
+            final price = double.tryParse(value.trim());
+            if (price == null || price <= 0) {
+              return 'Please enter a valid price';
+            }
+            return null;
+          },
         ),
 
         const SizedBox(height: 24),
@@ -116,6 +138,15 @@ class ItemDetailsSection extends StatelessWidget {
         AppTextArea(
           controller: controller.descriptionController,
           hintText: 'Describe your item in detail (brand, usage, faults)...',
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Please enter a description';
+            }
+            if (value.trim().length < 10) {
+              return 'Description must be at least 10 characters';
+            }
+            return null;
+          },
         ),
       ],
     );

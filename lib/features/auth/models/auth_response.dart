@@ -10,10 +10,28 @@ class AuthResponse {
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
+    print('AuthResponse.fromJson: Parsing response: $json');
+    // Handle wrapped API response format: {success, message, data: {...}}
+    final data = json['data'] as Map<String, dynamic>? ?? json;
+    print('AuthResponse.fromJson: Data extracted: $data');
+    
+    final accessToken = data['access_token'] as String?;
+    final refreshToken = data['refresh_token'] as String?;
+    final userData = data['user'] as Map<String, dynamic>?;
+    
+    if (accessToken == null || refreshToken == null || userData == null) {
+      print('AuthResponse.fromJson: Missing required fields');
+      throw Exception('Invalid response format: missing required fields');
+    }
+    
+    print('AuthResponse.fromJson: Creating UserData from: $userData');
+    final user = UserData.fromJson(userData);
+    print('AuthResponse.fromJson: UserData created: ${user.name}');
+    
     return AuthResponse(
-      accessToken: json['access_token'] as String,
-      refreshToken: json['refresh_token'] as String,
-      user: UserData.fromJson(json['user'] as Map<String, dynamic>),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user: user,
     );
   }
 
@@ -47,13 +65,15 @@ class UserData {
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
+      id: json['id']?.toString() ?? '',
+      name: json['name'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      phone: json['phone']?.toString() ?? '',
       avatar: json['avatar'] as String?,
       isVerified: json['is_verified'] as bool? ?? false,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] != null 
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
     );
   }
 

@@ -41,6 +41,7 @@ class PostAdController extends GetxController {
   final Rx<Position?> currentPosition = Rx<Position?>(null);
   final RxString selectedAddress = ''.obs;
   final RxBool showPreview = false.obs;
+  final RxBool validatedBeforePreview = false.obs;
 
   final ImagePicker _picker = ImagePicker();
   final GetStorage _storage = GetStorage();
@@ -303,6 +304,7 @@ class PostAdController extends GetxController {
     selectedAddress.value = '';
     hasDraft.value = false;
     draftSavedTime.value = '';
+    validatedBeforePreview.value = false;
     _storage.remove(_draftKey);
   }
 
@@ -386,22 +388,29 @@ class PostAdController extends GetxController {
   }
 
   /// Shows the ad preview
-  /// 
+  ///
   /// Validates the form and shows preview if valid.
-  /// 
+  ///
   /// Returns:
   /// - True if preview can be shown, false otherwise
   bool showAdPreview() {
+    print('PostAdController: showAdPreview() called');
     if (formKey.currentState?.validate() ?? false) {
+      validatedBeforePreview.value = true;
       showPreview.value = true;
+      print('PostAdController: Form validated, showing preview');
       return true;
     }
+    print('PostAdController: Form validation failed, not showing preview');
     return false;
   }
 
   /// Hides the ad preview
+  ///
+  /// Sets the preview visibility to false to return to the form.
   void hideAdPreview() {
     showPreview.value = false;
+    validatedBeforePreview.value = false;
   }
 
   /// Posts the ad after validation
@@ -409,14 +418,35 @@ class PostAdController extends GetxController {
   /// Validates the form and sends ad data to the backend API.
   /// Creates the ad first, then uploads images separately.
   Future<void> postAd() async {
+    print('PostAdController: postAd() called');
+    print('PostAdController: Form key state: ${formKey.currentState}');
+    print('PostAdController: Title: "${titleController.text}"');
+    print('PostAdController: Price: "${priceController.text}"');
+    print('PostAdController: Description: "${descriptionController.text}"');
+    print('PostAdController: Category: ${selectedCategory.value}');
+    print('PostAdController: Condition: ${selectedCondition.value}');
+    print('PostAdController: Images count: ${images.length}');
+    print('PostAdController: Location: "${locationController.text}"');
+    print('PostAdController: Use current location: ${useCurrentLocation.value}');
+    print('PostAdController: Current position: ${currentPosition.value}');
+
     try {
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = '';
 
-      if (formKey.currentState?.validate() ?? false) {
+      print('PostAdController: Validating form...');
+      // Skip form validation if already validated before showing preview
+      // (Form widget is unmounted when preview is shown, so formKey.currentState would be null)
+      final isValid = validatedBeforePreview.value || (formKey.currentState?.validate() ?? false);
+      print('PostAdController: Form validation result: $isValid (validatedBeforePreview: ${validatedBeforePreview.value})');
+
+      if (isValid) {
+        print('PostAdController: Form validation passed');
+
         // Validate required fields
         if (selectedCategory.value == null) {
+          print('PostAdController: No category selected');
           hasError.value = true;
           errorMessage.value = 'Please select a category';
           await HapticFeedback.error();
@@ -431,6 +461,7 @@ class PostAdController extends GetxController {
         }
 
         if (images.isEmpty) {
+          print('PostAdController: No images added');
           hasError.value = true;
           errorMessage.value = 'Please add at least one image';
           await HapticFeedback.error();
@@ -447,16 +478,31 @@ class PostAdController extends GetxController {
         // Get location coordinates
         double latitude = 0.0;
         double longitude = 0.0;
-        
+
         if (useCurrentLocation.value && currentPosition.value != null) {
           latitude = currentPosition.value!.latitude;
           longitude = currentPosition.value!.longitude;
+          print('PostAdController: Using current location: $latitude, $longitude');
         } else {
           // Use default coordinates if location not available
           latitude = 35.6892; // Default: Tehran
           longitude = 51.3890;
+          print('PostAdController: Using default location: $latitude, $longitude');
         }
 
+        print('PostAdController: Preparing API request...');
+        print('PostAdController: API Request Params:');
+        print('  - Title: "${titleController.text.trim()}"');
+        print('  - Description: "${descriptionController.text.trim()}"');
+        print('  - Category ID: ${selectedCategory.value!}');
+        print('  - Price: ${double.parse(priceController.text.trim())}');
+        print('  - Location: "${locationController.text.trim()}"');
+        print('  - Latitude: $latitude');
+        print('  - Longitude: $longitude');
+        print('  - Image paths: ${images.map((file) => file.path).toList()}');
+        print('  - Custom fields: {"condition": "${selectedCondition.value}"}');
+
+        print('PostAdController: Calling AdService.createAd()...');
         // Create the ad
         final response = await _adService.createAd(
           title: titleController.text.trim(),
@@ -471,17 +517,21 @@ class PostAdController extends GetxController {
             'condition': selectedCondition.value,
           },
         );
+        print('PostAdController: Ad created successfully with ID: ${response.ad.id}');
+        print('PostAdController: API Response: ${response.message}');
 
         // Upload images to the created ad
         if (images.isNotEmpty) {
           try {
+            print('PostAdController: Uploading ${images.length} images...');
             final imageResponse = await _adService.uploadAdImages(
               response.ad.id,
               images.map((file) => file.path).toList(),
             );
+            print('PostAdController: Images uploaded successfully');
           } catch (imageError) {
             // Log image upload error but don't fail the entire post
-            print('Image upload failed: $imageError');
+            print('PostAdController: Image upload failed: $imageError');
           }
         }
 
@@ -498,16 +548,26 @@ class PostAdController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: AppColors.success,
           colorText: Colors.white,
-          margin: const EdgeInsets.all(16),
         );
 
-        // Navigate to home or ad details
-        Get.back();
+        // Navigate back to home
+        print('PostAdController: Navigating to home...');
+        Get.offAllNamed('/');
+      } else {
+        print('PostAdController: Form validation failed - checking individual fields...');
+        print('PostAdController: Title empty: ${titleController.text.trim().isEmpty}');
+        print('PostAdController: Price empty: ${priceController.text.trim().isEmpty}');
+        print('PostAdController: Description empty: ${descriptionController.text.trim().isEmpty}');
+        print('PostAdController: Category null: ${selectedCategory.value == null}');
+        print('PostAdController: Images empty: ${images.isEmpty}');
       }
-    } catch (e) {
-      hasError.value = true;
-      errorMessage.value = 'Failed to publish ad. Please try again.';
+    } catch (e, stackTrace) {
+      print('PostAdController: Error posting ad: $e');
+      print('PostAdController: Error type: ${e.runtimeType}');
+      print('PostAdController: Stack trace: $stackTrace');
       await HapticFeedback.error();
+      hasError.value = true;
+      errorMessage.value = 'Failed to post ad: ${e.toString()}';
 
       Get.snackbar(
         'Error',
@@ -515,17 +575,10 @@ class PostAdController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.error,
         colorText: Colors.white,
-        margin: const EdgeInsets.all(16),
       );
     } finally {
       isLoading.value = false;
+      print('PostAdController: postAd() completed');
     }
-  }
-
-  /// Retries posting the ad
-  /// 
-  /// Clears error state and attempts to post the ad again.
-  Future<void> retryPostAd() async {
-    await postAd();
   }
 }

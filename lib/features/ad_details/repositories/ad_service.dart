@@ -67,6 +67,16 @@ class AdService {
     List<String>? imagePaths,
     Map<String, dynamic>? customFields,
   }) async {
+    print('AdService: createAd() called');
+    print('AdService: Title: "$title"');
+    print('AdService: Description: "${description.substring(0, description.length > 50 ? 50 : description.length)}..."');
+    print('AdService: Category ID: $categoryId');
+    print('AdService: Price: \$$price');
+    print('AdService: Location: "$location"');
+    print('AdService: Coordinates: ($latitude, $longitude)');
+    print('AdService: Image paths count: ${imagePaths?.length ?? 0}');
+    print('AdService: Custom fields: $customFields');
+
     final request = CreateAdRequest(
       title: title,
       description: description,
@@ -78,7 +88,20 @@ class AdService {
       imagePaths: imagePaths,
       customFields: customFields,
     );
-    return await _adRepository.createAd(request);
+
+    print('AdService: CreateAdRequest created');
+    print('AdService: Request JSON: ${request.toJson()}');
+    print('AdService: Calling _adRepository.createAd()...');
+
+    final response = await _adRepository.createAd(request);
+
+    print('AdService: CreateAd response received');
+    print('AdService: Response message: ${response.message}');
+    print('AdService: Response ad ID: ${response.ad.id}');
+    print('AdService: Response ad title: ${response.ad.title}');
+    print('AdService: Response ad price: \${response.ad.price}');
+
+    return response;
   }
 
   Future<UpdateAdResponse> updateAd({

@@ -48,12 +48,27 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
 
   @override
   Future<CreateAdResponse> createAd(CreateAdRequest request) async {
+    print('AdRepositoryImpl: createAd() called');
+    print('AdRepositoryImpl: Endpoint: ${AdEndpoints.createAd}');
+    print('AdRepositoryImpl: Request data: ${request.toJson()}');
+
     return handleException(() async {
+      print('AdRepositoryImpl: Calling apiClient.post()...');
       final response = await apiClient.post(
         AdEndpoints.createAd,
         data: request.toJson(),
       );
-      return CreateAdResponse.fromJson(response as Map<String, dynamic>);
+
+      print('AdRepositoryImpl: API response received');
+      print('AdRepositoryImpl: Status code: ${response.statusCode}');
+      print('AdRepositoryImpl: Response data: ${response.data}');
+
+      final createAdResponse = CreateAdResponse.fromJson(response as Map<String, dynamic>);
+      print('AdRepositoryImpl: CreateAdResponse parsed successfully');
+      print('AdRepositoryImpl: Response message: ${createAdResponse.message}');
+      print('AdRepositoryImpl: Ad ID: ${createAdResponse.ad.id}');
+
+      return createAdResponse;
     });
   }
 

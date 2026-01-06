@@ -17,18 +17,32 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
         AuthEndpoints.register,
         data: request.toJson(),
       );
-      return AuthResponse.fromJson(response as Map<String, dynamic>);
+      return AuthResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
   @override
   Future<AuthResponse> login(LoginRequest request) async {
+    print('AuthRepositoryImpl: login() called');
+    print('AuthRepositoryImpl: Endpoint: ${AuthEndpoints.login}');
+    print('AuthRepositoryImpl: Request data: ${request.toJson()}');
+
     return handleException(() async {
+      print('AuthRepositoryImpl: Calling apiClient.post()...');
       final response = await apiClient.post(
         AuthEndpoints.login,
         data: request.toJson(),
       );
-      return AuthResponse.fromJson(response as Map<String, dynamic>);
+
+      print('AuthRepositoryImpl: API response received');
+      print('AuthRepositoryImpl: Status code: ${response.statusCode}');
+      print('AuthRepositoryImpl: Response data: ${response.data}');
+
+      final authResponse = AuthResponse.fromJson(response.data as Map<String, dynamic>);
+      print('AuthRepositoryImpl: AuthResponse parsed successfully');
+      print('AuthRepositoryImpl: User: ${authResponse.user?.name ?? "null"}');
+
+      return authResponse;
     });
   }
 
@@ -39,7 +53,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
         AuthEndpoints.refreshToken,
         data: request.toJson(),
       );
-      return RefreshTokenResponse.fromJson(response as Map<String, dynamic>);
+      return RefreshTokenResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -55,7 +69,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   Future<AuthResponse> getCurrentUser() async {
     return handleException(() async {
       final response = await apiClient.get(AuthEndpoints.me);
-      return AuthResponse.fromJson(response as Map<String, dynamic>);
+      return AuthResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 

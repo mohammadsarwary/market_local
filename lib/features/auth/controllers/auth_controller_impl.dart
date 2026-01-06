@@ -85,6 +85,10 @@ class AuthControllerImpl extends GetxController {
     required String email,
     required String password,
   }) async {
+    print('AuthControllerImpl: login() called');
+    print('AuthControllerImpl: Email: "$email"');
+    print('AuthControllerImpl: Password length: ${password.length}');
+
     try {
       await HapticFeedback.light();
       isLoading.value = true;
@@ -96,9 +100,22 @@ class AuthControllerImpl extends GetxController {
         password: password,
       );
 
+      print('AuthControllerImpl: LoginRequest created');
+      print('AuthControllerImpl: Request JSON: ${request.toJson()}');
+      print('AuthControllerImpl: Calling authService.login()...');
+
       final response = await authService.login(request);
+
+      print('AuthControllerImpl: Login response received');
+      print('AuthControllerImpl: Response user: ${response.user?.name ?? "null"}');
+      print('AuthControllerImpl: Response user ID: ${response.user?.id ?? "null"}');
+      print('AuthControllerImpl: Access token length: ${response.accessToken.length}');
+      print('AuthControllerImpl: Refresh token length: ${response.refreshToken.length}');
+
       currentUser.value = response.user;
       isLoggedIn.value = true;
+
+      print('AuthControllerImpl: User logged in successfully');
 
       await HapticFeedback.success();
 
@@ -107,10 +124,17 @@ class AuthControllerImpl extends GetxController {
         'Login successful',
         snackPosition: SnackPosition.BOTTOM,
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('AuthControllerImpl: Login failed');
+      print('AuthControllerImpl: Error: $e');
+      print('AuthControllerImpl: Error type: ${e.runtimeType}');
+      print('AuthControllerImpl: Stack trace: $stackTrace');
+
       await HapticFeedback.error();
       hasError.value = true;
       errorMessage.value = _parseError(e);
+      print('AuthControllerImpl: Parsed error message: $errorMessage.value');
+
       Get.snackbar(
         'Login Failed',
         errorMessage.value,
@@ -119,6 +143,7 @@ class AuthControllerImpl extends GetxController {
       );
     } finally {
       isLoading.value = false;
+      print('AuthControllerImpl: login() completed');
     }
   }
 

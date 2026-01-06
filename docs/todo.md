@@ -81,6 +81,7 @@ Each task has a unique code: `[CATEGORY]-[NUMBER]`
 | `UI-008` | [x] | Add smooth page transitions between screens | UI Engineer |
 | `UI-009` | [x] | Fix any remaining overflow issues on small screens | UI Engineer |
 | `UI-010` | [x] | Add scroll-to-top button on long lists | UI Engineer |
+| `UI-011` | [x] | Redesign AdPreviewScreen to match new UI mocks | UI Engineer |
 
 ### Animations
 

@@ -32,9 +32,26 @@ class AuthService {
   }
 
   Future<AuthResponse> login(LoginRequest request) async {
+    print('AuthService: Starting login...');
+    print('AuthService: Request data: ${request.toJson()}');
+    print('AuthService: Calling _authRepository.login()...');
+
     final response = await _authRepository.login(request);
+
+    print('AuthService: Login response received');
+    print('AuthService: Response user: ${response.user?.name ?? "null"}');
+    print('AuthService: Response user ID: ${response.user?.id ?? "null"}');
+    print('AuthService: Access token: ${response.accessToken.substring(0, 10)}...');
+    print('AuthService: Saving access token...');
+
     await _authRepository.saveAuthToken(response.accessToken);
+    print('AuthService: Access token saved');
+
+    print('AuthService: Saving refresh token...');
     await _authRepository.saveRefreshToken(response.refreshToken);
+    print('AuthService: Refresh token saved');
+
+    print('AuthService: Login process completed successfully');
     return response;
   }
 

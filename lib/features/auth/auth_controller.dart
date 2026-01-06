@@ -55,14 +55,17 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      await _authService.login(request);
+      print('AuthController: Calling login with email: ${email.trim()}');
+      final response = await _authService.login(request);
+      print('AuthController: Login successful, user: ${response.user.name}');
+      print('AuthController: Access token: ${response.accessToken.substring(0, 20)}...');
 
       await HapticFeedback.success();
       isLoggedIn.value = true;
 
       Get.snackbar(
         'Success',
-        'Welcome back!',
+        'Welcome back, ${response.user.name}!',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.success,
         colorText: Colors.white,
@@ -70,10 +73,12 @@ class AuthController extends GetxController {
 
       // Navigate to home screen
       Get.offAllNamed('/');
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('AuthController: Login error: $e');
+      print('AuthController: Stack trace: $stackTrace');
       await HapticFeedback.error();
       hasError.value = true;
-      errorMessage.value = 'Invalid email or password';
+      errorMessage.value = e.toString();
       
       Get.snackbar(
         'Login Failed',

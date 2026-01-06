@@ -40,6 +40,14 @@ class AppTexts {
   static const String postAdPrice = 'Price';
   static const String postAdLocation = 'Location';
   static const String postAdPublish = 'Publish';
+  static const String postAdPreview = 'Preview';
+  static const String postAdPreviewMode = 'Preview Mode';
+  static const String postAdPreviewDisclaimer = 'This is how your ad will look to buyers.';
+  static const String postAdDismiss = 'Dismiss';
+  static const String postAdEditListing = 'Edit Listing';
+  static const String postAdPublishNow = 'Publish Now';
+  static const String postAdReadMore = 'Read more';
+  static const String postAdPickupAt = 'PICKUP AT';
 
   // Chat Screen
   static const String chatTitle = 'Messages';
