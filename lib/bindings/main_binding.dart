@@ -1,19 +1,54 @@
 import 'package:get/get.dart';
 import '../controllers/navigation_controller.dart';
-import '../features/home/home_controller.dart';
-import '../features/search/search_controller.dart';
-import '../features/chat/chat_controller.dart';
-import '../features/post_ad/post_ad_controller.dart';
-import '../features/profile/profile_controller.dart';
-import '../features/auth/auth_controller.dart';
-import '../features/auth/auth_flow_service.dart';
-import '../core/services/storage_service.dart';
+import '../controllers/ads/home_controller.dart';
+import '../controllers/ads/search_controller.dart';
+import '../controllers/ads/chat_controller.dart';
+import '../controllers/ads/post_ad_controller.dart';
+import '../controllers/profile/profile_controller.dart';
+import '../controllers/auth/auth_controller.dart';
+import '../services/auth_service.dart';
+import '../services/storage_service.dart';
+import '../core/api/api_service.dart';
+import '../core/repositories/local_data_source_impl.dart';
+import '../repositories/ad/ad_repository.dart';
+import '../repositories/ad/ad_repository_impl.dart';
+import '../repositories/auth/auth_repository.dart';
+import '../repositories/auth/auth_repository_impl.dart';
+import '../repositories/category/category_repository.dart';
+import '../repositories/category/category_repository_impl.dart';
+import '../repositories/user/user_repository.dart';
+import '../repositories/user/user_repository_impl.dart';
 
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NavigationController>(() => NavigationController());
+    // Infrastructure services
+    Get.lazyPut(() => ApiService(), fenix: true);
     Get.lazyPut<StorageService>(() => StorageService(), fenix: true);
+    Get.lazyPut(() => LocalDataSourceImpl(), fenix: true);
+
+    // Repositories
+    Get.lazyPut<AdRepository>(() => AdRepositoryImpl(
+      apiClient: ApiService.instance.apiClient,
+      localDataSource: Get.find<LocalDataSourceImpl>(),
+    ), fenix: true);
+
+    Get.lazyPut<AuthRepository>(() => AuthRepositoryImpl(
+      apiClient: ApiService.instance.apiClient,
+    ), fenix: true);
+
+    Get.lazyPut<CategoryRepository>(() => CategoryRepositoryImpl(
+      apiClient: ApiService.instance.apiClient,
+      localDataSource: Get.find<LocalDataSourceImpl>(),
+    ), fenix: true);
+
+    Get.lazyPut<UserRepository>(() => UserRepositoryImpl(
+      apiClient: ApiService.instance.apiClient,
+      localDataSource: Get.find<LocalDataSourceImpl>(),
+    ), fenix: true);
+
+    // Controllers
+    Get.lazyPut<NavigationController>(() => NavigationController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<SearchController>(() => SearchController());
     Get.lazyPut<ChatController>(() => ChatController());

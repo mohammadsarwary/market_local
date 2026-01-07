@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../features/auth/auth_controller.dart';
+import 'auth/auth_controller.dart';
 
 /// Controller for managing bottom navigation bar state
 /// 

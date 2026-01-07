@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:market_local/core/api/api_service.dart';
-import 'core/theme/app_theme.dart';
+import 'services/api_service.dart';
+import 'utils/theme.dart';
 import 'core/error/error_handler.dart';
 import 'core/error/error_boundary_widget.dart';
 import 'core/error/error_controller.dart';
-import 'core/loading/loading_controller.dart';
-import 'features/home/home_screen.dart';
-import 'features/search/search_screen.dart';
-import 'features/post_ad/post_ad_screen.dart';
-import 'features/chat/chat_screen.dart';
-import 'features/profile/profile_screen.dart';
+import 'services/loading_service.dart';
+import 'views/home/home_view.dart';
+import 'views/search/search_view.dart';
+import 'views/product/product_view.dart';
+import 'views/chat/chat_view.dart';
+import 'views/profile/profile_view.dart';
 import 'bindings/main_binding.dart';
 import 'controllers/navigation_controller.dart';
 
@@ -146,23 +146,23 @@ class MainScreen extends StatelessWidget {
     final List<Widget> screens = [
       const ErrorBoundary(
         boundaryName: 'Home Screen',
-        child: HomeScreen(),
+        child: HomeView(),
       ),
       const ErrorBoundary(
         boundaryName: 'Search Screen',
-        child: SearchScreen(),
+        child: SearchView(),
       ),
       const ErrorBoundary(
         boundaryName: 'Post Ad Screen',
-        child: PostAdScreen(),
+        child: ProductView(),
       ),
       const ErrorBoundary(
         boundaryName: 'Chat Screen',
-        child: ChatScreen(),
+        child: ChatView(),
       ),
       const ErrorBoundary(
         boundaryName: 'Profile Screen',
-        child: ProfileScreen(),
+        child: ProfileView(),
       ),
     ];
 

@@ -1,0 +1,238 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../utils/colors.dart';
+import '../../core/constants/app_sizes.dart';
+import '../auth/login_view.dart';
+import '../auth/signup_view.dart';
+
+/// Guest profile screen shown when user is not logged in
+class GuestProfileScreen extends StatelessWidget {
+  const GuestProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        elevation: 0,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, color: AppColors.textPrimary),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingL),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: AppSizes.paddingL),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppSizes.paddingL,
+                  horizontal: AppSizes.paddingM,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF8E1),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusL),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 140.0,
+                      child: Center(
+                        child: Icon(
+                          Icons.shopping_bag,
+                          size: 80.0,
+                          color: AppColors.primary.withOpacity(0.3),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSizes.paddingL),
+              const Text(
+                'Join the Community',
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                  height: 1.2,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSizes.paddingS),
+              const Text(
+                'Buy, sell, and chat with locals. Sign up now to start selling your items or finding great deals nearby.',
+                style: TextStyle(
+                  fontSize: AppSizes.fontM,
+                  color: AppColors.textSecondary,
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSizes.paddingL),
+              _buildFeatureCard(
+                icon: Icons.shopping_bag,
+                title: 'Sell in seconds',
+                description: 'List your items easily with a few taps',
+              ),
+              const SizedBox(height: AppSizes.paddingM),
+              _buildFeatureCard(
+                icon: Icons.chat_bubble,
+                title: 'Chat instantly',
+                description: 'Connect with buyers and sellers directly',
+              ),
+              const SizedBox(height: AppSizes.paddingXL),
+              SizedBox(
+                width: double.infinity,
+                height: 48.0,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(const SignupView()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.radiusM),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: AppSizes.fontL,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textOnPrimary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.paddingS),
+              SizedBox(
+                width: double.infinity,
+                height: 48.0,
+                child: OutlinedButton(
+                  onPressed: () => Get.to(const LoginView()),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColors.primary, width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.radiusM),
+                    ),
+                  ),
+                  child: const Text(
+                    'Log In',
+                    style: TextStyle(
+                      fontSize: AppSizes.fontL,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.paddingM),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      fontSize: AppSizes.fontXS,
+                      color: AppColors.textSecondary,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.paddingS),
+                  Text(
+                    '•',
+                    style: TextStyle(
+                      fontSize: AppSizes.fontXS,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.paddingS),
+                  Text(
+                    'Terms of Service',
+                    style: TextStyle(
+                      fontSize: AppSizes.fontXS,
+                      color: AppColors.textSecondary,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSizes.paddingL),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.paddingL),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppSizes.radiusM),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48.0,
+            height: 48.0,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(AppSizes.radiusM),
+            ),
+            child: Icon(
+              icon,
+              color: AppColors.primary,
+              size: 24.0,
+            ),
+          ),
+          const SizedBox(width: AppSizes.paddingL),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: AppSizes.fontL,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4.0),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: AppSizes.fontM,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

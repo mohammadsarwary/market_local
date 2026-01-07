@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../features/home/home_screen.dart';
-import '../features/search/search_screen.dart';
-import '../features/post_ad/post_ad_screen.dart';
-import '../features/chat/chat_screen.dart';
-import '../features/profile/profile_screen.dart';
-import '../features/auth/login_screen.dart';
-import '../features/auth/signup_screen.dart';
-import '../features/auth/register_screen.dart';
-import '../features/auth/otp_verification_screen.dart';
-import '../features/auth/forgot_password_screen.dart';
+import '../views/home/home_view.dart';
+import '../views/search/search_view.dart';
+import '../views/product/product_view.dart';
+import '../views/chat/chat_view.dart';
+import '../views/profile/profile_view.dart';
+import '../views/auth/login_view.dart';
+import '../views/auth/signup_view.dart';
+import '../views/auth/register_view.dart';
+import '../views/auth/otp_verification_view.dart';
+import '../views/auth/forgot_password_view.dart';
 
 /// App-wide route configuration using GoRouter
 /// All navigation routes should be defined here
@@ -44,27 +44,27 @@ class AppRouter {
       GoRoute(
         path: login,
         name: 'login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: signup,
         name: 'signup',
-        builder: (context, state) => const SignupScreen(),
+        builder: (context, state) => const SignupView(),
       ),
       GoRoute(
         path: register,
         name: 'register',
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => const RegisterView(),
       ),
       GoRoute(
         path: verifyOTP,
         name: 'verifyOTP',
-        builder: (context, state) => const OTPVerificationScreen(),
+        builder: (context, state) => const OTPVerificationView(),
       ),
       GoRoute(
         path: forgotPassword,
         name: 'forgotPassword',
-        builder: (context, state) => const ForgotPasswordScreen(),
+        builder: (context, state) => const ForgotPasswordView(),
       ),
       // Main shell route with bottom navigation
       StatefulShellRoute.indexedStack(
@@ -78,7 +78,7 @@ class AppRouter {
               GoRoute(
                 path: home,
                 name: 'home',
-                builder: (context, state) => const HomeScreen(),
+                builder: (context, state) => const HomeView(),
               ),
             ],
           ),
@@ -88,7 +88,7 @@ class AppRouter {
               GoRoute(
                 path: search,
                 name: 'search',
-                builder: (context, state) => const SearchScreen(),
+                builder: (context, state) => const SearchView(),
               ),
             ],
           ),
@@ -98,7 +98,7 @@ class AppRouter {
               GoRoute(
                 path: postAd,
                 name: 'postAd',
-                builder: (context, state) => const PostAdScreen(),
+                builder: (context, state) => const ProductView(),
               ),
             ],
           ),
@@ -108,7 +108,7 @@ class AppRouter {
               GoRoute(
                 path: chat,
                 name: 'chat',
-                builder: (context, state) => const ChatScreen(),
+                builder: (context, state) => const ChatView(),
               ),
             ],
           ),
@@ -118,7 +118,7 @@ class AppRouter {
               GoRoute(
                 path: profile,
                 name: 'profile',
-                builder: (context, state) => const ProfileScreen(),
+                builder: (context, state) => const ProfileView(),
               ),
             ],
           ),
