@@ -39,38 +39,69 @@ class ItemDetailsSection extends StatelessWidget {
         // Category Dropdown
         const Text('Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87)),
         const SizedBox(height: 10),
-        Obx(() => DropdownButtonFormField<String>(
-              value: controller.selectedCategory.value,
-              hint: Text('Select a category', style: TextStyle(color: Colors.grey[400])),
-              icon: const Icon(Icons.keyboard_arrow_down),
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+        Obx(() {
+          final categories = controller.categoryOptions;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (controller.isCategoryLoading.value)
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Loading categories...',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
+                  ],
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+              DropdownButtonFormField<String>(
+                value: categories.contains(controller.selectedCategory.value)
+                    ? controller.selectedCategory.value
+                    : null,
+                hint: Text('Select a category', style: TextStyle(color: Colors.grey[400])),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                  ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-                ),
+                items: categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                onChanged: (value) => controller.updateCategory(value),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a category';
+                  }
+                  return null;
+                },
               ),
-              items: controller.categories
-                  .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                  .toList(),
-              onChanged: (value) => controller.updateCategory(value),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a category';
-                }
-                return null;
-              },
-            )),
+              if (controller.categoryLoadError.value.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    controller.categoryLoadError.value,
+                    style: const TextStyle(color: AppColors.warning, fontSize: 12),
+                  ),
+                ),
+            ],
+          );
+        }),
 
         const SizedBox(height: 24),
         

@@ -10,6 +10,8 @@ import 'package:get_storage/get_storage.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/haptic_feedback.dart';
 import '../ad_details/repositories/ad_service.dart';
+import '../category/models/category_response.dart';
+import '../category/repositories/category_service.dart';
 import 'data/mock_data.dart';
 
 class PostAdController extends GetxController {
@@ -30,7 +32,7 @@ class PostAdController extends GetxController {
   final TextEditingController locationController = TextEditingController(text: PostAdMockData.defaultLocation);
 
   final Rx<String?> selectedCategory = Rx<String?>(null);
-  final RxString selectedCondition = 'New'.obs;
+  final RxString selectedCondition = 'new'.obs;
   final RxList<File> images = <File>[].obs;
   final RxList<String> imageUrls = <String>[...PostAdMockData.mockImages].obs;
   final RxBool useCurrentLocation = true.obs;
@@ -46,10 +48,20 @@ class PostAdController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   final GetStorage _storage = GetStorage();
   final AdService _adService = AdService.instance;
+  final CategoryService _categoryService = CategoryService.instance;
   Timer? _draftTimer;
   static const String _draftKey = 'ad_draft';
 
-  List<String> get categories => PostAdMockData.categories;
+  final RxList<Category> remoteCategories = <Category>[].obs;
+  final RxBool isCategoryLoading = false.obs;
+  final RxString categoryLoadError = ''.obs;
+
+  List<String> get categoryOptions {
+    if (remoteCategories.isNotEmpty) {
+      return remoteCategories.map((c) => c.name).toList();
+    }
+    return PostAdMockData.categories;
+  }
 
   List<String> get conditions => PostAdMockData.conditions;
 
@@ -57,6 +69,8 @@ class PostAdController extends GetxController {
   void onInit() {
     super.onInit();
     _adService.initialize();
+    _categoryService.initialize();
+    _loadCategories();
     _loadDraft();
     _startDraftAutoSave();
   }
@@ -80,6 +94,29 @@ class PostAdController extends GetxController {
   /// - [value] The category name to select, or null to clear selection
   void updateCategory(String? value) {
     selectedCategory.value = value;
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      isCategoryLoading.value = true;
+      categoryLoadError.value = '';
+
+      final cached = await _categoryService.getCachedCategories();
+      if (cached != null && cached.isNotEmpty) {
+        remoteCategories.assignAll(cached);
+      }
+
+      final response = await _categoryService.getCategories();
+      remoteCategories
+        ..clear()
+        ..addAll(response.categories);
+    } catch (e) {
+      if (remoteCategories.isEmpty) {
+        categoryLoadError.value = 'Unable to load latest categories. Showing defaults.';
+      }
+    } finally {
+      isCategoryLoading.value = false;
+    }
   }
 
   /// Updates the selected item condition
@@ -297,7 +334,7 @@ class PostAdController extends GetxController {
     descriptionController.clear();
     locationController.text = PostAdMockData.defaultLocation;
     selectedCategory.value = null;
-    selectedCondition.value = 'New';
+    selectedCondition.value = 'new';
     images.clear();
     imageUrls.clear();
     currentPosition.value = null;
@@ -347,7 +384,7 @@ class PostAdController extends GetxController {
         descriptionController.text = draftData['description'] ?? '';
         locationController.text = draftData['location'] ?? PostAdMockData.defaultLocation;
         selectedCategory.value = draftData['category'];
-        selectedCondition.value = draftData['condition'] ?? 'New';
+        selectedCondition.value = draftData['condition'] ?? 'new';
         useCurrentLocation.value = draftData['useCurrentLocation'] ?? true;
         
         final imagePaths = List<String>.from(draftData['images'] ?? []);

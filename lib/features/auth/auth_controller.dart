@@ -58,7 +58,7 @@ class AuthController extends GetxController {
       print('AuthController: Calling login with email: ${email.trim()}');
       final response = await _authService.login(request);
       print('AuthController: Login successful, user: ${response.user.name}');
-      print('AuthController: Access token: ${response.accessToken.substring(0, 20)}...');
+      print('AuthController: Access token: ${_previewToken(response.accessToken)}');
 
       await HapticFeedback.success();
       isLoggedIn.value = true;
@@ -275,5 +275,11 @@ class AuthController extends GetxController {
     // Basic validation - check if phone number has at least 10 digits
     final digitsOnly = phoneNumber.value.replaceAll(RegExp(r'[^0-9]'), '');
     return digitsOnly.length >= 10;
+  }
+
+  String _previewToken(String token, [int maxChars = 20]) {
+    if (token.isEmpty) return '';
+    if (token.length <= maxChars) return token;
+    return '${token.substring(0, maxChars)}...';
   }
 }

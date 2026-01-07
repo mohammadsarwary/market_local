@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../features/auth/auth_controller.dart';
 
 /// Controller for managing bottom navigation bar state
 /// 
@@ -29,6 +30,9 @@ class NavigationController extends GetxController {
   /// This will automatically notify any UI components listening to the
   /// [selectedIndex] value.
   /// 
+  /// If attempting to access the post ad screen (index 2) without being logged in,
+  /// redirects to the guest profile screen instead.
+  /// 
   /// Parameters:
   /// - [index] The index of the tab to select (0-based)
   /// 
@@ -37,6 +41,18 @@ class NavigationController extends GetxController {
   /// controller.changeIndex(1); // Selects second tab
   /// ```
   void changeIndex(int index) {
-    selectedIndex.value = index;
+    final authController = Get.find<AuthController>();
+    
+    if (index == 2 && !authController.isLoggedIn.value) {
+      selectedIndex.value = 4;
+      Get.snackbar(
+        'Authentication Required',
+        'Please log in to post an ad',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+    } else {
+      selectedIndex.value = index;
+    }
   }
 }

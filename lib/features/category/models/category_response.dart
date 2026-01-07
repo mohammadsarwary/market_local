@@ -21,16 +21,20 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'] as String,
-      name: json['name'] as String,
+      id: json['id']?.toString() ?? '',
+      name: json['name'] as String? ?? '',
       icon: json['icon'] as String?,
       description: json['description'] as String?,
       adCount: json['ad_count'] as int? ?? 0,
       subcategories: (json['subcategories'] as List<dynamic>?)
           ?.map((item) => Category.fromJson(item as Map<String, dynamic>))
           .toList(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -58,11 +62,26 @@ class CategoriesResponse {
   });
 
   factory CategoriesResponse.fromJson(Map<String, dynamic> json) {
+    List<dynamic> categoriesList = [];
+
+    if (json['data'] is List) {
+      categoriesList = json['data'] as List<dynamic>;
+    } else if (json['data'] is Map) {
+      final dataMap = json['data'] as Map<String, dynamic>;
+      if (dataMap['categories'] is List) {
+        categoriesList = dataMap['categories'] as List<dynamic>;
+      } else if (dataMap['data'] is List) {
+        categoriesList = dataMap['data'] as List<dynamic>;
+      }
+    } else if (json['categories'] is List) {
+      categoriesList = json['categories'] as List<dynamic>;
+    }
+
     return CategoriesResponse(
-      categories: (json['categories'] as List<dynamic>)
+      categories: categoriesList
           .map((item) => Category.fromJson(item as Map<String, dynamic>))
           .toList(),
-      total: json['total'] as int,
+      total: json['total'] as int? ?? categoriesList.length,
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:market_local/core/api/api_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/error/error_handler.dart';
@@ -61,7 +62,9 @@ class FadeInTransition extends CustomTransition {
 /// - Main binding sets up feature-specific dependencies
 /// 
 /// Run the app with: flutter run
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   // Initialize API service first before any controllers
   ApiService.instance.initialize();
   

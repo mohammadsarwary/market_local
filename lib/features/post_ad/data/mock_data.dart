@@ -14,10 +14,10 @@ class PostAdMockData {
   ];
 
   static const List<String> conditions = [
-    'New',
-    'Like New',
-    'Good',
-    'Fair',
+    'new',
+    'like new',
+    'good',
+    'fair',
   ];
 
   static const List<String> mockImages = [
