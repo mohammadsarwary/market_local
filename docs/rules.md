@@ -24,12 +24,13 @@ These rules are non-negotiable. Violation requires immediate rollback.
 
 | Rule | Reason |
 |------|--------|
-| ❌ DO NOT import one feature into another | Violates feature isolation |
+| ❌ DO NOT import one view into another | Violates feature isolation |
 | ❌ DO NOT put business logic in widgets | Separation of concerns |
 | ❌ DO NOT use raw `Map<String, dynamic>` for data | Use typed models |
 | ❌ DO NOT hardcode colors, sizes, or strings | Use constants |
 | ❌ DO NOT create circular dependencies | Breaks architecture |
 | ❌ DO NOT bypass GetX state management | Consistency |
+| ❌ DO NOT make API calls directly in controllers | Use repositories/services |
 
 ### API Integration Rules
 
@@ -248,6 +249,8 @@ Get.toNamed('/details', arguments: adModel);
 | Screens | `{feature}_screen.dart` | `home_screen.dart` |
 | Controllers | `{feature}_controller.dart` | `home_controller.dart` |
 | Models | `{name}_model.dart` | `ad_model.dart` |
+| Repositories | `{feature}_repository.dart` | `auth_repository.dart` |
+| Services | `{feature}_service.dart` | `auth_service.dart` |
 | Constants | `app_{type}.dart` | `app_colors.dart` |
 | Widgets | `{name}.dart` | `product_card.dart` |
 | Utils | `{name}.dart` | `validators.dart` |
@@ -290,7 +293,9 @@ Get.toNamed('/details', arguments: adModel);
 3. Third-party package imports
 4. Project core imports
 5. Project model imports
-6. Local feature imports
+6. Project service imports
+7. Project repository imports
+8. Local feature imports
 
 ### Example
 
@@ -316,9 +321,15 @@ import '../../core/constants/app_texts.dart';
 import '../../models/ad_model.dart';
 import '../../models/user_model.dart';
 
-// 6. Local
+// 6. Services
+import '../../services/api_client.dart';
+import '../../services/auth_service.dart';
+
+// 7. Repositories
+import '../../repositories/ad/ad_repository.dart';
+
+// 8. Local
 import 'home_controller.dart';
-import 'data/mock_data.dart';
 ```
 
 ### Rules

@@ -112,7 +112,11 @@ Task: [DESCRIPTION]
 Rules:
 - Follow feature-based architecture
 - Create files in correct locations per `/docs/structure.md`
-- Use mock data (no real API calls yet)
+- Screens in `views/{feature}/`
+- Controllers in `controllers/{feature}/`
+- Repositories in `repositories/{feature}/`
+- Models in `models/{domain}/`
+- Use ApiClient for API calls
 - Register controllers in `main_binding.dart`
 - Add routes in `app_router.dart` if needed
 
@@ -157,9 +161,9 @@ Context:
 
 Rules:
 - Use ApiClient for all HTTP requests
-- Define endpoints in ApiConstants
+- Define endpoints in ApiConstants (services/api_constants.dart)
 - Implement repository pattern (interface + implementation)
-- Create service layer for high-level operations
+- Create service layer for high-level operations (services/)
 - Use BaseRepository for error handling
 - Handle errors gracefully with try-catch
 - DO NOT expose sensitive data

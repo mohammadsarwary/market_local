@@ -77,10 +77,10 @@ Responsible for implementing new features, adding business logic, and extending 
 
 ### Allowed Actions
 
-- ✅ Create new feature folders in `features/`
-- ✅ Add new controllers and screens
+- ✅ Create new view folders in `views/`
+- ✅ Add new controllers in `controllers/`
 - ✅ Create new models in `models/`
-- ✅ Add mock data in `features/{name}/data/`
+- ✅ Add repositories in `repositories/`
 - ✅ Register new controllers in `main_binding.dart`
 - ✅ Add new routes in `app_router.dart`
 - ✅ Add new constants if needed
@@ -97,8 +97,10 @@ Responsible for implementing new features, adding business logic, and extending 
 
 ### Files Typically Modified
 
-- `features/{new_feature}/*` (new files)
-- `models/*_model.dart` (new models)
+- `views/{new_feature}/*` (new files)
+- `controllers/{new_feature}/*` (new files)
+- `models/{domain}/*` (new models)
+- `repositories/{new_feature}/*` (new files)
 - `bindings/main_binding.dart`
 - `routes/app_router.dart`
 - `core/constants/*.dart` (additions only)
@@ -207,7 +209,7 @@ Responsible for backend integration, API connections, data persistence, and repo
 ### Allowed Actions
 
 - ✅ Create `repositories/` layer
-- ✅ Add API client in `core/network/`
+- ✅ Add API client in `services/`
 - ✅ Implement authentication service
 - ✅ Add secure storage for tokens
 - ✅ Create data source abstractions
@@ -224,9 +226,9 @@ Responsible for backend integration, API connections, data persistence, and repo
 
 ### Files Typically Modified
 
-- `core/network/*` (new)
+- `services/*` (new)
 - `repositories/*` (new)
-- `features/*/data/*` (extend)
+- `models/*` (extend)
 - `pubspec.yaml`
 
 ### Status: ✅ ACTIVE

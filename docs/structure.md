@@ -25,14 +25,12 @@ market_local/
 ├── lib/                        # Main Dart source code
 │   ├── bindings/               # GetX dependency injection
 │   │   └── main_binding.dart   # App-wide bindings
-│   ├── controllers/            # Global controllers
+│   ├── controllers/            # Global and feature controllers
+│   │   ├── ads/                # Ad-related controllers
+│   │   ├── auth/               # Authentication controllers
+│   │   ├── profile/            # Profile controllers
 │   │   └── navigation_controller.dart
 │   ├── core/                   # Shared utilities and infrastructure
-│   │   ├── api/                # API client infrastructure
-│   │   │   ├── api_client.dart
-│   │   │   ├── api_service.dart
-│   │   │   ├── api_constants.dart
-│   │   │   └── api_interceptors.dart
 │   │   ├── constants/          # App-wide constants
 │   │   │   ├── app_colors.dart
 │   │   │   ├── app_sizes.dart
@@ -65,95 +63,40 @@ market_local/
 │   │       ├── common_image.dart
 │   │       ├── common_input.dart
 │   │       └── ... (13 widget files)
-│   ├── features/               # Feature modules
-│   │   ├── auth/               # Authentication feature
-│   │   │   ├── controllers/
-│   │   │   │   └── auth_controller_impl.dart
-│   │   │   ├── models/
-│   │   │   │   ├── auth_request.dart
-│   │   │   │   └── auth_response.dart
-│   │   │   ├── repositories/
-│   │   │   │   ├── auth_repository.dart
-│   │   │   │   ├── auth_repository_impl.dart
-│   │   │   │   └── auth_service.dart
-│   │   │   ├── auth_controller.dart
-│   │   │   ├── auth_flow_service.dart
-│   │   │   ├── login_screen.dart
-│   │   │   ├── register_screen.dart
-│   │   │   ├── signup_screen.dart
-│   │   │   ├── forgot_password_screen.dart
-│   │   │   └── otp_verification_screen.dart
-│   │   ├── profile/            # User profile feature
-│   │   │   ├── controllers/
-│   │   │   │   └── profile_controller_impl.dart
-│   │   │   ├── data/
-│   │   │   │   └── mock_data.dart
-│   │   │   ├── models/
-│   │   │   │   ├── user_profile_request.dart
-│   │   │   │   └── user_profile_response.dart
-│   │   │   ├── repositories/
-│   │   │   │   ├── user_repository.dart
-│   │   │   │   ├── user_repository_impl.dart
-│   │   │   │   └── user_service.dart
-│   │   │   ├── profile_controller.dart
-│   │   │   └── profile_screen.dart
-│   │   ├── ad_details/         # Ad details feature
-│   │   │   ├── models/
-│   │   │   │   ├── ad_request.dart
-│   │   │   │   └── ad_response.dart
-│   │   │   ├── repositories/
-│   │   │   │   ├── ad_repository.dart
-│   │   │   │   ├── ad_repository_impl.dart
-│   │   │   │   └── ad_service.dart
-│   │   │   ├── widgets/
-│   │   │   │   └── ... (8 widget files)
-│   │   │   ├── ad_details_screen.dart
-│   │   │   └── ad_details_screen_original.dart
-│   │   ├── category/           # Category feature
-│   │   │   ├── models/
-│   │   │   │   └── category_response.dart
-│   │   │   ├── repositories/
-│   │   │   │   ├── category_repository.dart
-│   │   │   │   ├── category_repository_impl.dart
-│   │   │   │   └── category_service.dart
-│   │   │   └── category_screen.dart
-│   │   ├── search/             # Search feature
-│   │   │   ├── controllers/
-│   │   │   │   └── search_controller_impl.dart
-│   │   │   ├── data/
-│   │   │   │   └── mock_data.dart
-│   │   │   ├── models/
-│   │   │   │   ├── search_request.dart
-│   │   │   │   └── search_response.dart
-│   │   │   ├── repositories/
-│   │   │   │   ├── search_repository.dart
-│   │   │   │   ├── search_repository_impl.dart
-│   │   │   │   └── search_service.dart
-│   │   │   ├── search_controller.dart
-│   │   │   └── search_screen.dart
-│   │   ├── post_ad/            # Post ad feature
-│   │   │   ├── data/
-│   │   │   │   └── mock_data.dart
-│   │   │   ├── widgets/
-│   │   │   │   └── ... (widget files)
-│   │   │   ├── post_ad_controller.dart
-│   │   │   └── post_ad_screen.dart
-│   │   ├── home/               # Home screen feature
-│   │   │   ├── data/
-│   │   │   │   └── mock_data.dart
-│   │   │   ├── home_controller.dart
-│   │   │   └── home_screen.dart
-│   │   └── chat/               # Chat feature
-│   │       ├── data/
-│   │       │   └── mock_data.dart
-│   │       ├── chat_controller.dart
-│   │       └── chat_screen.dart
 │   ├── models/                 # Shared data models
-│   │   ├── ad_model.dart
-│   │   ├── user_model.dart
-│   │   └── category_model.dart
+│   │   ├── ad/                 # Ad-related models
+│   │   ├── auth/               # Authentication models
+│   │   ├── category/           # Category models
+│   │   ├── user/               # User models
+│   │   └── models.dart         # Model exports
+│   ├── repositories/           # Repository implementations
+│   │   ├── ad/                 # Ad repositories
+│   │   ├── auth/               # Auth repositories
+│   │   ├── category/           # Category repositories
+│   │   └── user/               # User repositories
 │   ├── routes/                 # Route configuration
 │   │   └── app_router.dart
+│   ├── services/               # App services
+│   │   ├── api_client.dart     # Dio-based HTTP client
+│   │   ├── api_constants.dart  # API endpoint constants
+│   │   ├── api_interceptors.dart # Auth, logging, retry interceptors
+│   │   ├── api_service.dart    # API service wrapper
+│   │   ├── auth_service.dart   # Authentication service
+│   │   ├── loading_service.dart # Loading state service
+│   │   └── storage_service.dart # Local storage service
+│   ├── utils/                  # Utility functions
+│   │   ├── colors.dart         # Color utilities
+│   │   ├── haptic_feedback.dart # Haptic feedback utilities
+│   │   ├── text_styles.dart    # Text style utilities
+│   │   ├── theme.dart          # Theme utilities
+│   │   └── validators.dart     # Validation utilities
+│   ├── views/                  # Screen widgets
+│   │   ├── auth/               # Authentication screens (5 items)
+│   │   ├── chat/               # Chat screens
+│   │   ├── home/               # Home screen
+│   │   ├── product/            # Product-related screens (16 items)
+│   │   ├── profile/            # Profile screens (2 items)
+│   │   └── search/             # Search screen
 │   └── main.dart               # App entry point
 ├── pubspec.yaml                # Dependencies
 ├── pubspec.lock                # Locked dependencies
@@ -181,35 +124,25 @@ market_local/
 
 ### `/lib/controllers/`
 
-**Purpose:** Global controllers that are not feature-specific.
+**Purpose:** Global and feature-specific controllers.
 
 **Contains:**
 - `navigation_controller.dart` - Bottom navigation state
+- `ads/` - Ad-related controllers (8 items)
+- `auth/` - Authentication controllers (1 item)
+- `profile/` - Profile controllers (2 items)
 
 **Rules:**
-- Only truly global controllers belong here
-- Feature-specific controllers go in their feature folder
+- Feature-specific controllers organized in subdirectories
+- Global controllers at root level
 - Keep controllers minimal and focused
+- Use GetX reactive state management
 
 ---
 
 ### `/lib/core/`
 
 **Purpose:** Shared infrastructure, utilities, and reusable components used across all features.
-
-#### `/lib/core/api/`
-
-**Contains:**
-- `api_client.dart` - Dio-based HTTP client with interceptors
-- `api_service.dart` - Singleton API service wrapper
-- `api_constants.dart` - API endpoint constants and configuration
-- `api_interceptors.dart` - Auth, logging, and retry interceptors
-
-**Rules:**
-- All API calls must go through ApiClient
-- Endpoint constants defined in api_constants.dart
-- Never hardcode API URLs in features
-- Use interceptors for cross-cutting concerns (auth, logging, retry)
 
 #### `/lib/core/constants/`
 
@@ -311,61 +244,41 @@ market_local/
 
 ---
 
-### `/lib/features/`
-
-**Purpose:** Self-contained feature modules following clean architecture.
-
-**Structure per feature (with API integration):**
-```
-feature_name/
-├── controllers/
-│   └── feature_controller_impl.dart  # Controller implementation
-├── models/
-│   ├── feature_request.dart          # API request models
-│   └── feature_response.dart         # API response models
-├── repositories/
-│   ├── feature_repository.dart       # Repository interface
-│   ├── feature_repository_impl.dart  # Repository implementation
-│   └── feature_service.dart          # Service layer
-├── data/
-│   └── mock_data.dart                # Mock data (if needed)
-├── widgets/
-│   └── feature_widgets.dart          # Feature-specific widgets
-├── feature_controller.dart           # Main controller
-└── feature_screen.dart               # Main screen widget
-```
-
-**Architecture Layers:**
-1. **Screen** - UI layer, uses controllers
-2. **Controller** - State management, business logic
-3. **Service** - High-level API operations
-4. **Repository** - Data source coordination (API + local cache)
-5. **Models** - Data transfer objects
-
-**Rules:**
-- Each feature owns its UI, controller, repository, and models
-- Features must not import from other features
-- Shared code goes in `/core/`
-- Use models from `/models/` for shared data structures
-- Repositories handle API calls and caching
-- Services provide high-level operations for controllers
-
----
-
 ### `/lib/models/`
 
-**Purpose:** Centralized data models.
+**Purpose:** Centralized data models organized by domain.
 
 **Contains:**
-- `ad_model.dart` - Advertisement/listing model
-- `user_model.dart` - User profile model
-- `category_model.dart` - Category model
+- `ad/` - Ad-related models
+- `auth/` - Authentication models
+- `category/` - Category models
+- `user/` - User models
+- `models.dart` - Barrel export
 
 **Rules:**
 - All models must have `fromJson()` and `toJson()` methods
 - Include `copyWith()` for immutability
 - Use enums for fixed value sets
 - Models are immutable (use `final` fields)
+
+---
+
+### `/lib/repositories/`
+
+**Purpose:** Repository implementations for data access.
+
+**Contains:**
+- `ad/` - Ad repositories (interface + implementation)
+- `auth/` - Auth repositories (interface + implementation)
+- `category/` - Category repositories (interface + implementation)
+- `user/` - User repositories (interface + implementation)
+
+**Rules:**
+- Each domain has its own repository folder
+- Contains both interface and implementation
+- Extend BaseRepository for error handling
+- Use ApiClient for HTTP requests
+- Implement caching via LocalDataSource
 
 ---
 
@@ -383,35 +296,93 @@ feature_name/
 
 ---
 
+### `/lib/services/`
+
+**Purpose:** App-level services for API, authentication, storage, and loading.
+
+**Contains:**
+- `api_client.dart` - Dio-based HTTP client with interceptors
+- `api_constants.dart` - API endpoint constants and configuration
+- `api_interceptors.dart` - Auth, logging, and retry interceptors
+- `api_service.dart` - Singleton API service wrapper
+- `auth_service.dart` - Authentication service
+- `loading_service.dart` - Loading state service
+- `storage_service.dart` - Local storage service
+
+**Rules:**
+- Services are singletons
+- Use ApiClient for all HTTP requests
+- Define endpoints in ApiConstants
+- Use interceptors for cross-cutting concerns
+
+---
+
+### `/lib/utils/`
+
+**Purpose:** Utility functions and helpers.
+
+**Contains:**
+- `colors.dart` - Color utilities
+- `haptic_feedback.dart` - Haptic feedback utilities
+- `text_styles.dart` - Text style utilities
+- `theme.dart` - Theme utilities
+- `validators.dart` - Validation utilities
+
+**Rules:**
+- Pure utility functions only
+- No state or side effects
+- Well-documented with clear return types
+
+---
+
+### `/lib/views/`
+
+**Purpose:** Screen widgets organized by feature.
+
+**Contains:**
+- `auth/` - Authentication screens (5 items)
+- `chat/` - Chat screens
+- `home/` - Home screen
+- `product/` - Product-related screens (16 items)
+- `profile/` - Profile screens (2 items)
+- `search/` - Search screen
+
+**Rules:**
+- Each screen in its own file
+- Organized by feature/domain
+- Use GetView for controller access
+- Keep UI logic minimal
+
+---
+
 ## Ownership Rules
 
 ### Feature Ownership
 
 | Feature | Owner | Scope |
 |---------|-------|-------|
-| Authentication | `features/auth/` | Login, register, OTP, password reset |
-| Home | `features/home/` | Home screen, categories, product grid |
-| Search | `features/search/` | Search, filters, sorting |
-| Post Ad | `features/post_ad/` | Ad creation flow |
-| Chat | `features/chat/` | Messaging list and conversations |
-| Profile | `features/profile/` | User profile, settings, account management |
-| Ad Details | `features/ad_details/` | Product detail view, ad actions |
-| Category | `features/category/` | Category browsing and filtering |
+| Authentication | `views/auth/`, `controllers/auth/`, `repositories/auth/` | Login, register, OTP, password reset |
+| Home | `views/home/` | Home screen, categories, product grid |
+| Search | `views/search/` | Search, filters, sorting |
+| Products | `views/product/`, `controllers/ads/`, `repositories/ad/` | Product details, ad management |
+| Chat | `views/chat/` | Messaging list and conversations |
+| Profile | `views/profile/`, `controllers/profile/`, `repositories/user/` | User profile, settings, account management |
 
 ### Core Infrastructure Ownership
 
 | Component | Location | Used By |
 |-----------|----------|---------|
-| API Client | `core/api/` | All features with backend integration |
+| API Client | `services/api_client.dart` | All features with backend integration |
+| API Constants | `services/api_constants.dart` | All API calls |
 | Error Handling | `core/error/` | All features |
-| Loading States | `core/loading/` | All features |
+| Loading States | `core/loading/`, `services/loading_service.dart` | All features |
 | Base Repository | `core/repositories/` | All feature repositories |
 | Colors | `core/constants/app_colors.dart` | All features |
 | Sizes | `core/constants/app_sizes.dart` | All features |
 | Texts | `core/constants/app_texts.dart` | All features |
-| Theme | `core/theme/app_theme.dart` | App-wide |
+| Theme | `core/theme/app_theme.dart`, `utils/theme.dart` | App-wide |
 | Models | `models/` | All features |
-| Validators | `core/utils/validators.dart` | Forms |
+| Validators | `utils/validators.dart` | Forms |
 
 ---
 
@@ -421,23 +392,19 @@ feature_name/
 
 | Code Type | Location |
 |-----------|----------|
-| Feature screen | `features/{name}/{name}_screen.dart` |
-| Feature controller | `features/{name}/{name}_controller.dart` |
-| Controller implementation | `features/{name}/controllers/{name}_controller_impl.dart` |
-| API request model | `features/{name}/models/{name}_request.dart` |
-| API response model | `features/{name}/models/{name}_response.dart` |
-| Repository interface | `features/{name}/repositories/{name}_repository.dart` |
-| Repository implementation | `features/{name}/repositories/{name}_repository_impl.dart` |
-| Service layer | `features/{name}/repositories/{name}_service.dart` |
-| Feature mock data | `features/{name}/data/mock_data.dart` |
-| Feature widgets | `features/{name}/widgets/{widget_name}.dart` |
-| Shared data model | `models/{name}_model.dart` |
-| API endpoint constant | `core/api/api_constants.dart` |
+| Screen widget | `views/{feature}/{screen}_screen.dart` |
+| Feature controller | `controllers/{feature}/{feature}_controller.dart` |
+| Repository interface | `repositories/{feature}/{feature}_repository.dart` |
+| Repository implementation | `repositories/{feature}/{feature}_repository_impl.dart` |
+| API request model | `models/{feature}/{feature}_request.dart` |
+| API response model | `models/{feature}/{feature}_response.dart` |
+| Shared data model | `models/{domain}/{name}_model.dart` |
+| API endpoint constant | `services/api_constants.dart` |
 | Color constant | `core/constants/app_colors.dart` |
 | Size constant | `core/constants/app_sizes.dart` |
 | Text constant | `core/constants/app_texts.dart` |
 | Reusable widget | `core/widgets/common_{name}.dart` |
-| Validator function | `core/utils/validators.dart` |
+| Validator function | `utils/validators.dart` |
 | Route definition | `routes/app_router.dart` |
 | Controller binding | `bindings/main_binding.dart` |
 
@@ -502,21 +469,27 @@ import '../../core/constants/app_sizes.dart';
 // 5. Project imports - models
 import '../../models/ad_model.dart';
 
-// 6. Project imports - local (same feature)
+// 6. Project imports - services
+import '../../services/api_client.dart';
+
+// 7. Project imports - repositories
+import '../../repositories/ad/ad_repository.dart';
+
+// 8. Project imports - local (same feature)
 import 'home_controller.dart';
-import 'data/mock_data.dart';
 ```
 
 ---
 
 ## Summary
 
-- **Features own their code** - screens, controllers, repositories, services, models
-- **Repository pattern** - repositories coordinate between API and local storage
-- **Service layer** - services provide high-level operations for controllers
+- **Views own UI** - screen widgets organized by feature
+- **Controllers manage state** - organized by domain in `/controllers/`
+- **Repositories handle data** - organized by domain in `/repositories/`
+- **Services provide operations** - app-level services in `/services/`
 - **Core is shared** - API client, error handling, loading, constants, widgets
 - **API integration** - all API calls through ApiClient with interceptors
-- **Models are layered** - shared models in `/models/`, feature-specific in feature folders
+- **Models are organized** - domain-specific models in `/models/`
 - **No cross-feature imports** - use shared code in `/core/`
 - **Constants over hardcoding** - always use `AppColors`, `AppSizes`, `AppTexts`, `ApiConstants`
 - **Error boundaries** - wrap screens for proper error handling

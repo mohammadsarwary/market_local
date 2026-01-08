@@ -123,7 +123,7 @@ class CreateAdResponse {
 ### Step 2: Add Endpoint Constant
 
 ```dart
-// lib/core/api/api_constants.dart
+// lib/services/api_constants.dart
 class AdEndpoints {
   static const String createAd = '/ads';
   static const String getAd = '/ads/{ad}';
@@ -134,14 +134,16 @@ class AdEndpoints {
 
 ```dart
 // Repository interface
+// lib/repositories/ad/ad_repository.dart
 abstract class AdRepository {
   Future<CreateAdResponse> createAd(CreateAdRequest request);
 }
 
 // Repository implementation
+// lib/repositories/ad/ad_repository_impl.dart
 class AdRepositoryImpl extends BaseRepository implements AdRepository {
   final ApiClient apiClient;
-  
+
   @override
   Future<CreateAdResponse> createAd(CreateAdRequest request) async {
     return handleException(() async {
@@ -159,9 +161,10 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
 
 ```dart
 // Service layer
+// lib/services/ad_service.dart
 class AdService {
   final AdRepository _repository;
-  
+
   Future<CreateAdResponse> createAd({
     required String title,
     required double price,
@@ -213,64 +216,91 @@ class PostAdController extends GetxController {
 
 3. **Plan the file structure**
    ```
-   lib/features/{feature_name}/
-   ├── data/
-   │   └── mock_data.dart
+   lib/views/{feature_name}/
+   ├── {feature_name}_screen.dart
+   lib/controllers/{feature_name}/
    ├── {feature_name}_controller.dart
-   └── {feature_name}_screen.dart
+   lib/repositories/{feature_name}/
+   ├── {feature_name}_repository.dart
+   ├── {feature_name}_repository_impl.dart
+   lib/models/{domain}/
+   └── {feature_name}_model.dart
    ```
 
 ### Phase 2: Implementation
 
 1. **Create the data model** (if needed)
    ```dart
-   // lib/models/{name}_model.dart
+   // lib/models/{domain}/{name}_model.dart
    class NewModel {
      final String id;
      final String name;
      // ... fields
-     
+
      const NewModel({required this.id, required this.name});
-     
+
      factory NewModel.fromJson(Map<String, dynamic> json) => ...
      Map<String, dynamic> toJson() => ...
      NewModel copyWith({String? id, String? name}) => ...
    }
    ```
 
-2. **Create mock data**
+2. **Create the repository** (if needed)
    ```dart
-   // lib/features/{feature}/data/mock_data.dart
-   class FeatureMockData {
-     static const List<NewModel> items = [...];
+   // lib/repositories/{feature}/{feature}_repository.dart
+   abstract class FeatureRepository {
+     Future<List<NewModel>> getItems();
+   }
+
+   // lib/repositories/{feature}/{feature}_repository_impl.dart
+   class FeatureRepositoryImpl extends BaseRepository implements FeatureRepository {
+     final ApiClient apiClient;
+
+     @override
+     Future<List<NewModel>> getItems() async {
+       return handleException(() async {
+         final response = await apiClient.get('/endpoint');
+         return (response as List).map((e) => NewModel.fromJson(e)).toList();
+       });
+     }
    }
    ```
 
 3. **Create the controller**
    ```dart
-   // lib/features/{feature}/{feature}_controller.dart
+   // lib/controllers/{feature}/{feature}_controller.dart
    import 'package:get/get.dart';
-   import 'data/mock_data.dart';
-   
+   import '../../repositories/{feature}/{feature}_repository.dart';
+   import '../../models/{domain}/{feature}_model.dart';
+
    class FeatureController extends GetxController {
+     final FeatureRepository _repository = FeatureRepositoryImpl();
      final RxBool isLoading = false.obs;
-     
-     List<NewModel> get items => FeatureMockData.items;
+     final RxList<NewModel> items = <NewModel>[].obs;
+
+     Future<void> loadItems() async {
+       isLoading.value = true;
+       try {
+         items.value = await _repository.getItems();
+       } finally {
+         isLoading.value = false;
+       }
+     }
    }
    ```
 
 4. **Create the screen**
    ```dart
-   // lib/features/{feature}/{feature}_screen.dart
+   // lib/views/{feature}/{feature}_screen.dart
    import 'package:flutter/material.dart';
    import 'package:get/get.dart';
    import '../../core/constants/app_colors.dart';
    import '../../core/constants/app_sizes.dart';
-   import '{feature}_controller.dart';
-   
+   import '../../controllers/{feature}/{feature}_controller.dart';
+
    class FeatureScreen extends GetView<FeatureController> {
      const FeatureScreen({super.key});
-     
+
      @override
      Widget build(BuildContext context) {
        return Scaffold(...);

@@ -11,7 +11,6 @@ MarketLocal is a Flutter marketplace application built with GetX for state manag
 ```
 lib/
 ├── core/                   # Core infrastructure and utilities
-│   ├── api/               # API client infrastructure (Dio-based)
 │   ├── constants/         # App-wide constants (colors, sizes, texts)
 │   ├── error/             # Error handling system
 │   ├── loading/           # Loading state management
@@ -20,25 +19,54 @@ lib/
 │   ├── theme/             # App theming
 │   ├── utils/             # Utility functions
 │   └── widgets/           # Reusable UI components
-├── features/              # Feature modules
+├── views/                 # Screen widgets organized by feature
 │   ├── auth/             # Authentication (login, register, OTP)
 │   ├── home/             # Home screen and related components
 │   ├── search/           # Search functionality
-│   ├── post_ad/          # Ad posting workflow
+│   ├── product/          # Product-related screens (16 items)
 │   ├── chat/             # Messaging system
 │   ├── profile/          # User profile management
-│   ├── ad_details/       # Ad details and actions
-│   └── category/         # Category browsing
-├── models/                # Shared data models
-├── controllers/           # Global controllers
-├── bindings/             # Dependency injection bindings
-└── main.dart             # App entry point
+│   └── ...
+├── controllers/           # Global and feature controllers
+│   ├── ads/              # Ad-related controllers
+│   ├── auth/             # Authentication controllers
+│   ├── profile/          # Profile controllers
+│   └── navigation_controller.dart
+├── models/                # Shared data models organized by domain
+│   ├── ad/               # Ad-related models
+│   ├── auth/             # Authentication models
+│   ├── category/         # Category models
+│   └── user/             # User models
+├── repositories/          # Repository implementations
+│   ├── ad/               # Ad repositories
+│   ├── auth/             # Auth repositories
+│   ├── category/         # Category repositories
+│   └── user/             # User repositories
+├── services/              # App-level services
+│   ├── api_client.dart   # Dio-based HTTP client
+│   ├── api_constants.dart # API endpoint constants
+│   ├── api_interceptors.dart # Auth, logging, retry interceptors
+│   ├── api_service.dart  # API service wrapper
+│   ├── auth_service.dart # Authentication service
+│   ├── loading_service.dart # Loading state service
+│   └── storage_service.dart # Local storage service
+├── utils/                 # Utility functions
+│   ├── colors.dart       # Color utilities
+│   ├── haptic_feedback.dart # Haptic feedback utilities
+│   ├── text_styles.dart  # Text style utilities
+│   ├── theme.dart        # Theme utilities
+│   └── validators.dart   # Validation utilities
+├── routes/                # Route configuration
+│   └── app_router.dart
+├── bindings/              # Dependency injection bindings
+│   └── main_binding.dart
+└── main.dart              # App entry point
 ```
 
 ### Key Architectural Patterns
 
-1. **Feature-Based Structure**: Each feature is organized in its own directory
-2. **Clean Architecture**: Separation of UI, business logic, and data layers
+1. **View-Based Structure**: UI screens organized by feature in `views/`
+2. **Controller Organization**: Controllers organized by domain in `controllers/`
 3. **Repository Pattern**: Repositories coordinate between API and local storage
 4. **Service Layer**: Services provide high-level operations for controllers
 5. **GetX State Management**: Reactive state management with GetX
@@ -59,6 +87,8 @@ The app uses Dio-based HTTP client for all API communication:
 - **ApiConstants**: Centralized API endpoint definitions
 - **ApiInterceptors**: Auth token injection, logging, and automatic retry logic
 
+**Location:** `lib/services/`
+
 **Usage:**
 ```dart
 final apiClient = ApiService.instance.apiClient;
@@ -75,13 +105,15 @@ Data access follows the repository pattern:
 - **Service Layer**: Provides high-level operations for controllers
 - **LocalDataSource**: Local storage abstraction
 
+**Location:** `lib/repositories/` and `lib/core/repositories/`
+
 **Example:**
 ```dart
 // Repository
 class UserRepositoryImpl extends BaseRepository implements UserRepository {
   final ApiClient apiClient;
   final LocalDataSource localDataSource;
-  
+
   @override
   Future<UserProfile> getProfile() async {
     return handleException(() async {
@@ -96,7 +128,7 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
 // Service
 class UserService {
   final UserRepository _repository;
-  
+
   Future<UserProfile> getProfile() async {
     return await _repository.getProfile();
   }
@@ -404,18 +436,18 @@ Text(
 
 ### File Organization
 
-1. Group related files in feature directories
+1. Group related files in feature directories (`views/`, `controllers/`, `repositories/`)
 2. Follow clean architecture layers:
-   - **Screen**: UI layer
-   - **Controller**: State management
-   - **Service**: Business logic
-   - **Repository**: Data coordination
-   - **Models**: Data transfer objects
+   - **Views**: UI layer in `views/`
+   - **Controllers**: State management in `controllers/`
+   - **Services**: Business logic in `services/`
+   - **Repositories**: Data coordination in `repositories/`
+   - **Models**: Data transfer objects in `models/`
 3. Use barrel exports for clean imports
 4. Separate UI, logic, and data layers
 5. Keep widget files focused on single responsibilities
-6. Feature-specific models in feature folders
-7. Shared models in `/models/` directory
+6. Domain-specific models in `models/{domain}/`
+7. Shared utilities in `utils/`
 
 ### Error Handling
 
