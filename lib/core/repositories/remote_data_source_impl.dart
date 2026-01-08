@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import '../api/api_client.dart';
+import 'package:market_local/services/api_client.dart';
+
 import 'remote_data_source.dart';
 
 class RemoteDataSourceImpl implements RemoteDataSource {

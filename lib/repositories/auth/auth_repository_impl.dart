@@ -1,9 +1,9 @@
-import '../../../core/api/api_client.dart';
-import '../../../core/api/api_constants.dart';
+
 import '../../../core/repositories/base_repository.dart';
 import '../../models/auth/auth_models.dart';
 import 'auth_repository.dart';
-
+import 'package:market_local/services/api_client.dart';
+import 'package:market_local/services/api_constants.dart';
 class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   final ApiClient apiClient;
 

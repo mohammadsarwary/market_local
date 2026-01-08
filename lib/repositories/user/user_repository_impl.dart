@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../../core/api/api_client.dart';
-import '../../../core/api/api_constants.dart';
+import 'package:market_local/services/api_client.dart';
+import 'package:market_local/services/api_constants.dart';
 import '../../../core/repositories/base_repository.dart';
 import '../../../core/repositories/local_data_source.dart';
 import '../../models/user/user_models.dart';

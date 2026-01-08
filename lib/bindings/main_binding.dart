@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:market_local/services/api_service.dart';
 import '../controllers/navigation_controller.dart';
 import '../controllers/ads/home_controller.dart';
 import '../controllers/ads/search_controller.dart';
@@ -8,7 +9,7 @@ import '../controllers/profile/profile_controller.dart';
 import '../controllers/auth/auth_controller.dart';
 import '../services/auth_service.dart';
 import '../services/storage_service.dart';
-import '../core/api/api_service.dart';
+
 import '../core/repositories/local_data_source_impl.dart';
 import '../repositories/ad/ad_repository.dart';
 import '../repositories/ad/ad_repository_impl.dart';
