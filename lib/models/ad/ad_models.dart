@@ -392,24 +392,36 @@ class Ad {
   });
 
   factory Ad.fromJson(Map<String, dynamic> json) {
+    final user = json['user'] as Map<String, dynamic>?;
+    final category = json['category'] as Map<String, dynamic>?;
+
+    double parseNum(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
     return Ad(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      categoryId: json['category_id'] as String,
-      categoryName: json['category_name'] as String,
-      price: (json['price'] as num).toDouble(),
-      location: json['location'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      images: List<String>.from(json['images'] as List<dynamic>? ?? []),
-      userId: json['user_id'] as String,
-      userName: json['user_name'] as String,
-      userAvatar: json['user_avatar'] as String?,
-      userRating: (json['user_rating'] as num?)?.toDouble() ?? 0.0,
+      id: json['id'].toString(),
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      categoryId: json['category_id']?.toString() ?? category?['id']?.toString() ?? '',
+      categoryName: json['category_name'] as String? ?? category?['name'] as String? ?? '',
+      price: parseNum(json['price']),
+      location: json['location'] as String? ?? '',
+      latitude: parseNum(json['latitude']),
+      longitude: parseNum(json['longitude']),
+      images: json['images'] != null
+          ? List<String>.from(json['images'] as List<dynamic>)
+          : (json['primary_image'] != null ? [json['primary_image'] as String] : []),
+      userId: json['user_id']?.toString() ?? user?['id']?.toString() ?? '',
+      userName: json['user_name'] as String? ?? user?['name'] as String? ?? '',
+      userAvatar: json['user_avatar'] as String? ?? user?['avatar'] as String?,
+      userRating: parseNum(json['user_rating'] ?? user?['rating']),
       status: json['status'] as String? ?? 'active',
       isFavorite: json['is_favorite'] as bool? ?? false,
-      views: json['views'] as int? ?? 0,
+      views: json['views'] is int ? json['views'] as int : int.tryParse(json['views']?.toString() ?? '0') ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -455,13 +467,15 @@ class AdsResponse {
   });
 
   factory AdsResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>? ?? json;
+    
     return AdsResponse(
-      ads: (json['ads'] as List<dynamic>)
-          .map((item) => Ad.fromJson(item as Map<String, dynamic>))
-          .toList(),
-      total: json['total'] as int,
-      page: json['page'] as int,
-      limit: json['limit'] as int,
+      ads: (data['ads'] as List<dynamic>?)
+          ?.map((item) => Ad.fromJson(item as Map<String, dynamic>))
+          .toList() ?? [],
+      total: data['total'] as int? ?? (data['ads'] as List?)?.length ?? 0,
+      page: data['page'] as int? ?? 1,
+      limit: data['limit'] as int? ?? 20,
     );
   }
 

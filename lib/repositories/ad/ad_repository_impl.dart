@@ -23,7 +23,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
         AdEndpoints.ads,
         queryParameters: request.toJson(),
       );
-      return AdsResponse.fromJson(response as Map<String, dynamic>);
+      return AdsResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -33,7 +33,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
       try {
         final endpoint = AdEndpoints.adDetails.replaceAll('{ad}', adId);
         final response = await apiClient.get(endpoint);
-        final ad = Ad.fromJson(response as Map<String, dynamic>);
+        final ad = Ad.fromJson(response.data as Map<String, dynamic>);
         await cacheAd(ad);
         return ad;
       } catch (e) {
@@ -63,7 +63,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
       print('AdRepositoryImpl: Status code: ${response.statusCode}');
       print('AdRepositoryImpl: Response data: ${response.data}');
 
-      final createAdResponse = CreateAdResponse.fromJson(response as Map<String, dynamic>);
+      final createAdResponse = CreateAdResponse.fromJson(response.data as Map<String, dynamic>);
       print('AdRepositoryImpl: CreateAdResponse parsed successfully');
       print('AdRepositoryImpl: Response message: ${createAdResponse.message}');
       print('AdRepositoryImpl: Ad ID: ${createAdResponse.ad.id}');
@@ -80,7 +80,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
         endpoint,
         data: request.toJson(),
       );
-      return UpdateAdResponse.fromJson(response as Map<String, dynamic>);
+      return UpdateAdResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -90,7 +90,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
       final endpoint = AdEndpoints.deleteAd.replaceAll('{ad}', adId);
       final response = await apiClient.delete(endpoint);
       await clearAdCache(adId);
-      return DeleteAdResponse.fromJson(response as Map<String, dynamic>);
+      return DeleteAdResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -99,7 +99,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
     return handleException(() async {
       final endpoint = AdEndpoints.markAsSold.replaceAll('{ad}', adId);
       final response = await apiClient.post(endpoint);
-      return MarkAsSoldResponse.fromJson(response as Map<String, dynamic>);
+      return MarkAsSoldResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -108,7 +108,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
     return handleException(() async {
       final endpoint = AdEndpoints.toggleFavorite.replaceAll('{ad}', adId);
       final response = await apiClient.post(endpoint);
-      return ToggleFavoriteResponse.fromJson(response as Map<String, dynamic>);
+      return ToggleFavoriteResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -125,7 +125,7 @@ class AdRepositoryImpl extends BaseRepository implements AdRepository {
         endpoint,
         files: files,
       );
-      return ImageUploadResponse.fromJson(response as Map<String, dynamic>);
+      return ImageUploadResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 

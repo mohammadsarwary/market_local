@@ -134,9 +134,11 @@ class HomeController extends GetxController {
   /// Fetch ads from API
   Future<void> _fetchAds({required int page, bool clearExisting = false}) async {
     try {
-      final categoryId = selectedCategoryIndex.value == 0 
-          ? null 
+      final categoryId = selectedCategoryIndex.value == 0
+          ? null
           : categories[selectedCategoryIndex.value].id;
+
+      print('HomeController: Fetching ads - page: $page, categoryId: $categoryId');
 
       final response = await _adRepository.getAdsPaginated(
         page: page,
@@ -145,7 +147,11 @@ class HomeController extends GetxController {
         sortBy: 'created_at',
       );
 
+      print('HomeController: Response received - ads count: ${response.ads.length}, total: ${response.total}');
+
       final fetchedAds = response.ads.map((ad) => _mapAdToAdModel(ad)).toList();
+
+      print('HomeController: Mapped ${fetchedAds.length} ads to AdModel');
 
       if (clearExisting) {
         _products.value = fetchedAds;
@@ -157,8 +163,12 @@ class HomeController extends GetxController {
       _totalPages.value = (response.total / response.limit).ceil();
       _hasMoreData.value = response.page < _totalPages.value;
 
+      print('HomeController: Products updated - total: ${_products.length}');
+
       await _cacheAds(fetchedAds);
     } catch (e) {
+      print('HomeController: Error fetching ads: $e');
+      print('HomeController: Stack trace: ${StackTrace.current}');
       rethrow;
     }
   }
