@@ -19,7 +19,7 @@ class CategoryRepositoryImpl extends BaseRepository implements CategoryRepositor
     return handleException(() async {
       try {
         final response = await apiClient.get(CategoryEndpoints.categories);
-        final categoriesResponse = CategoriesResponse.fromJson(response as Map<String, dynamic>);
+        final categoriesResponse = CategoriesResponse.fromJson(response.data as Map<String, dynamic>);
         await cacheCategories(categoriesResponse.categories);
         return categoriesResponse;
       } catch (e) {
@@ -37,7 +37,7 @@ class CategoryRepositoryImpl extends BaseRepository implements CategoryRepositor
     return handleException(() async {
       final endpoint = CategoryEndpoints.categoryDetails.replaceAll(':id', categoryId);
       final response = await apiClient.get(endpoint);
-      return Category.fromJson(response as Map<String, dynamic>);
+      return Category.fromJson(response.data as Map<String, dynamic>);
     });
   }
 
@@ -46,7 +46,7 @@ class CategoryRepositoryImpl extends BaseRepository implements CategoryRepositor
     return handleException(() async {
       final endpoint = CategoryEndpoints.subcategories.replaceAll(':id', parentCategoryId);
       final response = await apiClient.get(endpoint);
-      return SubcategoriesResponse.fromJson(response as Map<String, dynamic>);
+      return SubcategoriesResponse.fromJson(response.data as Map<String, dynamic>);
     });
   }
 

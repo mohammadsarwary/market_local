@@ -110,6 +110,7 @@ class PostAdController extends GetxController {
       remoteCategories
         ..clear()
         ..addAll(response.categories);
+        print('Post ads controller $response');
     } catch (e) {
       if (remoteCategories.isEmpty) {
         categoryLoadError.value = 'Unable to load latest categories. Showing defaults.';
