@@ -44,28 +44,15 @@ class NavigationController extends GetxController {
     final authController = Get.find<AuthController>();
     
     // Protected routes: Post Ad (2), Chat (3), Profile (4)
-    if ((index == 2 || index == 3 || index == 4)) {
-      if (authController.isCheckingAuth.value) {
-        // Still checking auth status, don't navigate yet
-        Get.snackbar(
-          'Checking...',
-          'Verifying authentication status',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 1),
-        );
-        return;
-      }
-      
-      if (!authController.isLoggedIn.value) {
-        Get.snackbar(
-          'Authentication Required',
-          'Please log in to access this feature',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-        );
-        Get.toNamed('/login');
-        return;
-      }
+    if ((index == 2 || index == 3 || index == 4) && !authController.isLoggedIn.value) {
+      Get.snackbar(
+        'Authentication Required',
+        'Please log in to access this feature',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+      Get.toNamed('/login');
+      return;
     }
     
     selectedIndex.value = index;

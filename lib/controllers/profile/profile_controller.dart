@@ -110,7 +110,8 @@ class ProfileController extends GetxController {
       await HapticFeedback.success();
     } catch (e) {
       hasError.value = true;
-      errorMessage.value = 'Failed to load profile. Please try again.';
+      errorMessage.value = 'Failed to load profile: ${e.toString()}';
+      print('Profile load error: $e');
       await HapticFeedback.error();
     } finally {
       isLoading.value = false;
@@ -141,6 +142,7 @@ class ProfileController extends GetxController {
       savedItems.value = favorites.favorites.map((item) => _convertFavoriteToAdModel(item)).toList();
     } catch (e) {
       print('Error loading tabs data: $e');
+      // Don't fail the entire profile load if tabs fail
     }
   }
 

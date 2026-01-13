@@ -19,7 +19,7 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   Future<UserProfile> getProfile() async {
     return handleException(() async {
       final response = await apiClient.put(UserEndpoints.profile);
-      final profile = UserProfile.fromJson(response as Map<String, dynamic>);
+      final profile = UserProfile.fromJson(response.data as Map<String, dynamic>);
       await saveUserProfile(profile);
       return profile;
     });

@@ -13,6 +13,7 @@ import 'views/product/product_view.dart';
 import 'views/chat/chat_view.dart';
 import 'views/profile/profile_view.dart';
 import 'views/auth/login_view.dart';
+import 'views/splash/splash_view.dart';
 import 'bindings/main_binding.dart';
 import 'controllers/navigation_controller.dart';
 
@@ -106,7 +107,7 @@ class MyApp extends StatelessWidget {
         title: 'MarketLocal',
         theme: AppTheme.lightTheme,
         initialBinding: MainBinding(),
-        home: const MainScreen(),
+        home: const SplashView(),
         debugShowCheckedModeBanner: false,
         transitionDuration: const Duration(milliseconds: 300),
         defaultTransition: Transition.fadeIn,

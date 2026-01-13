@@ -259,7 +259,7 @@ class UserProfile {
       bio: data['bio'] as String?,
       location: data['location'] as String?,
       isVerified: data['is_verified'] as bool? ?? false,
-      totalAds: int.tryParse(data['total_ads']?.toString() ?? '0') ?? 0,
+      totalAds: int.tryParse(data['total_ads']?.toString() ?? data['active_listings']?.toString() ?? '0') ?? 0,
       rating: double.tryParse(data['rating']?.toString() ?? '0') ?? 0.0,
       reviewCount: int.tryParse(data['review_count']?.toString() ?? '0') ?? 0,
       activeListings: int.tryParse(data['active_listings']?.toString() ?? '0') ?? 0,

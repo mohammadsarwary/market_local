@@ -19,6 +19,9 @@ class ApiClient {
         sendTimeout: ApiConstants.sendTimeout,
         contentType: 'application/json',
         responseType: ResponseType.json,
+        headers: {
+          'Accept': 'application/json',
+        },
       ),
     );
 

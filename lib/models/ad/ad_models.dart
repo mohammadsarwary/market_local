@@ -234,10 +234,10 @@ class CreateAdRequest {
       'title': title,
       'description': description,
       'category_id': categoryId,
-      'price': price,
+      'price': price.toString(),
       'location': location,
-      'latitude': latitude,
-      'longitude': longitude,
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
       if (customFields != null) ...customFields!,
     };
   }
@@ -272,10 +272,10 @@ class UpdateAdRequest {
       'title': title,
       'description': description,
       'category_id': categoryId,
-      'price': price,
+      'price': price.toString(),
       'location': location,
-      'latitude': latitude,
-      'longitude': longitude,
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
       if (customFields != null) ...customFields!,
     };
   }
@@ -423,7 +423,7 @@ class Ad {
       isFavorite: json['is_favorite'] as bool? ?? false,
       views: json['views'] is int ? json['views'] as int : int.tryParse(json['views']?.toString() ?? '0') ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : DateTime.parse(json['created_at'] as String),
     );
   }
 
@@ -500,9 +500,11 @@ class CreateAdResponse {
   });
 
   factory CreateAdResponse.fromJson(Map<String, dynamic> json) {
+    // API returns ad data in 'data' key, not 'ad'
+    final adData = json['data'] ?? json['ad'];
     return CreateAdResponse(
       message: json['message'] as String,
-      ad: Ad.fromJson(json['ad'] as Map<String, dynamic>),
+      ad: Ad.fromJson(adData as Map<String, dynamic>),
     );
   }
 

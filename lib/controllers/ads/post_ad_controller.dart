@@ -32,6 +32,7 @@ class PostAdController extends GetxController {
   final TextEditingController locationController = TextEditingController(text: PostAdMockData.defaultLocation);
 
   final Rx<String?> selectedCategory = Rx<String?>(null);
+  final Rx<String?> selectedCategoryId = Rx<String?>(null);
   final RxString selectedCondition = 'new'.obs;
   final RxList<File> images = <File>[].obs;
   final RxList<String> imageUrls = <String>[...PostAdMockData.mockImages].obs;
@@ -94,6 +95,22 @@ class PostAdController extends GetxController {
   /// - [value] The category name to select, or null to clear selection
   void updateCategory(String? value) {
     selectedCategory.value = value;
+    // Find and store the category ID
+    if (value != null) {
+      final category = remoteCategories.firstWhere(
+        (c) => c.name == value,
+        orElse: () => Category(
+          id: '1',
+          name: value,
+          adCount: 0,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+      selectedCategoryId.value = category.id;
+    } else {
+      selectedCategoryId.value = null;
+    }
   }
 
   Future<void> _loadCategories() async {
@@ -335,6 +352,7 @@ class PostAdController extends GetxController {
     descriptionController.clear();
     locationController.text = PostAdMockData.defaultLocation;
     selectedCategory.value = null;
+    selectedCategoryId.value = null;
     selectedCondition.value = 'new';
     images.clear();
     imageUrls.clear();
@@ -357,7 +375,7 @@ class PostAdController extends GetxController {
         'price': priceController.text,
         'description': descriptionController.text,
         'location': locationController.text,
-        'category': selectedCategory.value,
+        'categoryId': selectedCategoryId.value,
         'condition': selectedCondition.value,
         'useCurrentLocation': useCurrentLocation.value,
         'images': images.map((file) => file.path).toList(),
@@ -384,7 +402,7 @@ class PostAdController extends GetxController {
         priceController.text = draftData['price'] ?? '';
         descriptionController.text = draftData['description'] ?? '';
         locationController.text = draftData['location'] ?? PostAdMockData.defaultLocation;
-        selectedCategory.value = draftData['category'];
+        selectedCategoryId.value = draftData['categoryId'];
         selectedCondition.value = draftData['condition'] ?? 'new';
         useCurrentLocation.value = draftData['useCurrentLocation'] ?? true;
         
@@ -461,7 +479,7 @@ class PostAdController extends GetxController {
     print('PostAdController: Title: "${titleController.text}"');
     print('PostAdController: Price: "${priceController.text}"');
     print('PostAdController: Description: "${descriptionController.text}"');
-    print('PostAdController: Category: ${selectedCategory.value}');
+    print('PostAdController: Category ID: ${selectedCategoryId.value}');
     print('PostAdController: Condition: ${selectedCondition.value}');
     print('PostAdController: Images count: ${images.length}');
     print('PostAdController: Location: "${locationController.text}"');
@@ -483,7 +501,7 @@ class PostAdController extends GetxController {
         print('PostAdController: Form validation passed');
 
         // Validate required fields
-        if (selectedCategory.value == null) {
+        if (selectedCategoryId.value == null) {
           print('PostAdController: No category selected');
           hasError.value = true;
           errorMessage.value = 'Please select a category';
@@ -532,7 +550,7 @@ class PostAdController extends GetxController {
         print('PostAdController: API Request Params:');
         print('  - Title: "${titleController.text.trim()}"');
         print('  - Description: "${descriptionController.text.trim()}"');
-        print('  - Category ID: ${selectedCategory.value!}');
+        print('  - Category ID: ${selectedCategoryId.value!}');
         print('  - Price: ${double.parse(priceController.text.trim())}');
         print('  - Location: "${locationController.text.trim()}"');
         print('  - Latitude: $latitude');
@@ -545,14 +563,14 @@ class PostAdController extends GetxController {
         final response = await _adRepository.createAdWithDetails(
           title: titleController.text.trim(),
           description: descriptionController.text.trim(),
-          categoryId: selectedCategory.value!,
+          categoryId: selectedCategoryId.value!,
           price: double.parse(priceController.text.trim()),
           location: locationController.text.trim(),
           latitude: latitude,
           longitude: longitude,
           imagePaths: images.map((file) => file.path).toList(),
           customFields: {
-            'condition': selectedCondition.value,
+            'condition': selectedCondition.value.toLowerCase(),
           },
         );
         print('PostAdController: Ad created successfully with ID: ${response.ad.id}');
@@ -596,7 +614,7 @@ class PostAdController extends GetxController {
         print('PostAdController: Title empty: ${titleController.text.trim().isEmpty}');
         print('PostAdController: Price empty: ${priceController.text.trim().isEmpty}');
         print('PostAdController: Description empty: ${descriptionController.text.trim().isEmpty}');
-        print('PostAdController: Category null: ${selectedCategory.value == null}');
+        print('PostAdController: Category ID null: ${selectedCategoryId.value == null}');
         print('PostAdController: Images empty: ${images.isEmpty}');
       }
     } catch (e, stackTrace) {
