@@ -37,4 +37,28 @@ class ApiService {
   Future<void> clearTokens() async {
     await _apiClient.clearTokens();
   }
+
+  Future<void> saveUserData(Map<String, dynamic> userData) async {
+    await _apiClient.saveUserData(userData);
+  }
+
+  Future<Map<String, dynamic>?> getUserData() async {
+    return await _apiClient.getUserData();
+  }
+
+  Future<void> clearUserData() async {
+    await _apiClient.clearUserData();
+  }
+
+  bool isTokenValid(String token) {
+    return _apiClient.isTokenValid(token);
+  }
+
+  DateTime? getTokenExpiryTime(String token) {
+    return _apiClient.getTokenExpiryTime(token);
+  }
+
+  bool isTokenExpiringSoon(String token) {
+    return _apiClient.isTokenExpiringSoon(token);
+  }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'api_constants.dart';
@@ -213,5 +214,120 @@ class ApiClient {
   Future<void> clearTokens() async {
     await _secureStorage.delete(key: 'access_token');
     await _secureStorage.delete(key: 'refresh_token');
+  }
+
+  /// Saves user data to secure storage
+  Future<void> saveUserData(Map<String, dynamic> userData) async {
+    try {
+      await _secureStorage.write(
+        key: 'user_data',
+        value: jsonEncode(userData),
+      );
+    } catch (e) {
+      print('ApiClient: Error saving user data: $e');
+    }
+  }
+
+  /// Retrieves user data from secure storage
+  Future<Map<String, dynamic>?> getUserData() async {
+    try {
+      final data = await _secureStorage.read(key: 'user_data');
+      if (data != null) {
+        return jsonDecode(data) as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      print('ApiClient: Error reading user data: $e');
+      return null;
+    }
+  }
+
+  /// Clears user data from secure storage
+  Future<void> clearUserData() async {
+    try {
+      await _secureStorage.delete(key: 'user_data');
+    } catch (e) {
+      print('ApiClient: Error clearing user data: $e');
+    }
+  }
+
+  /// Validates JWT token expiry (supports JWT and Laravel Sanctum tokens)
+  bool isTokenValid(String token) {
+    try {
+      // Check if token is empty
+      if (token.isEmpty) {
+        print('ApiClient: Empty token');
+        return false;
+      }
+
+      final parts = token.split('.');
+      
+      // JWT format: header.payload.signature (3 parts)
+      if (parts.length == 3) {
+        // Decode JWT payload
+        final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+        final decoded = jsonDecode(payload) as Map<String, dynamic>;
+
+        if (decoded['exp'] == null) {
+          print('ApiClient: JWT token has no expiry');
+          return false;
+        }
+
+        final expiryDate = DateTime.fromMillisecondsSinceEpoch(
+          (decoded['exp'] as int) * 1000,
+        );
+        final isValid = expiryDate.isAfter(DateTime.now());
+
+        if (!isValid) {
+          print('ApiClient: JWT token expired at $expiryDate');
+        }
+
+        return isValid;
+      }
+      
+      // Laravel Sanctum format: id|hash (no expiry in token itself)
+      // Accept as valid since server handles expiry
+      if (parts.length == 2 && parts[0].isNotEmpty && parts[1].isNotEmpty) {
+        print('ApiClient: Sanctum token accepted (server-side expiry)');
+        return true;
+      }
+
+      print('ApiClient: Invalid token format');
+      return false;
+    } catch (e) {
+      print('ApiClient: Error validating token: $e');
+      return false;
+    }
+  }
+
+  /// Gets token expiry time
+  DateTime? getTokenExpiryTime(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+
+      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final decoded = jsonDecode(payload) as Map<String, dynamic>;
+
+      if (decoded['exp'] == null) return null;
+
+      return DateTime.fromMillisecondsSinceEpoch(
+        (decoded['exp'] as int) * 1000,
+      );
+    } catch (e) {
+      print('ApiClient: Error getting token expiry: $e');
+      return null;
+    }
+  }
+
+  /// Checks if token is about to expire (within 5 minutes)
+  bool isTokenExpiringSoon(String token) {
+    final expiryTime = getTokenExpiryTime(token);
+    if (expiryTime == null) return false;
+
+    final now = DateTime.now();
+    final fiveMinutesLater = now.add(const Duration(minutes: 5));
+
+    return expiryTime.isBefore(fiveMinutesLater) && expiryTime.isAfter(now);
   }
 }

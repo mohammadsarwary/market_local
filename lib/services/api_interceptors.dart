@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'api_constants.dart';
 
 class AuthInterceptor extends Interceptor {
   final FlutterSecureStorage secureStorage;
@@ -27,9 +28,9 @@ class AuthInterceptor extends Interceptor {
       final refreshToken = await secureStorage.read(key: 'refresh_token');
       if (refreshToken != null && refreshToken.isNotEmpty) {
         try {
-          final dio = Dio();
+          final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
           final response = await dio.post(
-            'https://market.bazarino.store/api/auth/refresh',
+            AuthEndpoints.refresh,
             data: {'refresh_token': refreshToken},
           );
 

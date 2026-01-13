@@ -82,8 +82,18 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   @override
   Future<UserAdsResponse> getUserAds(GetUserAdsRequest request) async {
     return handleException(() async {
+      // Get current user ID from saved user data
+      final userData = await apiClient.getUserData();
+      if (userData == null || userData['id'] == null) {
+        throw Exception('User data not found. Please login again.');
+      }
+      
+      final userId = userData['id'].toString();
+      // Use endpoint with user ID: /users/{userId}/ads instead of /users/ads
+      final endpoint = UserEndpoints.getUserAds.replaceAll('{user}', userId);
+      
       final response = await apiClient.get(
-        UserEndpoints.userAds,
+        endpoint,
         queryParameters: request.toJson(),
       );
       return UserAdsResponse.fromJson(response as Map<String, dynamic>);

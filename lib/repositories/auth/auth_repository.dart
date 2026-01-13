@@ -23,6 +23,18 @@ abstract class AuthRepository {
 
   Future<bool> isAuthenticated();
 
+  Future<void> saveUserData(Map<String, dynamic> userData);
+
+  Future<Map<String, dynamic>?> getUserData();
+
+  Future<void> clearUserData();
+
+  bool isTokenValid(String token);
+
+  DateTime? getTokenExpiryTime(String token);
+
+  bool isTokenExpiringSoon(String token);
+
   // Convenience methods
   Future<AuthResponse> registerAndSaveToken(RegisterRequest request);
 

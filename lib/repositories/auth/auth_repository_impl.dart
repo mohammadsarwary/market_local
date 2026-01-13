@@ -49,7 +49,7 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   Future<RefreshTokenResponse> refreshToken(RefreshTokenRequest request) async {
     return handleException(() async {
       final response = await apiClient.post(
-        AuthEndpoints.refreshToken,
+        AuthEndpoints.refresh,
         data: request.toJson(),
       );
       return RefreshTokenResponse.fromJson(response.data as Map<String, dynamic>);
@@ -166,7 +166,44 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
       // Tokens are cleared regardless
     } finally {
       await clearTokens();
+      await clearUserData();
     }
+  }
+
+  @override
+  Future<void> saveUserData(Map<String, dynamic> userData) async {
+    return handleException(() async {
+      await apiClient.saveUserData(userData);
+    });
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getUserData() async {
+    return handleException(() async {
+      return await apiClient.getUserData();
+    });
+  }
+
+  @override
+  Future<void> clearUserData() async {
+    return handleException(() async {
+      await apiClient.clearUserData();
+    });
+  }
+
+  @override
+  bool isTokenValid(String token) {
+    return apiClient.isTokenValid(token);
+  }
+
+  @override
+  DateTime? getTokenExpiryTime(String token) {
+    return apiClient.getTokenExpiryTime(token);
+  }
+
+  @override
+  bool isTokenExpiringSoon(String token) {
+    return apiClient.isTokenExpiringSoon(token);
   }
 
   @override

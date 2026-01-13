@@ -346,11 +346,13 @@ class _AdPreviewScreenState extends State<AdPreviewScreen> {
                       ),
                       const SizedBox(width: AppSizes.paddingM),
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.back();
-                            controller.postAd();
-                          },
+                        child: Obx(() => ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () {
+                                  Get.back();
+                                  controller.postAd();
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
@@ -360,12 +362,21 @@ class _AdPreviewScreenState extends State<AdPreviewScreen> {
                             ),
                             elevation: 0,
                           ),
-                          child: const Text(
-                            AppTexts.postAdPublishNow,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: AppSizes.fontL),
-                          ),
-                        ),
+                          child: controller.isLoading.value
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ),
+                                )
+                              : const Text(
+                                  AppTexts.postAdPublishNow,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: AppSizes.fontL),
+                                ),
+                        )),
                       ),
                     ],
                   ),

@@ -580,7 +580,7 @@ class PostAdController extends GetxController {
         if (images.isNotEmpty) {
           try {
             print('PostAdController: Uploading ${images.length} images...');
-            final imageResponse = await _adRepository.uploadAdImages(
+            await _adRepository.uploadAdImages(
               response.ad.id,
               images.map((file) => file.path).toList(),
             );
@@ -606,9 +606,9 @@ class PostAdController extends GetxController {
           colorText: Colors.white,
         );
 
-        // Navigate back to home
-        print('PostAdController: Navigating to home...');
-        Get.offAllNamed('/');
+        // Navigate to profile page to view user's ads
+        print('PostAdController: Navigating to profile...');
+        Get.offAllNamed('/profile');
       } else {
         print('PostAdController: Form validation failed - checking individual fields...');
         print('PostAdController: Title empty: ${titleController.text.trim().isEmpty}');

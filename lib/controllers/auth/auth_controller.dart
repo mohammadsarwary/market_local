@@ -65,6 +65,22 @@ class AuthController extends GetxController {
       print('AuthController: Login successful, user: ${response.user.name}');
       print('AuthController: Access token: ${_previewToken(response.accessToken)}');
 
+      // Validate token before saving
+      if (!_authRepository.isTokenValid(response.accessToken)) {
+        print('AuthController: Invalid or expired token received');
+        throw Exception('Received invalid token from server');
+      }
+
+      // Save user data for offline access
+      await _authRepository.saveUserData({
+        'id': response.user.id,
+        'name': response.user.name,
+        'email': response.user.email,
+        'avatar': response.user.avatar,
+        'phone': response.user.phone,
+      });
+      print('AuthController: User data saved');
+
       await HapticFeedback.success();
       isLoggedIn.value = true;
       
@@ -120,7 +136,7 @@ class AuthController extends GetxController {
         phone: phone ?? '',
       );
 
-      final response = await _authRepository.registerAndSaveToken(request);
+      await _authRepository.registerAndSaveToken(request);
 
       await HapticFeedback.success();
       isLoggedIn.value = true;

@@ -121,27 +121,36 @@ class ProfileController extends GetxController {
   /// Loads data for all tabs (Active, Sold, Saved)
   Future<void> loadUserTabsData() async {
     try {
+      print('ProfileController: Loading active ads...');
       final activeAds = await _userRepository.getUserAdsPaginated(
         page: 1,
         limit: 20,
         status: 'active',
       );
+      print('ProfileController: Active ads loaded: ${activeAds.ads.length} ads');
+      print('ProfileController: Total active ads: ${activeAds.total}');
       items.value = activeAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
+      print('ProfileController: Items list length: ${items.length}');
 
+      print('ProfileController: Loading sold ads...');
       final soldAds = await _userRepository.getUserAdsPaginated(
         page: 1,
         limit: 20,
         status: 'sold',
       );
+      print('ProfileController: Sold ads loaded: ${soldAds.ads.length} ads');
       soldItems.value = soldAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
 
+      print('ProfileController: Loading favorites...');
       final favorites = await _userRepository.getFavoritesPaginated(
         page: 1,
         limit: 20,
       );
+      print('ProfileController: Favorites loaded: ${favorites.favorites.length} favorites');
       savedItems.value = favorites.favorites.map((item) => _convertFavoriteToAdModel(item)).toList();
     } catch (e) {
       print('Error loading tabs data: $e');
+      print('Error type: ${e.runtimeType}');
       // Don't fail the entire profile load if tabs fail
     }
   }
