@@ -158,7 +158,7 @@ Obx(() => controller.isLoading.value
 
 | Rule | Implementation |
 |------|----------------|
-| ✅ Define all routes in `app_router.dart` | Centralized |
+| ✅ Define all routes in `main.dart` `getPages` | Centralized |
 | ✅ Use named routes | `Get.toNamed('/home')` |
 | ✅ Pass typed arguments | `Get.toNamed('/details', arguments: adModel)` |
 | ✅ Handle null arguments | Null safety |

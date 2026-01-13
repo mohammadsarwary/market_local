@@ -172,9 +172,9 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
 
   @override
   Future<void> saveUserData(Map<String, dynamic> userData) async {
-    return handleException(() async {
-      await apiClient.saveUserData(userData);
-    });
+    // Don't wrap in handleException - let errors be visible for debugging
+    // but don't fail login if user data save fails
+    await apiClient.saveUserData(userData);
   }
 
   @override

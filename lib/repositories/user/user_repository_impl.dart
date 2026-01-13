@@ -82,13 +82,20 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   @override
   Future<UserAdsResponse> getUserAds(GetUserAdsRequest request) async {
     return handleException(() async {
-      // Get current user ID from saved user data
+      // Try to get user ID from saved data first
+      var userId = '';
       final userData = await apiClient.getUserData();
-      if (userData == null || userData['id'] == null) {
-        throw Exception('User data not found. Please login again.');
+      if (userData != null && userData['id'] != null) {
+        userId = userData['id'].toString();
+        print('UserRepositoryImpl: Got user ID from saved data: $userId');
+      } else {
+        // Fallback: fetch profile to get user ID
+        print('UserRepositoryImpl: User data not in storage, fetching profile...');
+        final profile = await getProfile();
+        userId = profile.id;
+        print('UserRepositoryImpl: Got user ID from profile: $userId');
       }
       
-      final userId = userData['id'].toString();
       // Use endpoint with user ID: /users/{userId}/ads instead of /users/ads
       final endpoint = UserEndpoints.getUserAds.replaceAll('{user}', userId);
       
@@ -96,7 +103,18 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
         endpoint,
         queryParameters: request.toJson(),
       );
-      return UserAdsResponse.fromJson(response as Map<String, dynamic>);
+      // API returns {success, message, data: [...]} but model expects {ads, total, page, limit}
+      final responseData = response.data as Map<String, dynamic>;
+      final adsList = responseData['data'] as List<dynamic>? ?? [];
+      
+      return UserAdsResponse(
+        ads: adsList
+            .map((item) => UserAdItem.fromJson(item as Map<String, dynamic>))
+            .toList(),
+        total: adsList.length,
+        page: request.page,
+        limit: request.limit,
+      );
     });
   }
 

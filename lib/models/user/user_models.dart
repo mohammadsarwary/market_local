@@ -398,12 +398,20 @@ class UserAdItem {
 
   factory UserAdItem.fromJson(Map<String, dynamic> json) {
     return UserAdItem(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      image: json['image'] as String?,
-      price: (json['price'] as num).toDouble(),
-      status: json['status'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      // API may return id as int or string - handle both
+      id: json['id']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      // API returns 'primary_image' or 'image' - handle both
+      image: json['primary_image']?.toString() ?? json['image']?.toString(),
+      // API may return price as num or string - handle both
+      price: json['price'] is num
+          ? (json['price'] as num).toDouble()
+          : double.tryParse(json['price']?.toString() ?? '0.0') ?? 0.0,
+      // API returns 'status' or 'condition' - handle both
+      status: json['status']?.toString() ?? json['condition']?.toString() ?? 'unknown',
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'].toString())
+          : DateTime.now(),
     );
   }
 

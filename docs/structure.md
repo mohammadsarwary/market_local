@@ -74,7 +74,7 @@ market_local/
 │   │   ├── auth/               # Auth repositories
 │   │   ├── category/           # Category repositories
 │   │   └── user/               # User repositories
-│   ├── routes/                 # Route configuration
+│   ├── routes/                 # Route configuration (legacy, unused)
 │   │   └── app_router.dart
 │   ├── services/               # App services
 │   │   ├── api_client.dart     # Dio-based HTTP client
@@ -284,13 +284,12 @@ market_local/
 
 ### `/lib/routes/`
 
-**Purpose:** Navigation and routing configuration.
+**Purpose:** Legacy route configuration (unused).
 
-**Contains:**
-- `app_router.dart` - Route definitions and navigation setup
+**Note:** Routes are now defined in `main.dart` using GetX routing.
 
 **Rules:**
-- All routes defined in one place
+- Routes defined in `main.dart` `getPages` list
 - Use named routes
 - Do not hardcode route strings in features
 
@@ -405,7 +404,7 @@ market_local/
 | Text constant | `core/constants/app_texts.dart` |
 | Reusable widget | `core/widgets/common_{name}.dart` |
 | Validator function | `utils/validators.dart` |
-| Route definition | `routes/app_router.dart` |
+| Route definition | `main.dart` getPages list |
 | Controller binding | `bindings/main_binding.dart` |
 
 ### ❌ INCORRECT Placement

@@ -55,12 +55,12 @@ lib/
 │   ├── haptic_feedback.dart # Haptic feedback utilities
 │   ├── text_styles.dart  # Text style utilities
 │   ├── theme.dart        # Theme utilities
-│   └── validators.dart   # Validation utilities
-├── routes/                # Route configuration
+│   ├── validators.dart   # Validation utilities
+├── routes/                # Route configuration (legacy, unused)
 │   └── app_router.dart
 ├── bindings/              # Dependency injection bindings
 │   └── main_binding.dart
-└── main.dart              # App entry point
+└── main.dart              # App entry point with GetX routing
 ```
 
 ### Key Architectural Patterns

@@ -217,14 +217,17 @@ class ApiClient {
   }
 
   /// Saves user data to secure storage
+  /// Note: Errors are logged but not thrown to prevent login failures
   Future<void> saveUserData(Map<String, dynamic> userData) async {
     try {
       await _secureStorage.write(
         key: 'user_data',
         value: jsonEncode(userData),
       );
+      print('ApiClient: User data saved successfully');
     } catch (e) {
       print('ApiClient: Error saving user data: $e');
+      // Don't throw - allow login to continue even if user data save fails
     }
   }
 
@@ -260,8 +263,19 @@ class ApiClient {
         return false;
       }
 
+      // Laravel Sanctum format: id|hash (no expiry in token itself)
+      // Accept as valid since server handles expiry
+      // Check this BEFORE JWT to avoid splitting by wrong separator
+      if (token.contains('|')) {
+        final parts = token.split('|');
+        if (parts.length == 2 && parts[0].isNotEmpty && parts[1].isNotEmpty) {
+          print('ApiClient: Sanctum token accepted (server-side expiry)');
+          return true;
+        }
+      }
+
       final parts = token.split('.');
-      
+
       // JWT format: header.payload.signature (3 parts)
       if (parts.length == 3) {
         // Decode JWT payload
@@ -283,13 +297,6 @@ class ApiClient {
         }
 
         return isValid;
-      }
-      
-      // Laravel Sanctum format: id|hash (no expiry in token itself)
-      // Accept as valid since server handles expiry
-      if (parts.length == 2 && parts[0].isNotEmpty && parts[1].isNotEmpty) {
-        print('ApiClient: Sanctum token accepted (server-side expiry)');
-        return true;
       }
 
       print('ApiClient: Invalid token format');

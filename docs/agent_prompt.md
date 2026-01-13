@@ -118,7 +118,7 @@ Rules:
 - Models in `models/{domain}/`
 - Use ApiClient for API calls
 - Register controllers in `main_binding.dart`
-- Add routes in `app_router.dart` if needed
+- Add routes in `main.dart` getPages if needed
 
 After completion:
 1. Run `flutter analyze`

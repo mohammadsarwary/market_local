@@ -225,23 +225,59 @@ class ProfileView extends GetView<ProfileController> {
             ),
           ),
           
-          // Items Grid
+          // Items Grid - Limited to 4 items with See All button
           Padding(
             padding: const EdgeInsets.all(16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: controller.items.length,
-              itemBuilder: (context, index) {
-                final item = controller.items[index];
-                return _buildItemCard(item);
-              },
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'MY LISTINGS',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    if (controller.items.length > 4)
+                      TextButton(
+                        onPressed: () => Get.toNamed('/myPublishedAds'),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'See All',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: controller.items.length > 4 ? 4 : controller.items.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.items[index];
+                    return _buildItemCard(item);
+                  },
+                ),
+              ],
             ),
           ),
           

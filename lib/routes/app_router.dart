@@ -5,6 +5,7 @@ import '../views/search/search_view.dart';
 import '../views/product/product_view.dart';
 import '../views/chat/chat_view.dart';
 import '../views/profile/profile_view.dart';
+import '../views/profile/my_published_ads_view.dart';
 import '../views/auth/login_view.dart';
 import '../views/auth/signup_view.dart';
 import '../views/auth/register_view.dart';
@@ -22,6 +23,7 @@ class AppRouter {
   static const String postAd = '/post-ad';
   static const String chat = '/chat';
   static const String profile = '/profile';
+  static const String myPublishedAds = '/my-published-ads';
   static const String adDetails = '/ad/:id';
   static const String chatDetail = '/chat/:id';
   static const String editProfile = '/profile/edit';
@@ -119,6 +121,11 @@ class AppRouter {
                 path: profile,
                 name: 'profile',
                 builder: (context, state) => const ProfileView(),
+              ),
+              GoRoute(
+                path: myPublishedAds,
+                name: 'myPublishedAds',
+                builder: (context, state) => const MyPublishedAdsView(),
               ),
             ],
           ),

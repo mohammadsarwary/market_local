@@ -82,7 +82,7 @@ Responsible for implementing new features, adding business logic, and extending 
 - ✅ Create new models in `models/`
 - ✅ Add repositories in `repositories/`
 - ✅ Register new controllers in `main_binding.dart`
-- ✅ Add new routes in `app_router.dart`
+- ✅ Add new routes in `main.dart` `getPages`
 - ✅ Add new constants if needed
 
 ### Forbidden Actions
@@ -102,7 +102,7 @@ Responsible for implementing new features, adding business logic, and extending 
 - `models/{domain}/*` (new models)
 - `repositories/{new_feature}/*` (new files)
 - `bindings/main_binding.dart`
-- `routes/app_router.dart`
+- `main.dart` (add routes)
 - `core/constants/*.dart` (additions only)
 
 ---

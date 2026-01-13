@@ -71,15 +71,20 @@ class AuthController extends GetxController {
         throw Exception('Received invalid token from server');
       }
 
-      // Save user data for offline access
-      await _authRepository.saveUserData({
-        'id': response.user.id,
-        'name': response.user.name,
-        'email': response.user.email,
-        'avatar': response.user.avatar,
-        'phone': response.user.phone,
-      });
-      print('AuthController: User data saved');
+      // Save user data for offline access and profile page
+      try {
+        await _authRepository.saveUserData({
+          'id': response.user.id,
+          'name': response.user.name,
+          'email': response.user.email,
+          'avatar': response.user.avatar,
+          'phone': response.user.phone,
+        });
+        print('AuthController: User data saved successfully');
+      } catch (e) {
+        print('AuthController: Warning - Failed to save user data: $e');
+        // Don't fail login if user data save fails, but log it
+      }
 
       await HapticFeedback.success();
       isLoggedIn.value = true;

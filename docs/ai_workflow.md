@@ -316,7 +316,7 @@ class PostAdController extends GetxController {
 
 6. **Add the route**
    ```dart
-   // lib/routes/app_router.dart
+   // lib/main.dart
    GetPage(
      name: '/feature',
      page: () => const FeatureScreen(),
@@ -542,7 +542,7 @@ class NewWidget extends StatelessWidget {
 // 1. Create the screen widget
 // 2. Create the controller (if needed)
 // 3. Register controller in main_binding.dart
-// 4. Add route in app_router.dart
+// 4. Add route in main.dart getPages
 // 5. Navigate using Get.toNamed('/route')
 ```
 

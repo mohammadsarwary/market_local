@@ -12,6 +12,7 @@ import 'views/search/search_view.dart';
 import 'views/product/product_view.dart';
 import 'views/chat/chat_view.dart';
 import 'views/profile/profile_view.dart';
+import 'views/profile/my_published_ads_view.dart';
 import 'views/auth/login_view.dart';
 import 'views/splash/splash_view.dart';
 import 'bindings/main_binding.dart';
@@ -114,6 +115,8 @@ class MyApp extends StatelessWidget {
         customTransition: FadeInTransition(),
         getPages: [
           GetPage(name: '/login', page: () => const LoginView()),
+          // Add MyPublishedAds route to GetX routing (not GoRouter)
+          GetPage(name: '/myPublishedAds', page: () => const MyPublishedAdsView()),
         ],
       ),
     );
