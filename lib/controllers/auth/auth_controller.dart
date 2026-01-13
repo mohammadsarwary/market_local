@@ -22,6 +22,9 @@ class AuthController extends GetxController {
   /// User login status
   final RxBool isLoggedIn = false.obs;
 
+  /// Loading state for initial auth check
+  final RxBool isCheckingAuth = false.obs;
+
   /// Auth repository for API calls
   late final AuthRepository _authRepository;
 
@@ -36,7 +39,9 @@ class AuthController extends GetxController {
 
   /// Check if user is logged in
   Future<void> _checkAuthStatus() async {
+    isCheckingAuth.value = true;
     isLoggedIn.value = await _authRepository.isAuthenticated();
+    isCheckingAuth.value = false;
   }
 
   /// Login with email and password
@@ -62,6 +67,9 @@ class AuthController extends GetxController {
 
       await HapticFeedback.success();
       isLoggedIn.value = true;
+      
+      // Explicitly check auth status after login to ensure consistency
+      await _checkAuthStatus();
 
       Get.snackbar(
         'Success',
@@ -116,6 +124,9 @@ class AuthController extends GetxController {
 
       await HapticFeedback.success();
       isLoggedIn.value = true;
+      
+      // Explicitly check auth status after registration to ensure consistency
+      await _checkAuthStatus();
 
       Get.snackbar(
         'Success',

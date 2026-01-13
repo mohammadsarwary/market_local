@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
 import '../../models/ad/ad_models.dart';
 import '../../models/user/user_models.dart';
+import '../../repositories/user/user_repository.dart';
 import '../../utils/haptic_feedback.dart';
-import 'mock_data.dart';
 
 class ProfileController extends GetxController {
+  final UserRepository _userRepository;
+
+  ProfileController(this._userRepository);
   /// Loading state for profile operations
   final RxBool isLoading = false.obs;
 
@@ -14,15 +17,35 @@ class ProfileController extends GetxController {
   /// Error message to display
   final RxString errorMessage = ''.obs;
 
-  final Rx<UserModel> user = ProfileMockData.currentUser.obs;
+  final Rx<UserModel> user = UserModel(
+    id: '',
+    name: '',
+    email: '',
+    createdAt: DateTime.now(),
+  ).obs;
   
   final RxInt selectedTabIndex = 0.obs;
 
   final String appVersion = 'Version 2.4.0';
 
-  List<String> get tabs => ProfileMockData.tabs;
+  static const List<String> tabs = ['Active', 'Sold', 'Saved'];
   
-  List<AdModel> get items => ProfileMockData.userItems;
+  final RxList<AdModel> items = <AdModel>[].obs;
+  final RxList<AdModel> soldItems = <AdModel>[].obs;
+  final RxList<AdModel> savedItems = <AdModel>[].obs;
+
+  List<AdModel> get currentItems {
+    switch (selectedTabIndex.value) {
+      case 0:
+        return items;
+      case 1:
+        return soldItems;
+      case 2:
+        return savedItems;
+      default:
+        return items;
+    }
+  }
 
   String get memberSinceYear => user.value.createdAt.year.toString();
 
@@ -72,20 +95,18 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// Loads user profile data
-  /// 
-  /// Simulates loading profile data with loading and error states.
-  /// In a real app, this would fetch user data from an API.
+  /// Loads user profile data from API
   Future<void> loadProfileData() async {
     try {
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = '';
 
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
+      final profile = await _userRepository.getProfileWithFallback();
+      user.value = _convertToUserModel(profile);
 
-      // In a real app, this would fetch user data from an API
+      await loadUserTabsData();
+
       await HapticFeedback.success();
     } catch (e) {
       hasError.value = true;
@@ -96,10 +117,100 @@ class ProfileController extends GetxController {
     }
   }
 
+  /// Loads data for all tabs (Active, Sold, Saved)
+  Future<void> loadUserTabsData() async {
+    try {
+      final activeAds = await _userRepository.getUserAdsPaginated(
+        page: 1,
+        limit: 20,
+        status: 'active',
+      );
+      items.value = activeAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
+
+      final soldAds = await _userRepository.getUserAdsPaginated(
+        page: 1,
+        limit: 20,
+        status: 'sold',
+      );
+      soldItems.value = soldAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
+
+      final favorites = await _userRepository.getFavoritesPaginated(
+        page: 1,
+        limit: 20,
+      );
+      savedItems.value = favorites.favorites.map((item) => _convertFavoriteToAdModel(item)).toList();
+    } catch (e) {
+      print('Error loading tabs data: $e');
+    }
+  }
+
+  /// Converts UserAdItem to AdModel for UI display
+  AdModel _convertUserAdToAdModel(UserAdItem item) {
+    return AdModel(
+      id: item.id,
+      title: item.title,
+      description: '',
+      price: item.price,
+      images: item.image != null ? [item.image!] : [],
+      categoryId: '',
+      categoryName: 'Category',
+      sellerId: user.value.id,
+      sellerName: user.value.name,
+      location: user.value.location,
+      createdAt: item.createdAt,
+      isSold: item.status == 'sold',
+      condition: AdCondition.used,
+    );
+  }
+
+  /// Converts FavoriteItem to AdModel for UI display
+  AdModel _convertFavoriteToAdModel(FavoriteItem item) {
+    return AdModel(
+      id: item.id,
+      title: item.title,
+      description: '',
+      price: item.price,
+      images: item.image != null ? [item.image!] : [],
+      categoryId: '',
+      categoryName: item.category,
+      sellerId: '',
+      sellerName: '',
+      location: '',
+      createdAt: item.createdAt,
+      isFavorite: true,
+      condition: AdCondition.used,
+    );
+  }
+
+  /// Converts UserProfile API response to UserModel for UI
+  UserModel _convertToUserModel(UserProfile profile) {
+    return UserModel(
+      id: profile.id,
+      name: profile.name,
+      email: profile.email,
+      phone: profile.phone,
+      avatar: profile.avatar ?? '',
+      isVerified: profile.isVerified,
+      rating: profile.rating,
+      reviewCount: profile.reviewCount,
+      activeListings: profile.activeListings,
+      soldItems: profile.soldItems,
+      followers: profile.followers,
+      following: 0,
+      location: profile.location ?? '',
+      createdAt: profile.createdAt,
+      lastActive: profile.updatedAt,
+    );
+  }
+
   /// Retries loading profile data
-  /// 
-  /// Clears error state and loads profile data again.
   Future<void> retryLoadProfile() async {
     await loadProfileData();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadProfileData();
   }
 }

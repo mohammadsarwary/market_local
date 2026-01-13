@@ -12,6 +12,7 @@ import 'views/search/search_view.dart';
 import 'views/product/product_view.dart';
 import 'views/chat/chat_view.dart';
 import 'views/profile/profile_view.dart';
+import 'views/auth/login_view.dart';
 import 'bindings/main_binding.dart';
 import 'controllers/navigation_controller.dart';
 
@@ -110,6 +111,9 @@ class MyApp extends StatelessWidget {
         transitionDuration: const Duration(milliseconds: 300),
         defaultTransition: Transition.fadeIn,
         customTransition: FadeInTransition(),
+        getPages: [
+          GetPage(name: '/login', page: () => const LoginView()),
+        ],
       ),
     );
   }

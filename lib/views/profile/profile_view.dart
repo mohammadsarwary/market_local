@@ -8,7 +8,6 @@ import '../../utils/colors.dart';
 import '../../utils/text_styles.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../models/ad/ad_models.dart';
-import 'guest_profile_view.dart';
 import '../auth/login_view.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -20,7 +19,8 @@ class ProfileView extends GetView<ProfileController> {
     
     return Obx(() {
       if (!authController.isLoggedIn.value) {
-        return const GuestProfileScreen();
+        Get.toNamed('/login');
+        return const SizedBox.shrink();
       }
       
       return Scaffold(

@@ -54,7 +54,9 @@ class MainBinding extends Bindings {
     Get.lazyPut<SearchController>(() => SearchController());
     Get.lazyPut<ChatController>(() => ChatController());
     Get.lazyPut<PostAdController>(() => PostAdController());
-    Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<ProfileController>(() => ProfileController(
+      Get.find<UserRepository>(),
+    ));
     Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
     Get.lazyPut<AuthFlowService>(() => AuthFlowService(), fenix: true);
   }

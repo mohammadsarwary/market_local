@@ -223,6 +223,9 @@ class UserProfile {
   final int totalAds;
   final double rating;
   final int reviewCount;
+  final int activeListings;
+  final int soldItems;
+  final int followers;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -238,25 +241,32 @@ class UserProfile {
     required this.totalAds,
     required this.rating,
     required this.reviewCount,
+    required this.activeListings,
+    required this.soldItems,
+    required this.followers,
     required this.createdAt,
     required this.updatedAt,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>? ?? json;
     return UserProfile(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      avatar: json['avatar'] as String?,
-      bio: json['bio'] as String?,
-      location: json['location'] as String?,
-      isVerified: json['is_verified'] as bool? ?? false,
-      totalAds: json['total_ads'] as int? ?? 0,
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      reviewCount: json['review_count'] as int? ?? 0,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      id: data['id'].toString(),
+      name: data['name'] as String,
+      email: data['email'] as String,
+      phone: data['phone']?.toString() ?? '',
+      avatar: data['avatar'] as String?,
+      bio: data['bio'] as String?,
+      location: data['location'] as String?,
+      isVerified: data['is_verified'] as bool? ?? false,
+      totalAds: int.tryParse(data['total_ads']?.toString() ?? '0') ?? 0,
+      rating: double.tryParse(data['rating']?.toString() ?? '0') ?? 0.0,
+      reviewCount: int.tryParse(data['review_count']?.toString() ?? '0') ?? 0,
+      activeListings: int.tryParse(data['active_listings']?.toString() ?? '0') ?? 0,
+      soldItems: int.tryParse(data['sold_items']?.toString() ?? '0') ?? 0,
+      followers: int.tryParse(data['followers']?.toString() ?? '0') ?? 0,
+      createdAt: DateTime.parse(data['created_at'] as String),
+      updatedAt: DateTime.parse(data['updated_at'] as String),
     );
   }
 
@@ -273,6 +283,9 @@ class UserProfile {
       'total_ads': totalAds,
       'rating': rating,
       'review_count': reviewCount,
+      'active_listings': activeListings,
+      'sold_items': soldItems,
+      'followers': followers,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
@@ -290,9 +303,10 @@ class UpdateProfileResponse {
   });
 
   factory UpdateProfileResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>?;
     return UpdateProfileResponse(
-      message: json['message'] as String,
-      user: UserProfile.fromJson(json['user'] as Map<String, dynamic>),
+      message: json['message'] as String? ?? '',
+      user: data != null ? UserProfile.fromJson(data) : UserProfile.fromJson(json),
     );
   }
 
