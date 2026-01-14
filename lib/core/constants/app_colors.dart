@@ -16,7 +16,7 @@ class AppColors {
   static const Color secondaryDark = Color(0xFF087F23);
 
   // Background Colors
-  static const Color background = Color(0xFFF5F5F5);
+  static const Color background = Color.fromARGB(255, 251, 251, 251);
   static const Color surface = Colors.white;
   static const Color scaffoldBackground = Color(0xFFF5F5F5);
 

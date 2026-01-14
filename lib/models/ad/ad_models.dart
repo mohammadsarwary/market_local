@@ -34,6 +34,7 @@ class AdModel {
   final bool isSold;
   final bool isFavorite;
   final int viewCount;
+  final String? status;
   final AdCondition condition;
 
   const AdModel({
@@ -58,6 +59,7 @@ class AdModel {
     this.isSold = false,
     this.isFavorite = false,
     this.viewCount = 0,
+    this.status,
     this.condition = AdCondition.used,
   });
 
@@ -84,6 +86,7 @@ class AdModel {
     bool? isSold,
     bool? isFavorite,
     int? viewCount,
+    String? status,
     AdCondition? condition,
   }) {
     return AdModel(
@@ -108,6 +111,7 @@ class AdModel {
       isSold: isSold ?? this.isSold,
       isFavorite: isFavorite ?? this.isFavorite,
       viewCount: viewCount ?? this.viewCount,
+      status: status ?? this.status,
       condition: condition ?? this.condition,
     );
   }
@@ -138,6 +142,7 @@ class AdModel {
       isSold: json['is_sold'] as bool? ?? false,
       isFavorite: json['is_favorite'] as bool? ?? false,
       viewCount: json['view_count'] as int? ?? 0,
+      status: json['status'] as String?,
       condition: AdCondition.values.firstWhere(
         (e) => e.name == json['condition'],
         orElse: () => AdCondition.used,
@@ -169,6 +174,7 @@ class AdModel {
       'is_sold': isSold,
       'is_favorite': isFavorite,
       'view_count': viewCount,
+      'status': status,
       'condition': condition.name,
     };
   }

@@ -26,9 +26,15 @@ class ProfileController extends GetxController {
   
   final RxInt selectedTabIndex = 0.obs;
 
+  final RxInt selectedFilterIndex = 0.obs;
+
   final String appVersion = 'Version 2.4.0';
 
   static const List<String> tabs = ['Active', 'Sold', 'Saved'];
+
+  static const List<String> filters = ['All', 'Active', 'Inactive', 'Pending'];
+
+  final RxList<AdModel> allAds = <AdModel>[].obs;
   
   final RxList<AdModel> items = <AdModel>[].obs;
   final RxList<AdModel> soldItems = <AdModel>[].obs;
@@ -58,6 +64,19 @@ class ProfileController extends GetxController {
   /// - [index] The index of the tab to select
   void changeTab(int index) {
     selectedTabIndex.value = index;
+  }
+
+  void changeFilter(int index) {
+    selectedFilterIndex.value = index;
+  }
+
+  List<AdModel> get filteredAds {
+    if (selectedFilterIndex.value == 0) {
+      return allAds;
+    }
+    final filter = filters[selectedFilterIndex.value].toLowerCase();
+    // Handle null status by defaulting to empty string to prevent comparison issues
+    return allAds.where((ad) => (ad.status ?? '').toLowerCase() == filter).toList();
   }
 
   /// Navigates to the edit profile screen
@@ -121,25 +140,24 @@ class ProfileController extends GetxController {
   /// Loads data for all tabs (Active, Sold, Saved)
   Future<void> loadUserTabsData() async {
     try {
-      print('ProfileController: Loading active ads...');
-      final activeAds = await _userRepository.getUserAdsPaginated(
+      print('ProfileController: Loading all ads...');
+      final allUserAds = await _userRepository.getUserAdsPaginated(
         page: 1,
         limit: 20,
-        status: 'active',
       );
-      print('ProfileController: Active ads loaded: ${activeAds.ads.length} ads');
-      print('ProfileController: Total active ads: ${activeAds.total}');
-      items.value = activeAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
-      print('ProfileController: Items list length: ${items.length}');
+      print('ProfileController: All ads loaded: ${allUserAds.ads.length} ads');
+      allAds.value = allUserAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
+      print('ProfileController: All ads list length: ${allAds.length}');
+
+      print('ProfileController: Loading active ads...');
+      final activeAds = allUserAds.ads.where((ad) => ad.status.toLowerCase() == 'active').toList();
+      items.value = activeAds.map((item) => _convertUserAdToAdModel(item)).toList();
+      print('ProfileController: Active ads loaded: ${items.length} ads');
 
       print('ProfileController: Loading sold ads...');
-      final soldAds = await _userRepository.getUserAdsPaginated(
-        page: 1,
-        limit: 20,
-        status: 'sold',
-      );
-      print('ProfileController: Sold ads loaded: ${soldAds.ads.length} ads');
-      soldItems.value = soldAds.ads.map((item) => _convertUserAdToAdModel(item)).toList();
+      final soldAds = allUserAds.ads.where((ad) => ad.status.toLowerCase() == 'sold').toList();
+      soldItems.value = soldAds.map((item) => _convertUserAdToAdModel(item)).toList();
+      print('ProfileController: Sold ads loaded: ${soldItems.length} ads');
 
       print('ProfileController: Loading favorites...');
       final favorites = await _userRepository.getFavoritesPaginated(
@@ -170,6 +188,7 @@ class ProfileController extends GetxController {
       location: user.value.location,
       createdAt: item.createdAt,
       isSold: item.status == 'sold',
+      status: item.status,
       condition: AdCondition.used,
     );
   }
